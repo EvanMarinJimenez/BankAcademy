@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimuBank | Inicio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="/CSS/home.css">
+</head>
+<body>
+
+<!--  NAVBAR -->
+<header class="navbar">
+  <div class="navbar__left">
+    <div class="brand-mark">
+      <i data-lucide="landmark"></i>
+      <span>SimuBank</span>
+    </div>
+
+    <nav class="navbar__links">
+      <a href="#" class="nav-link nav-link--active">Inicio</a>
+      <a href="#" class="nav-link">Simulaciones</a>
+      <a href="#" class="nav-link">Historial</a>
+      <a href="#" class="nav-link">Reportes</a>
+    </nav>
+  </div>
+
+  <div class="navbar__right">
+    <button class="icon-btn" aria-label="Notificaciones">
+      <i data-lucide="bell"></i>
+      <span class="icon-btn__dot"></span>
+    </button>
+
+    <div class="user-chip">
+      <div class="user-avatar">JP</div>
+      <div class="user-chip__info">
+        <span class="user-chip__name">Juan Pérez</span>
+        <span class="user-chip__role">Agente en formación</span>
+      </div>
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="page-head">
+    <div>
+      <h1>Hola, Juan 👋</h1>
+      <p>Este es tu panel para conectarte a las simulaciones de llamadas y chats.</p>
+    </div>
+  </div>
+
+  <!-- Selector de estado -->
+  <section class="status-card">
+    <div class="status-card__current">
+      <span class="status-dot status-dot--available"></span>
+      <div>
+        <p class="status-card__label">Tu estado actual</p>
+        <h2>Disponible</h2>
+      </div>
+    </div>
+
+    <div class="status-options">
+      <button class="status-option status-option--active" data-status="available">
+        <span class="status-dot status-dot--available"></span>
+        Disponible
+      </button>
+      <button class="status-option" data-status="busy">
+        <span class="status-dot status-dot--busy"></span>
+        Ocupado
+      </button>
+      <button class="status-option" data-status="offline">
+        <span class="status-dot status-dot--offline"></span>
+        Desconectado
+      </button>
+    </div>
+  </section>
+
+  <!-- Metricas rapidas -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--primary">
+        <i data-lucide="phone-call"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">8</p>
+        <p class="stat-card__label">Llamadas simuladas hoy</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--secondary">
+        <i data-lucide="message-square"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">5</p>
+        <p class="stat-card__label">Chats simulados hoy</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--success">
+        <i data-lucide="clock"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">4:32</p>
+        <p class="stat-card__label">Tiempo promedio de atención</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--primary">
+        <i data-lucide="star"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">92%</p>
+        <p class="stat-card__label">Evaluación promedio</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cola de simulaciones -->
+  <section class="queue-section">
+    <div class="queue-section__head">
+      <h3>Simulaciones en cola</h3>
+      <span class="queue-count">3 esperando</span>
+    </div>
+
+    <div class="queue-list">
+
+      <div class="queue-item">
+        <div class="queue-item__type queue-item__type--call">
+          <i data-lucide="phone"></i>
+        </div>
+        <div class="queue-item__info">
+          <p class="queue-item__name">Simulación · Cliente María G.</p>
+          <p class="queue-item__meta">Llamada entrante · Apertura de cuenta</p>
+        </div>
+        <span class="queue-item__wait">Esperando 0:42</span>
+        <button class="btn-primary btn-primary--sm">Atender</button>
+      </div>
+
+      <div class="queue-item">
+        <div class="queue-item__type queue-item__type--chat">
+          <i data-lucide="message-square"></i>
+        </div>
+        <div class="queue-item__info">
+          <p class="queue-item__name">Simulación · Cliente Kevin R.</p>
+          <p class="queue-item__meta">Chat entrante · Consulta de saldo</p>
+        </div>
+        <span class="queue-item__wait">Esperando 1:10</span>
+        <button class="btn-primary btn-primary--sm">Atender</button>
+      </div>
+
+      <div class="queue-item">
+        <div class="queue-item__type queue-item__type--call">
+          <i data-lucide="phone"></i>
+        </div>
+        <div class="queue-item__info">
+          <p class="queue-item__name">Simulación · Cliente Ana T.</p>
+          <p class="queue-item__meta">Llamada entrante · Bloqueo de tarjeta</p>
+        </div>
+        <span class="queue-item__wait">Esperando 2:05</span>
+        <button class="btn-primary btn-primary--sm">Atender</button>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
