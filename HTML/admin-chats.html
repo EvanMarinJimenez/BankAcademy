@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Simulaciones de Chats</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-chats.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item active">
+                <i data-lucide="message-circle"></i>
+                <span>Chats</span>
+            </a>
+
+            <a href="admin-assignments.html" class="nav-item">
+    <i data-lucide="calendar-check"></i>
+    <span>Asignaciones</span>
+</a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+    <i data-lucide="clipboard-check"></i>
+    <span>Evaluaciones</span>
+</a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Simulaciones</p>
+                <h1>Simulaciones de chats</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Introducción -->
+        <section class="page-intro">
+
+            <div>
+                <h2>Escenarios de atención escrita</h2>
+
+                <p>
+                    Administra los escenarios utilizados para practicar
+                    situaciones de atención al cliente mediante chat.
+                </p>
+            </div>
+
+            <button class="btn-primary">
+                <i data-lucide="plus"></i>
+                <span>Nuevo escenario</span>
+            </button>
+
+        </section>
+
+
+        <!-- Filtros -->
+        <section class="filters-card">
+
+            <div class="search-box">
+
+                <i data-lucide="search"></i>
+
+                <input
+                    type="text"
+                    placeholder="Buscar escenario..."
+                >
+
+            </div>
+
+            <select>
+                <option>Todos los estados</option>
+                <option>Activo</option>
+                <option>Inactivo</option>
+            </select>
+
+        </section>
+
+
+        <!-- Resumen -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i data-lucide="message-circle"></i>
+                </div>
+
+                <div>
+                    <span>Total de escenarios</span>
+                    <strong>8</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon green">
+                    <i data-lucide="check-circle"></i>
+                </div>
+
+                <div>
+                    <span>Escenarios activos</span>
+                    <strong>6</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon orange">
+                    <i data-lucide="clock"></i>
+                </div>
+
+                <div>
+                    <span>En revisión</span>
+                    <strong>2</strong>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- Lista de escenarios -->
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Escenarios disponibles</h2>
+
+                    <p>
+                        Consulta y administra los escenarios de chat de la plataforma.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="scenario-list">
+
+                <!-- Escenario 1 -->
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Cliente inconforme</h3>
+
+                            <span class="status active">
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Atención de un cliente que presenta una
+                            inconformidad con el servicio recibido.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="tag"></i>
+                                Reclamos
+                            </span>
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                10 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                Actualizado: 08/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <button class="icon-action" title="Ver escenario">
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                        <button class="icon-action" title="Editar escenario">
+                            <i data-lucide="edit-3"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 2 -->
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Consulta sobre tarjeta</h3>
+
+                            <span class="status active">
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Cliente que solicita información y asistencia
+                            relacionada con su tarjeta bancaria.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="tag"></i>
+                                Consultas
+                            </span>
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                8 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                Actualizado: 07/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <button class="icon-action" title="Ver escenario">
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                        <button class="icon-action" title="Editar escenario">
+                            <i data-lucide="edit-3"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 3 -->
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="shield-alert"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Transacción no reconocida</h3>
+
+                            <span class="status active">
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Atención de un cliente que reporta una
+                            transacción que no reconoce en su cuenta.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="tag"></i>
+                                Seguridad
+                            </span>
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                12 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                Actualizado: 05/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <button class="icon-action" title="Ver escenario">
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                        <button class="icon-action" title="Editar escenario">
+                            <i data-lucide="edit-3"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 4 -->
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="help-circle"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Consulta general</h3>
+
+                            <span class="status inactive">
+                                Inactivo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Escenario orientado a la atención de consultas
+                            generales de los clientes.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="tag"></i>
+                                Información
+                            </span>
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                7 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                Actualizado: 02/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <button class="icon-action" title="Ver escenario">
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                        <button class="icon-action" title="Editar escenario">
+                            <i data-lucide="edit-3"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

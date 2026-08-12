@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Reportes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-reports.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+                <i data-lucide="message-circle"></i>
+                <span>Chats</span>
+            </a>
+
+            <a href="admin-assignments.html" class="nav-item">
+                <i data-lucide="calendar-check"></i>
+                <span>Asignaciones</span>
+            </a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+                <i data-lucide="clipboard-check"></i>
+                <span>Evaluaciones</span>
+            </a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Evaluación</p>
+                <h1>Reportes</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Introducción -->
+        <section class="page-intro">
+
+            <div>
+                <h2>Reportes de desempeño</h2>
+
+                <p>
+                    Consulta información consolidada sobre las simulaciones
+                    y evaluaciones realizadas en la plataforma.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Filtros -->
+        <section class="filters-card">
+
+            <div class="filter-group">
+
+                <label for="tipo-reporte">
+                    Tipo de reporte
+                </label>
+
+                <select id="tipo-reporte">
+
+                    <option>
+                        Desempeño de participantes
+                    </option>
+
+                    <option>
+                        Simulaciones realizadas
+                    </option>
+
+                    <option>
+                        Evaluaciones
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="fecha-inicio">
+                    Fecha inicial
+                </label>
+
+                <input
+                    type="date"
+                    id="fecha-inicio"
+                >
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="fecha-fin">
+                    Fecha final
+                </label>
+
+                <input
+                    type="date"
+                    id="fecha-fin"
+                >
+
+            </div>
+
+
+            <button class="btn-primary">
+                <i data-lucide="search"></i>
+                Generar reporte
+            </button>
+
+        </section>
+
+
+        <!-- Resumen -->
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Resumen de resultados</h2>
+
+                    <p>
+                        Información general de las actividades registradas.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-icon blue">
+                        <i data-lucide="users"></i>
+                    </div>
+
+                    <div>
+                        <span>Participantes evaluados</span>
+                        <strong>24</strong>
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon green">
+                        <i data-lucide="clipboard-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Evaluaciones completadas</span>
+                        <strong>36</strong>
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon purple">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+
+                    <div>
+                        <span>Promedio general</span>
+                        <strong>86%</strong>
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Reportes disponibles -->
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Reportes disponibles</h2>
+
+                    <p>
+                        Consulta los reportes generados por la plataforma.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="reports-list">
+
+
+                <article class="report-card">
+
+                    <div class="report-icon blue">
+                        <i data-lucide="bar-chart-3"></i>
+                    </div>
+
+                    <div class="report-info">
+
+                        <h3>Reporte de desempeño</h3>
+
+                        <p>
+                            Resultados obtenidos por los participantes
+                            durante las simulaciones.
+                        </p>
+
+                        <span>
+                            Última actualización: 10/08/2026
+                        </span>
+
+                    </div>
+
+                    <button class="icon-button" title="Ver reporte">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                    <button class="icon-button" title="Descargar reporte">
+                        <i data-lucide="download"></i>
+                    </button>
+
+                </article>
+
+
+                <article class="report-card">
+
+                    <div class="report-icon green">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="report-info">
+
+                        <h3>Reporte de simulaciones</h3>
+
+                        <p>
+                            Resumen de llamadas y chats realizados
+                            durante las prácticas.
+                        </p>
+
+                        <span>
+                            Última actualización: 09/08/2026
+                        </span>
+
+                    </div>
+
+                    <button class="icon-button" title="Ver reporte">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                    <button class="icon-button" title="Descargar reporte">
+                        <i data-lucide="download"></i>
+                    </button>
+
+                </article>
+
+
+                <article class="report-card">
+
+                    <div class="report-icon purple">
+                        <i data-lucide="clipboard-check"></i>
+                    </div>
+
+                    <div class="report-info">
+
+                        <h3>Reporte de evaluaciones</h3>
+
+                        <p>
+                            Resultados y calificaciones obtenidas
+                            en las evaluaciones.
+                        </p>
+
+                        <span>
+                            Última actualización: 08/08/2026
+                        </span>
+
+                    </div>
+
+                    <button class="icon-button" title="Ver reporte">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                    <button class="icon-button" title="Descargar reporte">
+                        <i data-lucide="download"></i>
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

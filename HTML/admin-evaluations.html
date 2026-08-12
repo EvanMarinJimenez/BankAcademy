@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Evaluaciones</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-evaluations.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+                <i data-lucide="message-circle"></i>
+                <span>Chats</span>
+            </a>
+
+            <a href="admin-assignments.html" class="nav-item">
+                <i data-lucide="calendar-check"></i>
+                <span>Asignaciones</span>
+            </a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item active">
+                <i data-lucide="clipboard-check"></i>
+                <span>Evaluaciones</span>
+            </a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Evaluación</p>
+                <h1>Evaluaciones</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Introducción -->
+        <section class="page-intro">
+
+            <div>
+                <h2>Evaluaciones de participantes</h2>
+
+                <p>
+                    Consulta los resultados obtenidos por los participantes
+                    durante las simulaciones.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Estadísticas -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i data-lucide="clipboard-check"></i>
+                </div>
+
+                <div>
+                    <span>Evaluaciones realizadas</span>
+                    <strong>36</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon green">
+                    <i data-lucide="trending-up"></i>
+                </div>
+
+                <div>
+                    <span>Promedio general</span>
+                    <strong>87%</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon orange">
+                    <i data-lucide="clock"></i>
+                </div>
+
+                <div>
+                    <span>Pendientes</span>
+                    <strong>5</strong>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- Filtros -->
+        <section class="filters-card">
+
+            <div class="search-box">
+
+                <i data-lucide="search"></i>
+
+                <input
+                    type="text"
+                    placeholder="Buscar participante..."
+                >
+
+            </div>
+
+            <select>
+                <option>Todos los tipos</option>
+                <option>Llamadas</option>
+                <option>Chats</option>
+            </select>
+
+            <select>
+                <option>Todos los resultados</option>
+                <option>Excelente</option>
+                <option>Satisfactorio</option>
+                <option>Requiere mejora</option>
+            </select>
+
+        </section>
+
+
+        <!-- Evaluaciones -->
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Resultados recientes</h2>
+
+                    <p>
+                        Últimas evaluaciones registradas en la plataforma.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="evaluation-list">
+
+
+                <!-- Evaluación 1 -->
+                <article class="evaluation-card">
+
+                    <div class="participant-avatar">
+                        MR
+                    </div>
+
+                    <div class="evaluation-info">
+
+                        <div class="evaluation-title">
+
+                            <h3>María Rodríguez</h3>
+
+                            <span class="result excellent">
+                                Excelente
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Escenario: Cliente inconforme
+                        </p>
+
+                        <div class="evaluation-meta">
+
+                            <span>
+                                <i data-lucide="message-circle"></i>
+                                Chat
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                10/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="score">
+
+                        <strong>94%</strong>
+
+                        <span>Resultado</span>
+
+                    </div>
+
+                    <button class="icon-action" title="Ver evaluación">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                </article>
+
+
+                <!-- Evaluación 2 -->
+                <article class="evaluation-card">
+
+                    <div class="participant-avatar">
+                        JS
+                    </div>
+
+                    <div class="evaluation-info">
+
+                        <div class="evaluation-title">
+
+                            <h3>Juan Sánchez</h3>
+
+                            <span class="result satisfactory">
+                                Satisfactorio
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Escenario: Transacción no reconocida
+                        </p>
+
+                        <div class="evaluation-meta">
+
+                            <span>
+                                <i data-lucide="phone"></i>
+                                Llamada
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                09/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="score">
+
+                        <strong>86%</strong>
+
+                        <span>Resultado</span>
+
+                    </div>
+
+                    <button class="icon-action" title="Ver evaluación">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                </article>
+
+
+                <!-- Evaluación 3 -->
+                <article class="evaluation-card">
+
+                    <div class="participant-avatar">
+                        LP
+                    </div>
+
+                    <div class="evaluation-info">
+
+                        <div class="evaluation-title">
+
+                            <h3>Laura Pérez</h3>
+
+                            <span class="result excellent">
+                                Excelente
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Escenario: Consulta sobre tarjeta
+                        </p>
+
+                        <div class="evaluation-meta">
+
+                            <span>
+                                <i data-lucide="phone"></i>
+                                Llamada
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                08/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="score">
+
+                        <strong>91%</strong>
+
+                        <span>Resultado</span>
+
+                    </div>
+
+                    <button class="icon-action" title="Ver evaluación">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                </article>
+
+
+                <!-- Evaluación 4 -->
+                <article class="evaluation-card">
+
+                    <div class="participant-avatar">
+                        CG
+                    </div>
+
+                    <div class="evaluation-info">
+
+                        <div class="evaluation-title">
+
+                            <h3>Carlos González</h3>
+
+                            <span class="result improvement">
+                                Requiere mejora
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Escenario: Cliente inconforme
+                        </p>
+
+                        <div class="evaluation-meta">
+
+                            <span>
+                                <i data-lucide="message-circle"></i>
+                                Chat
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                07/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="score">
+
+                        <strong>72%</strong>
+
+                        <span>Resultado</span>
+
+                    </div>
+
+                    <button class="icon-action" title="Ver evaluación">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

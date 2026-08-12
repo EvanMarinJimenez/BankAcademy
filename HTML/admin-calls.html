@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Simulaciones de llamadas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-calls.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item active">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+    <i data-lucide="message-circle"></i>
+    <span>Chats</span>
+</a>
+
+            <a href="admin-assignments.html" class="nav-item">
+    <i data-lucide="calendar-check"></i>
+    <span>Asignaciones</span>
+</a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+    <i data-lucide="clipboard-check"></i>
+    <span>Evaluaciones</span>
+</a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Simulaciones</p>
+                <h1>Llamadas</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Introducción -->
+
+        <section class="page-intro">
+
+            <div>
+                <h2>Gestión de escenarios de llamadas</h2>
+
+                <p>
+                    Administra los escenarios utilizados para las simulaciones
+                    de atención telefónica de los participantes.
+                </p>
+            </div>
+
+            <a href="admin-call-create.html" class="btn-primary">
+                <i data-lucide="plus"></i>
+                <span>Crear escenario</span>
+            </a>
+
+        </section>
+
+
+        <!-- Filtros -->
+
+        <section class="filters-card">
+
+            <div class="search-box">
+
+                <i data-lucide="search"></i>
+
+                <input
+                    type="search"
+                    placeholder="Buscar escenario..."
+                    aria-label="Buscar escenario"
+                >
+
+            </div>
+
+            <div class="filter-group">
+
+                <label for="status-filter">
+                    Estado
+                </label>
+
+                <select id="status-filter">
+                    <option value="all">Todos</option>
+                    <option value="active">Activos</option>
+                    <option value="inactive">Inactivos</option>
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- Escenarios -->
+
+        <section class="scenarios-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Escenarios disponibles</h2>
+
+                    <p>
+                        12 escenarios registrados
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="scenarios-list">
+
+
+                <!-- Escenario 1 -->
+
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Cliente inconforme</h3>
+
+                            <span class="status status-active">
+                                <span class="status-dot"></span>
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Atención de una llamada de un cliente que presenta
+                            una inconformidad con el servicio recibido.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                10–15 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="users"></i>
+                                Individual
+                            </span>
+
+                            <span>
+                                Actualizado hoy
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <a
+                            href="admin-call-edit.html"
+                            class="action-btn"
+                            title="Editar escenario"
+                        >
+                            <i data-lucide="pencil"></i>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="action-btn action-danger"
+                            title="Desactivar escenario"
+                        >
+                            <i data-lucide="power"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-btn"
+                            title="Más opciones"
+                        >
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 2 -->
+
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Solicitud de información</h3>
+
+                            <span class="status status-active">
+                                <span class="status-dot"></span>
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            El participante debe atender una llamada de un
+                            cliente que solicita información sobre un producto.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                8–12 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="users"></i>
+                                Individual
+                            </span>
+
+                            <span>
+                                Actualizado ayer
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <a
+                            href="admin-call-edit.html"
+                            class="action-btn"
+                            title="Editar escenario"
+                        >
+                            <i data-lucide="pencil"></i>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="action-btn action-danger"
+                            title="Desactivar escenario"
+                        >
+                            <i data-lucide="power"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-btn"
+                            title="Más opciones"
+                        >
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 3 -->
+
+                <article class="scenario-card">
+
+                    <div class="scenario-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Reclamo por cobro</h3>
+
+                            <span class="status status-active">
+                                <span class="status-dot"></span>
+                                Activo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Atención de un cliente que cuestiona un cobro
+                            realizado en su cuenta.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                10–15 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="users"></i>
+                                Individual
+                            </span>
+
+                            <span>
+                                Actualizado 08/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <a
+                            href="admin-call-edit.html"
+                            class="action-btn"
+                            title="Editar escenario"
+                        >
+                            <i data-lucide="pencil"></i>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="action-btn action-danger"
+                            title="Desactivar escenario"
+                        >
+                            <i data-lucide="power"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-btn"
+                            title="Más opciones"
+                        >
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Escenario 4 -->
+
+                <article class="scenario-card">
+
+                    <div class="scenario-icon scenario-icon-inactive">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="scenario-info">
+
+                        <div class="scenario-title">
+
+                            <h3>Consulta de producto</h3>
+
+                            <span class="status status-inactive">
+                                <span class="status-dot"></span>
+                                Inactivo
+                            </span>
+
+                        </div>
+
+                        <p>
+                            Simulación orientada a la atención de consultas
+                            generales sobre productos y servicios.
+                        </p>
+
+                        <div class="scenario-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                8–10 min
+                            </span>
+
+                            <span>
+                                <i data-lucide="users"></i>
+                                Individual
+                            </span>
+
+                            <span>
+                                Actualizado 05/08/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scenario-actions">
+
+                        <a
+                            href="admin-call-edit.html"
+                            class="action-btn"
+                            title="Editar escenario"
+                        >
+                            <i data-lucide="pencil"></i>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="action-btn action-success"
+                            title="Activar escenario"
+                        >
+                            <i data-lucide="power"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-btn"
+                            title="Más opciones"
+                        >
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+
+            <!-- Paginación -->
+
+            <div class="table-footer">
+
+                <span>
+                    Mostrando 1–4 de 12 escenarios
+                </span>
+
+                <div class="pagination">
+
+                    <button
+                        type="button"
+                        class="pagination-btn disabled"
+                        aria-label="Página anterior"
+                    >
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="pagination-btn active"
+                    >
+                        1
+                    </button>
+
+                    <button
+                        type="button"
+                        class="pagination-btn"
+                    >
+                        2
+                    </button>
+
+                    <button
+                        type="button"
+                        class="pagination-btn"
+                    >
+                        3
+                    </button>
+
+                    <button
+                        type="button"
+                        class="pagination-btn"
+                        aria-label="Página siguiente"
+                    >
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Usuarios</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-users.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item active">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+    <i data-lucide="message-circle"></i>
+    <span>Chats</span>
+</a>
+
+            <a href="admin-assignments.html" class="nav-item">
+    <i data-lucide="calendar-check"></i>
+    <span>Asignaciones</span>
+</a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+    <i data-lucide="clipboard-check"></i>
+    <span>Evaluaciones</span>
+</a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Administración</p>
+                <h1>Usuarios</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Encabezado de sección -->
+
+        <section class="page-intro">
+
+            <div>
+                <h2>Gestión de participantes</h2>
+
+                <p>
+                    Registra, consulta, modifica y administra el estado
+                    de los participantes de la plataforma.
+                </p>
+            </div>
+
+            <a href="admin-user-create.html" class="btn-primary">
+                <i data-lucide="user-plus"></i>
+                <span>Registrar participante</span>
+            </a>
+
+        </section>
+
+
+        <!-- Filtros -->
+
+        <section class="filters-card">
+
+            <div class="search-box">
+
+                <i data-lucide="search"></i>
+
+                <input type="search" placeholder="Buscar por nombre o correo electrónico..."
+                    aria-label="Buscar participante">
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="status-filter">
+                    Estado
+                </label>
+
+                <select id="status-filter">
+                    <option value="all">Todos</option>
+                    <option value="active">Activos</option>
+                    <option value="inactive">Inactivos</option>
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- Tabla de usuarios -->
+
+        <section class="users-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Participantes registrados</h2>
+
+                    <p>
+                        24 participantes encontrados
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="users-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Participante</th>
+                            <th>Correo electrónico</th>
+                            <th>Estado</th>
+                            <th>Última actividad</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <div class="participant">
+
+                                    <div class="participant-avatar">
+                                        MR
+                                    </div>
+
+                                    <div>
+                                        <strong>María Rodríguez</strong>
+                                        <span>ID: P-001</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                maria.rodriguez@example.com
+                            </td>
+
+                            <td>
+                                <span class="status status-active">
+                                    <span class="status-dot"></span>
+                                    Activo
+                                </span>
+                            </td>
+
+                            <td>
+                                Hoy, 10:24 a. m.
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="admin-user-edit.html" class="action-btn" title="Editar participante">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+
+                                    <button type="button" class="action-btn action-danger"
+                                        title="Desactivar participante">
+                                        <i data-lucide="user-x"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <div class="participant">
+
+                                    <div class="participant-avatar">
+                                        CM
+                                    </div>
+
+                                    <div>
+                                        <strong>Carlos Méndez</strong>
+                                        <span>ID: P-002</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                carlos.mendez@example.com
+                            </td>
+
+                            <td>
+                                <span class="status status-active">
+                                    <span class="status-dot"></span>
+                                    Activo
+                                </span>
+                            </td>
+
+                            <td>
+                                Ayer, 3:45 p. m.
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="admin-user-edit.html" class="action-btn" title="Editar participante">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+
+                                    <button type="button" class="action-btn action-danger"
+                                        title="Desactivar participante">
+                                        <i data-lucide="user-x"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <div class="participant">
+
+                                    <div class="participant-avatar">
+                                        AL
+                                    </div>
+
+                                    <div>
+                                        <strong>Ana López</strong>
+                                        <span>ID: P-003</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                ana.lopez@example.com
+                            </td>
+
+                            <td>
+                                <span class="status status-inactive">
+                                    <span class="status-dot"></span>
+                                    Inactivo
+                                </span>
+                            </td>
+
+                            <td>
+                                08/08/2026
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="admin-user-edit.html" class="action-btn" title="Editar participante">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+
+                                    <button type="button" class="action-btn action-success"
+                                        title="Activar participante">
+                                        <i data-lucide="user-check"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <div class="participant">
+
+                                    <div class="participant-avatar">
+                                        JS
+                                    </div>
+
+                                    <div>
+                                        <strong>Jorge Sánchez</strong>
+                                        <span>ID: P-004</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                jorge.sanchez@example.com
+                            </td>
+
+                            <td>
+                                <span class="status status-active">
+                                    <span class="status-dot"></span>
+                                    Activo
+                                </span>
+                            </td>
+
+                            <td>
+                                07/08/2026
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="admin-user-edit.html" class="action-btn" title="Editar participante">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+
+                                    <button type="button" class="action-btn action-danger"
+                                        title="Desactivar participante">
+                                        <i data-lucide="user-x"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <div class="participant">
+
+                                    <div class="participant-avatar">
+                                        SP
+                                    </div>
+
+                                    <div>
+                                        <strong>Sofía Pérez</strong>
+                                        <span>ID: P-005</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                sofia.perez@example.com
+                            </td>
+
+                            <td>
+                                <span class="status status-active">
+                                    <span class="status-dot"></span>
+                                    Activo
+                                </span>
+                            </td>
+
+                            <td>
+                                06/08/2026
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="admin-user-edit.html" class="action-btn" title="Editar participante">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+
+                                    <button type="button" class="action-btn action-danger"
+                                        title="Desactivar participante">
+                                        <i data-lucide="user-x"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Paginación -->
+
+            <div class="table-footer">
+
+                <span>
+                    Mostrando 1–5 de 24 participantes
+                </span>
+
+                <div class="pagination">
+
+                    <button type="button" class="pagination-btn disabled" aria-label="Página anterior">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+
+                    <button type="button" class="pagination-btn active">
+                        1
+                    </button>
+
+                    <button type="button" class="pagination-btn">
+                        2
+                    </button>
+
+                    <button type="button" class="pagination-btn">
+                        3
+                    </button>
+
+                    <button type="button" class="pagination-btn" aria-label="Página siguiente">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

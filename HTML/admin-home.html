@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Panel Administrativo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-home.css">
+</head>
+
+<body>
+
+    <!-- Barra lateral -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item active">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+    <i data-lucide="message-circle"></i>
+    <span>Chats</span>
+</a>
+
+            <a href="admin-assignments.html" class="nav-item">
+    <i data-lucide="calendar-check"></i>
+    <span>Asignaciones</span>
+</a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+    <i data-lucide="clipboard-check"></i>
+    <span>Evaluaciones</span>
+</a>
+
+            <a href="admin-reports.html" class="nav-item">
+    <i data-lucide="file-text"></i>
+    <span>Reportes</span>
+</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="../HTML/admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Contenido principal -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Panel administrativo</p>
+                <h1>Bienvenido, Administrador</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Resumen -->
+
+        <section class="welcome-section">
+
+            <div>
+                <h2>Resumen de la plataforma</h2>
+
+                <p>
+                    Administra usuarios, simulaciones y evaluaciones
+                    desde este panel.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Estadísticas -->
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i data-lucide="users"></i>
+                </div>
+
+                <div>
+                    <span>Usuarios registrados</span>
+                    <strong>24</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon purple">
+                    <i data-lucide="phone"></i>
+                </div>
+
+                <div>
+                    <span>Escenarios de llamadas</span>
+                    <strong>12</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon green">
+                    <i data-lucide="message-circle"></i>
+                </div>
+
+                <div>
+                    <span>Escenarios de chat</span>
+                    <strong>8</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon orange">
+                    <i data-lucide="clipboard-check"></i>
+                </div>
+
+                <div>
+                    <span>Evaluaciones realizadas</span>
+                    <strong>36</strong>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- Acciones principales -->
+
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Gestión de la plataforma</h2>
+                    <p>
+                        Accede rápidamente a las principales funciones administrativas.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="management-grid">
+
+                <a href="admin-users.html" class="management-card">
+
+                    <div class="management-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+
+                    <div>
+                        <h3>Gestionar usuarios</h3>
+
+                        <p>
+                            Registrar y modificar participantes y administradores.
+                        </p>
+                    </div>
+
+                    <i data-lucide="arrow-right" class="card-arrow"></i>
+
+                </a>
+
+
+                <a href="#" class="management-card">
+
+                    <div class="management-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div>
+                        <h3>Simulaciones de llamadas</h3>
+
+                        <p>
+                            Crear y configurar escenarios de atención telefónica.
+                        </p>
+                    </div>
+
+                    <i data-lucide="arrow-right" class="card-arrow"></i>
+
+                </a>
+
+
+                <a href="#" class="management-card">
+
+                    <div class="management-icon">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+
+                    <div>
+                        <h3>Simulaciones de chat</h3>
+
+                        <p>
+                            Crear y configurar escenarios de atención escrita.
+                        </p>
+                    </div>
+
+                    <i data-lucide="arrow-right" class="card-arrow"></i>
+
+                </a>
+
+
+                <a href="#" class="management-card">
+
+                    <div class="management-icon">
+                        <i data-lucide="clipboard-check"></i>
+                    </div>
+
+                    <div>
+                        <h3>Evaluaciones</h3>
+
+                        <p>
+                            Consultar y gestionar las evaluaciones de los participantes.
+                        </p>
+                    </div>
+
+                    <i data-lucide="arrow-right" class="card-arrow"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- Actividad reciente -->
+
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Actividad reciente</h2>
+                    <p>
+                        Últimas acciones registradas en la plataforma.
+                    </p>
+                </div>
+
+                <a href="#" class="view-all">
+                    Ver todas
+                </a>
+
+            </div>
+
+
+            <div class="activity-card">
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        <i data-lucide="user-plus"></i>
+                    </div>
+
+                    <div class="activity-info">
+                        <strong>Nuevo participante registrado</strong>
+                        <span>María Rodríguez fue registrada en la plataforma.</span>
+                    </div>
+
+                    <time>Hace 15 min</time>
+
+                </div>
+
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="activity-info">
+                        <strong>Escenario actualizado</strong>
+                        <span>Se modificó el escenario "Cliente inconforme".</span>
+                    </div>
+
+                    <time>Hace 1 hora</time>
+
+                </div>
+
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        <i data-lucide="clipboard-check"></i>
+                    </div>
+
+                    <div class="activity-info">
+                        <strong>Evaluación registrada</strong>
+                        <span>Se completó una evaluación de llamada.</span>
+                    </div>
+
+                    <time>Hace 2 horas</time>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>
