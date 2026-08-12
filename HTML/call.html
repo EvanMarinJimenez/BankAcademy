@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimuBank | Llamada en curso</title>
+  <meta name="description" content="Vista de simulación de llamada activa en SimuBank – plataforma de capacitación bancaria.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/CSS/call.css">
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+  <div class="navbar__left">
+    <div class="brand-mark">
+      <i data-lucide="landmark"></i>
+      <span>SimuBank</span>
+    </div>
+    <nav class="navbar__links">
+      <a href="/HTML/home.html" class="nav-link">Inicio</a>
+      <a href="#" class="nav-link nav-link--active">Simulaciones</a>
+      <a href="#" class="nav-link">Historial</a>
+      <a href="#" class="nav-link">Reportes</a>
+    </nav>
+  </div>
+
+  <div class="navbar__right">
+    <div class="live-badge" id="liveBadge">
+      <span class="live-badge__dot"></span>
+      Llamada en curso
+    </div>
+    <button class="icon-btn" aria-label="Notificaciones">
+      <i data-lucide="bell"></i>
+      <span class="icon-btn__dot"></span>
+    </button>
+    <div class="user-chip">
+      <div class="user-avatar">JP</div>
+      <div class="user-chip__info">
+        <span class="user-chip__name">Juan Pérez</span>
+        <span class="user-chip__role">Agente en formación</span>
+      </div>
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== WORKSPACE ===================== -->
+<div class="call-workspace">
+
+  <!-- ——— Panel de llamada (centrado) ——— -->
+  <main class="panel-call">
+
+    <!-- Avatar con ondas animadas -->
+    <div class="call-avatar-wrapper">
+      <div class="call-wave"></div>
+      <div class="call-wave"></div>
+      <div class="call-wave"></div>
+      <div class="call-avatar">MG</div>
+    </div>
+
+    <!-- Nombre y estado -->
+    <div class="call-info">
+      <h1 class="call-client-name">María García</h1>
+      <div class="call-status-row">
+        <span class="call-status-dot" id="statusDot"></span>
+        <span class="call-status-text" id="callStatusText">Llamada en curso</span>
+      </div>
+    </div>
+
+    <!-- Timer estático -->
+    <div class="call-timer" id="callTimer" aria-label="Duración de la llamada">04:27</div>
+
+    <!--
+      Indicador de grabación automática — HUL09 criterio 1:
+      "El sistema comienza la grabación cuando inicia la llamada."
+    -->
+    <div class="rec-indicator" id="recIndicator">
+      <span class="rec-dot"></span>
+      Grabando
+    </div>
+
+    <!--
+      Controles: Silencio · Finalizar (HUL14) · Espera
+    -->
+    <div>
+      <div class="call-controls">
+        <button class="ctrl-btn ctrl-btn--default" id="btnMute" aria-label="Silenciar micrófono" title="Silenciar">
+          <i data-lucide="mic"></i>
+        </button>
+        <button class="ctrl-btn ctrl-btn--end" id="btnEnd" aria-label="Finalizar llamada" title="Finalizar llamada">
+          <i data-lucide="phone-off"></i>
+        </button>
+        <button class="ctrl-btn ctrl-btn--default" id="btnHold" aria-label="Poner en espera" title="Poner en espera">
+          <i data-lucide="pause"></i>
+        </button>
+      </div>
+      <div class="ctrl-labels">
+        <span class="ctrl-label">Silencio</span>
+        <span class="ctrl-label ctrl-label--end">Finalizar</span>
+        <span class="ctrl-label">Espera</span>
+      </div>
+    </div>
+
+  </main>
+
+</div><!-- /.call-workspace -->
+
+<!-- ===================== CHAT FLOTANTE (abajo derecha) ===================== -->
+<div class="chat-fab">
+
+  <!-- Panel de chat (visible al pulsar el botón) -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-panel__header">
+      <div class="chat-panel__title">
+        <i data-lucide="message-square"></i>
+        Chat – Simulación
+      </div>
+      <button class="chat-close-btn" id="chatCloseBtn" aria-label="Cerrar chat">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="chat-panel__body" id="chatBody">
+      <div class="chat-bubble-row chat-bubble-row--in">
+        <span class="chat-who">Cliente · Chat</span>
+        <div class="chat-bubble chat-bubble--in">Hola, también tengo una pregunta por chat sobre mis estados de cuenta.</div>
+        <span class="chat-time">20:29</span>
+      </div>
+      <div class="chat-bubble-row chat-bubble-row--out">
+        <span class="chat-who">Tú</span>
+        <div class="chat-bubble chat-bubble--out">Claro, con gusto le ayudo. ¿Cuál es su número de cuenta?</div>
+        <span class="chat-time">20:30</span>
+      </div>
+      <div class="chat-bubble-row chat-bubble-row--in">
+        <span class="chat-who">Cliente · Chat</span>
+        <div class="chat-bubble chat-bubble--in">Es la terminación 4821. ¿Puede verificar mis últimos movimientos?</div>
+        <span class="chat-time">20:31</span>
+      </div>
+    </div>
+
+    <div class="chat-panel__footer">
+      <input
+        class="chat-input"
+        id="chatInput"
+        type="text"
+        placeholder="Escribe un mensaje…"
+        aria-label="Mensaje de chat"
+      >
+      <button class="chat-send-btn" id="chatSendBtn" aria-label="Enviar mensaje">
+        <i data-lucide="send"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Botón FAB -->
+  <button class="chat-fab__btn" id="chatFabBtn" aria-label="Abrir chat">
+    <span class="chat-fab__badge" id="chatBadge">2</span>
+    <i data-lucide="message-square"></i>
+  </button>
+
+</div>
+
+<!--
+  MODAL — Confirmación antes de finalizar (HUL14 criterio 2):
+  "El sistema solicita confirmar la acción antes de ejecutarla."
+-->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal__icon">
+      <i data-lucide="phone-off"></i>
+    </div>
+    <h2 class="modal__title" id="modalTitle">¿Finalizar la llamada?</h2>
+    <p class="modal__body">
+      La grabación se guardará automáticamente y el sistema registrará el resultado de la simulación.
+    </p>
+    <div class="modal__summary">
+      <div class="modal__summary-row">
+        <span>Duración</span>
+        <span id="modalDuration">04:27</span>
+      </div>
+      <div class="modal__summary-row">
+        <span>Estado de grabación</span>
+        <span>Activa · Guardando</span>
+      </div>
+    </div>
+    <div class="modal__actions">
+      <button class="btn-modal-cancel" id="btnModalCancel">Continuar llamada</button>
+      <button class="btn-modal-end"    id="btnModalEnd">Finalizar ahora</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+  lucide.createIcons();
+
+  /* ──────────────────────────────
+     Botón Silencio
+  ────────────────────────────── */
+  const btnMute = document.getElementById('btnMute');
+  btnMute.addEventListener('click', () => {
+    const active = btnMute.classList.toggle('active');
+    btnMute.innerHTML = `<i data-lucide="${active ? 'mic-off' : 'mic'}"></i>`;
+    lucide.createIcons();
+  });
+
+  /* ──────────────────────────────
+     Botón Espera
+  ────────────────────────────── */
+  const btnHold = document.getElementById('btnHold');
+  btnHold.addEventListener('click', () => {
+    const active = btnHold.classList.toggle('active');
+    document.getElementById('callStatusText').textContent = active ? 'En espera…' : 'Llamada en curso';
+    btnHold.innerHTML = `<i data-lucide="${active ? 'play' : 'pause'}"></i>`;
+    lucide.createIcons();
+  });
+
+  /* ──────────────────────────────
+     Finalizar llamada — HUL14
+  ────────────────────────────── */
+  const modalOverlay   = document.getElementById('modalOverlay');
+  const btnEnd         = document.getElementById('btnEnd');
+  const btnModalCancel = document.getElementById('btnModalCancel');
+  const btnModalEnd    = document.getElementById('btnModalEnd');
+
+  function openModal()  { modalOverlay.classList.add('visible'); }
+  function closeModal() { modalOverlay.classList.remove('visible'); }
+
+  btnEnd.addEventListener('click', openModal);
+  btnModalCancel.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+  /* HUL14 C1: sistema termina comunicación y guarda registro.
+     HUL09 C2: grabación queda almacenada al finalizar. */
+  btnModalEnd.addEventListener('click', () => {
+    closeModal();
+
+    const statusDot = document.getElementById('statusDot');
+    statusDot.style.background = 'var(--color-offline)';
+    statusDot.style.animation  = 'none';
+    document.getElementById('callStatusText').textContent = 'Llamada finalizada';
+
+    document.getElementById('recIndicator').style.opacity = '0';
+    document.getElementById('liveBadge').style.display = 'none';
+
+    document.querySelectorAll('.call-wave').forEach(w => w.style.animation = 'none');
+  });
+
+  /* ──────────────────────────────
+     Chat flotante
+  ────────────────────────────── */
+  const chatFabBtn   = document.getElementById('chatFabBtn');
+  const chatPanel    = document.getElementById('chatPanel');
+  const chatCloseBtn = document.getElementById('chatCloseBtn');
+  const chatBadge    = document.getElementById('chatBadge');
+  const chatBody     = document.getElementById('chatBody');
+  const chatInput    = document.getElementById('chatInput');
+  const chatSendBtn  = document.getElementById('chatSendBtn');
+
+  function openChat() {
+    chatPanel.classList.add('visible');
+    chatBadge.style.display = 'none'; // limpiar badge al abrir
+    chatInput.focus();
+  }
+  function closeChat() { chatPanel.classList.remove('visible'); }
+
+  chatFabBtn.addEventListener('click', () => {
+    chatPanel.classList.contains('visible') ? closeChat() : openChat();
+  });
+  chatCloseBtn.addEventListener('click', closeChat);
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    const now = new Date();
+    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+    const row = document.createElement('div');
+    row.className = 'chat-bubble-row chat-bubble-row--out';
+    row.innerHTML = `
+      <span class="chat-who">Tú</span>
+      <div class="chat-bubble chat-bubble--out">${text}</div>
+      <span class="chat-time">${timeStr}</span>
+    `;
+    chatBody.appendChild(row);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    chatInput.value = '';
+    lucide.createIcons();
+  }
+
+  chatSendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+</script>
+</body>
+</html>
