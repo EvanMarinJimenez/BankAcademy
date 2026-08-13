@@ -1,0 +1,580 @@
+/* =========================================================
+   SIMUBANK - ADMIN COMMON
+   Sidebar colapsable mediante hover
+   ========================================================= */
+
+:root {
+    --admin-sidebar-width: 74px;
+    --admin-sidebar-expanded: 245px;
+
+    --admin-sidebar-blue: #1E3A8A;
+    --admin-sidebar-blue-hover: #2949A5;
+
+    --admin-sidebar-text: rgba(255, 255, 255, 0.78);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    width: var(--admin-sidebar-width) !important;
+    height: 100vh !important;
+
+    background: var(--admin-sidebar-blue) !important;
+
+    z-index: 1000 !important;
+
+    overflow: hidden !important;
+
+    transition: width 0.25s ease !important;
+}
+
+
+/* Expandir al poner el mouse */
+
+.sidebar:hover {
+    width: var(--admin-sidebar-expanded) !important;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.sidebar-brand {
+    height: 76px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 10px !important;
+
+    padding: 0 !important;
+
+    color: #FFFFFF !important;
+
+    flex-shrink: 0 !important;
+
+    border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* Icono SimuBank */
+
+.sidebar-brand i,
+.sidebar-brand svg {
+    width: 24px !important;
+    height: 24px !important;
+
+    min-width: 24px !important;
+
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+
+    flex-shrink: 0 !important;
+
+    margin: 0 !important;
+}
+
+
+/* Texto SimuBank */
+
+.sidebar-brand span {
+    white-space: nowrap !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    width: 0 !important;
+
+    overflow: hidden !important;
+
+    transform: translateX(-8px);
+
+    transition:
+        opacity 0.18s ease,
+        transform 0.20s ease,
+        width 0.20s ease,
+        visibility 0.20s ease;
+}
+
+
+/* Logo expandido */
+
+.sidebar:hover .sidebar-brand {
+    justify-content: flex-start !important;
+
+    padding-left: 22px !important;
+}
+
+
+.sidebar:hover .sidebar-brand span {
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    width: auto !important;
+
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+.sidebar-nav {
+    width: 100% !important;
+
+    padding: 24px 8px 10px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 5px !important;
+}
+
+
+/* =========================================================
+   ITEMS
+   ========================================================= */
+
+.sidebar .nav-item {
+    position: relative !important;
+
+    width: 100% !important;
+    min-height: 46px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    gap: 13px !important;
+
+    border-radius: 11px !important;
+
+    color: var(--admin-sidebar-text) !important;
+
+    text-decoration: none !important;
+
+    white-space: nowrap !important;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        padding 0.25s ease !important;
+}
+
+
+/* =========================================================
+   ICONOS
+   ========================================================= */
+
+.sidebar .nav-item i,
+.sidebar .nav-item svg {
+    width: 20px !important;
+    height: 20px !important;
+
+    min-width: 20px !important;
+    max-width: 20px !important;
+
+    margin: 0 !important;
+
+    flex-shrink: 0 !important;
+
+    color: currentColor !important;
+    stroke: currentColor !important;
+}
+
+
+/* =========================================================
+   TEXTO DE LOS ITEMS
+   ========================================================= */
+
+.sidebar .nav-item span {
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    width: 0 !important;
+
+    overflow: hidden !important;
+
+    white-space: nowrap !important;
+
+    transform: translateX(-8px);
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.20s ease,
+        width 0.20s ease,
+        visibility 0.20s ease;
+}
+
+
+/* =========================================================
+   HOVER ITEM
+   ========================================================= */
+
+.sidebar .nav-item:hover {
+    background: rgba(255,255,255,0.10) !important;
+
+    color: #FFFFFF !important;
+}
+
+
+/* =========================================================
+   ITEM ACTIVO
+   ========================================================= */
+
+.sidebar .nav-item.active {
+    background: rgba(255,255,255,0.16) !important;
+
+    color: #FFFFFF !important;
+
+    font-weight: 600 !important;
+}
+
+
+/* Indicador del módulo activo */
+
+.sidebar .nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: -8px;
+
+    top: 50%;
+
+    width: 3px;
+    height: 24px;
+
+    transform: translateY(-50%);
+
+    border-radius: 0 4px 4px 0;
+
+    background: #FFFFFF;
+}
+
+
+/* =========================================================
+   SIDEBAR EXPANDIDO
+   ========================================================= */
+
+.sidebar:hover .nav-item {
+    justify-content: flex-start !important;
+
+    padding: 0 13px !important;
+}
+
+
+.sidebar:hover .nav-item span {
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    width: auto !important;
+
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   TÍTULOS DE SECCIÓN
+   ========================================================= */
+
+.sidebar .nav-section-title {
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    white-space: nowrap !important;
+
+    transition:
+        opacity 0.15s ease,
+        visibility 0.15s ease;
+}
+
+
+.sidebar:hover .nav-section-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+/* =========================================================
+   PARTE INFERIOR
+   ========================================================= */
+
+.sidebar-bottom {
+    width: 100% !important;
+
+    margin-top: auto !important;
+
+    padding: 12px 8px 18px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.sidebar .nav-item.logout:hover {
+    background: rgba(239,68,68,0.18) !important;
+
+    color: #FFFFFF !important;
+}
+
+
+/* =========================================================
+   TOOLTIP
+   ========================================================= */
+
+.sidebar:not(:hover) .nav-item[data-label]::after {
+    content: attr(data-label);
+
+    position: absolute;
+
+    left: calc(100% + 12px);
+    top: 50%;
+
+    transform: translateY(-50%) translateX(-5px);
+
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    background: #172554;
+
+    color: #FFFFFF;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    z-index: 1200;
+
+    box-shadow:
+        0 8px 20px rgba(15,23,42,0.18);
+
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease,
+        visibility 0.12s ease;
+}
+
+
+.sidebar:not(:hover) .nav-item[data-label]:hover::after {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(-50%) translateX(0);
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.main-content {
+    margin-left: var(--admin-sidebar-width) !important;
+}
+
+
+/* =========================================================
+   TOPBAR / HEADER
+   ========================================================= */
+
+.topbar {
+    min-height: 96px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 0;
+
+    box-sizing: border-box;
+}
+
+
+/* Información izquierda del header */
+
+.topbar > div:first-child {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+/* "Panel administrativo" */
+
+.page-label {
+    margin: 0 0 4px 0;
+
+    font-size: 14px;
+    line-height: 1.2;
+
+    color: #64748B;
+}
+
+
+/* Bienvenido */
+
+.topbar h1 {
+    margin: 0;
+
+    font-size: 28px;
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #1E293B;
+}
+
+
+/* =========================================================
+   PERFIL ADMINISTRADOR
+   ========================================================= */
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+
+/* Campana */
+
+.notification {
+    position: relative;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification i {
+    width: 22px;
+    height: 22px;
+
+    color: #64748B;
+}
+
+
+/* Punto rojo */
+
+.notification-dot {
+    position: absolute;
+
+    top: 5px;
+    right: 5px;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #EF4444;
+
+    border: 2px solid #F8FAFC;
+}
+
+
+/* Perfil */
+
+.profile-info {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.profile-avatar {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #1E3A8A;
+
+    color: #FFFFFF;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.profile-info strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    color: #1E293B;
+}
+
+
+.profile-info span {
+    display: block;
+
+    font-size: 13px;
+
+    color: #64748B;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    :root {
+        --admin-sidebar-width: 64px;
+    }
+
+    .sidebar {
+        width: 64px !important;
+    }
+
+    .sidebar:hover {
+        width: min(245px, 82vw) !important;
+    }
+
+    .main-content {
+        margin-left: 64px !important;
+    }
+}
