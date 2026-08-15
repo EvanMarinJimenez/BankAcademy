@@ -14,11 +14,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="../JS/admin-common.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-    <link rel="stylesheet" href="../CSS/admin-assignments.css">
-    <link rel="stylesheet" href="../CSS/admin-common.css">
+<link rel="stylesheet" href="../CSS/admin-common.css">
+<link rel="stylesheet" href="../CSS/admin-assignments.css">
+
+<script src="../JS/admin-common.js"></script>
 </head>
 
 <body>
@@ -31,52 +32,66 @@
             <span>SimuBank</span>
         </div>
 
-        <nav class="sidebar-nav">
+<nav class="sidebar-nav">
 
-            <a href="admin-home.html" class="nav-item">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Panel principal</span>
-            </a>
+    <a href="admin-home.html" class="nav-item">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Panel principal</span>
+    </a>
 
-            <a href="admin-users.html" class="nav-item">
-                <i data-lucide="users"></i>
-                <span>Usuarios</span>
-            </a>
+    <a href="admin-users.html" class="nav-item">
+        <i data-lucide="users"></i>
+        <span>Usuarios</span>
+    </a>
 
-            <div class="nav-section-title">
-                SIMULACIONES
-            </div>
+    <div class="nav-section-title">
+        SIMULACIONES
+    </div>
 
-            <a href="admin-calls.html" class="nav-item">
-                <i data-lucide="phone"></i>
-                <span>Llamadas</span>
-            </a>
+    <a href="admin-calls.html" class="nav-item">
+        <i data-lucide="phone"></i>
+        <span>Llamadas</span>
+    </a>
 
-            <a href="admin-chats.html" class="nav-item">
-                <i data-lucide="message-circle"></i>
-                <span>Chats</span>
-            </a>
+    <a href="admin-chats.html" class="nav-item">
+        <i data-lucide="message-circle"></i>
+        <span>Chats</span>
+    </a>
 
-            <a href="admin-assignments.html" class="nav-item active">
-                <i data-lucide="calendar-check"></i>
-                <span>Asignaciones</span>
-            </a>
+    <a href="admin-assignments.html" class="nav-item">
+        <i data-lucide="calendar-check"></i>
+        <span>Asignaciones</span>
+    </a>
 
-            <div class="nav-section-title">
-                EVALUACIÓN
-            </div>
+    <div class="nav-section-title">
+        OPERACIÓN
+    </div>
 
-            <a href="admin-evaluations.html" class="nav-item">
-    <i data-lucide="clipboard-check"></i>
-    <span>Evaluaciones</span>
-</a>
+    <a href="admin-monitoring.html" class="nav-item">
+        <i data-lucide="activity"></i>
+        <span>Monitoreo</span>
+    </a>
 
-            <a href="admin-reports.html" class="nav-item">
-    <i data-lucide="file-text"></i>
-    <span>Reportes</span>
-</a>
+    <div class="nav-section-title">
+        EVALUACIÓN
+    </div>
 
-        </nav>
+    <a href="admin-evaluations.html" class="nav-item">
+        <i data-lucide="clipboard-check"></i>
+        <span>Evaluaciones</span>
+    </a>
+
+    <a href="admin-recordings.html" class="nav-item">
+        <i data-lucide="mic"></i>
+        <span>Grabaciones</span>
+    </a>
+
+    <a href="admin-reports.html" class="nav-item">
+        <i data-lucide="file-text"></i>
+        <span>Reportes</span>
+    </a>
+
+</nav>
 
         <div class="sidebar-bottom">
 
@@ -277,17 +292,30 @@
 
                     </div>
 
-                    <div class="assignment-actions">
+<div class="assignment-actions">
 
-                        <button class="icon-action" title="Ver asignación">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver asignación">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar asignación">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Editar asignación">
+        <i data-lucide="pencil"></i>
+    </button>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Eliminar asignación">
+        <i data-lucide="trash-2"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -334,17 +362,30 @@
 
                     </div>
 
-                    <div class="assignment-actions">
+<div class="assignment-actions">
 
-                        <button class="icon-action" title="Ver asignación">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver asignación">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar asignación">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Editar asignación">
+        <i data-lucide="pencil"></i>
+    </button>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Eliminar asignación">
+        <i data-lucide="trash-2"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -391,17 +432,30 @@
 
                     </div>
 
-                    <div class="assignment-actions">
+<div class="assignment-actions">
 
-                        <button class="icon-action" title="Ver asignación">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver asignación">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Ver evaluación">
-                            <i data-lucide="clipboard-check"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Editar asignación">
+        <i data-lucide="pencil"></i>
+    </button>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Eliminar asignación">
+        <i data-lucide="trash-2"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -448,21 +502,78 @@
 
                     </div>
 
-                    <div class="assignment-actions">
+<div class="assignment-actions">
 
-                        <button class="icon-action" title="Ver asignación">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver asignación">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar asignación">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Editar asignación">
+        <i data-lucide="pencil"></i>
+    </button>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Eliminar asignación">
+        <i data-lucide="trash-2"></i>
+    </button>
+
+</div>
 
                 </article>
 
             </div>
+
+            <div class="table-footer">
+
+    <span>
+        Mostrando 1–4 de 12 asignaciones
+    </span>
+
+    <div class="pagination">
+
+        <button
+            class="pagination-btn disabled"
+            type="button"
+            aria-label="Página anterior">
+            <i data-lucide="chevron-left"></i>
+        </button>
+
+        <button
+            class="pagination-btn active"
+            type="button">
+            1
+        </button>
+
+        <button
+            class="pagination-btn"
+            type="button">
+            2
+        </button>
+
+        <button
+            class="pagination-btn"
+            type="button">
+            3
+        </button>
+
+        <button
+            class="pagination-btn"
+            type="button"
+            aria-label="Página siguiente">
+            <i data-lucide="chevron-right"></i>
+        </button>
+
+    </div>
+
+</div>
 
         </section>
 

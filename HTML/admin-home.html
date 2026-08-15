@@ -10,18 +10,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="../JS/admin-common.js"></script>
 
-    <link rel="stylesheet" href="../CSS/admin-home.css">
     <link rel="stylesheet" href="../CSS/admin-common.css">
+    <link rel="stylesheet" href="../CSS/admin-home.css">
+
+    <script src="../JS/admin-common.js" defer></script>
 </head>
 
 <body>
 
-    <!-- Barra lateral -->
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
     <aside class="sidebar">
 
@@ -30,56 +35,73 @@
             <span>SimuBank</span>
         </div>
 
-        <nav class="sidebar-nav">
+<nav class="sidebar-nav">
 
-            <a href="admin-home.html" class="nav-item active">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Panel principal</span>
-            </a>
+    <a href="admin-home.html" class="nav-item active">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Panel principal</span>
+    </a>
 
-            <a href="admin-users.html" class="nav-item">
-                <i data-lucide="users"></i>
-                <span>Usuarios</span>
-            </a>
+    <a href="admin-users.html" class="nav-item">
+        <i data-lucide="users"></i>
+        <span>Usuarios</span>
+    </a>
 
-            <div class="nav-section-title">
-                SIMULACIONES
-            </div>
 
-            <a href="admin-calls.html" class="nav-item">
-                <i data-lucide="phone"></i>
-                <span>Llamadas</span>
-            </a>
+    <div class="nav-section-title">
+        SIMULACIONES
+    </div>
 
-            <a href="admin-chats.html" class="nav-item">
-    <i data-lucide="message-circle"></i>
-    <span>Chats</span>
-</a>
+    <a href="admin-calls.html" class="nav-item">
+        <i data-lucide="phone"></i>
+        <span>Llamadas</span>
+    </a>
 
-            <a href="admin-assignments.html" class="nav-item">
-    <i data-lucide="calendar-check"></i>
-    <span>Asignaciones</span>
-</a>
+    <a href="admin-chats.html" class="nav-item">
+        <i data-lucide="message-circle"></i>
+        <span>Chats</span>
+    </a>
 
-            <div class="nav-section-title">
-                EVALUACIÓN
-            </div>
+    <a href="admin-assignments.html" class="nav-item">
+        <i data-lucide="calendar-check"></i>
+        <span>Asignaciones</span>
+    </a>
 
-            <a href="admin-evaluations.html" class="nav-item">
-    <i data-lucide="clipboard-check"></i>
-    <span>Evaluaciones</span>
-</a>
 
-            <a href="admin-reports.html" class="nav-item">
-    <i data-lucide="file-text"></i>
-    <span>Reportes</span>
-</a>
+    <div class="nav-section-title">
+        OPERACIÓN
+    </div>
 
-        </nav>
+    <a href="admin-monitoring.html" class="nav-item">
+        <i data-lucide="activity"></i>
+        <span>Monitoreo</span>
+    </a>
+
+
+    <div class="nav-section-title">
+        EVALUACIÓN
+    </div>
+
+    <a href="admin-evaluations.html" class="nav-item">
+        <i data-lucide="clipboard-check"></i>
+        <span>Evaluaciones</span>
+    </a>
+
+    <a href="admin-recordings.html" class="nav-item">
+        <i data-lucide="mic"></i>
+        <span>Grabaciones</span>
+    </a>
+
+    <a href="admin-reports.html" class="nav-item">
+        <i data-lucide="file-text"></i>
+        <span>Reportes</span>
+    </a>
+
+</nav>
 
         <div class="sidebar-bottom">
 
-            <a href="../HTML/admin-login.html" class="nav-item logout">
+            <a href="admin-login.html" class="nav-item logout">
                 <i data-lucide="log-out"></i>
                 <span>Cerrar sesión</span>
             </a>
@@ -89,71 +111,83 @@
     </aside>
 
 
-    <!-- Contenido principal -->
+    <!-- =========================
+         CONTENIDO
+    ========================== -->
 
     <main class="main-content">
 
-        <!-- Header -->
+        <!-- HEADER -->
 
-        <header class="topbar">
+        <header class="home-header">
 
-            <div>
-                <p class="page-label">Panel administrativo</p>
-                <h1>Bienvenido, Administrador</h1>
+            <div class="header-title">
+
+                <span class="header-label">
+                    Panel administrativo
+                </span>
+
+                <h1>
+                    Bienvenido, Administrador
+                    <span class="welcome-icon">👋</span>
+                </h1>
+
+                <p>
+                    Aquí tienes un resumen general de la actividad de SimuBank.
+                </p>
+
             </div>
 
-            <div class="admin-profile">
 
-                <div class="notification">
+            <div class="header-profile">
+
+                <button class="notification-btn">
                     <i data-lucide="bell"></i>
-                    <span class="notification-dot"></span>
+                    <span></span>
+                </button>
+
+                <div class="profile-avatar">
+                    AD
                 </div>
 
-                <div class="profile-info">
-                    <div class="profile-avatar">
-                        AD
-                    </div>
-
-                    <div>
-                        <strong>Admin Banking Academy</strong>
-                        <span>Administrador</span>
-                    </div>
+                <div class="profile-text">
+                    <strong>Admin Banking Academy</strong>
+                    <small>Administrador</small>
                 </div>
+
+                <i data-lucide="chevron-down" class="profile-chevron"></i>
 
             </div>
 
         </header>
 
 
-        <!-- Resumen -->
-
-        <section class="welcome-section">
-
-            <div>
-                <h2>Resumen de la plataforma</h2>
-
-                <p>
-                    Administra usuarios, simulaciones y evaluaciones
-                    desde este panel.
-                </p>
-            </div>
-
-        </section>
-
-
-        <!-- Estadísticas -->
+        <!-- =========================
+             ESTADÍSTICAS
+        ========================== -->
 
         <section class="stats-grid">
 
             <article class="stat-card">
 
-                <div class="stat-icon blue">
+                <div class="stat-icon stat-icon-blue">
                     <i data-lucide="users"></i>
                 </div>
 
-                <div>
-                    <span>Usuarios registrados</span>
-                    <strong>24</strong>
+                <div class="stat-content">
+
+                    <span>
+                        Usuarios registrados
+                    </span>
+
+                    <strong>
+                        24
+                    </strong>
+
+                    <small class="stat-positive">
+                        ↑ 12% <em>vs. ayer</em>
+                    </small>
+
                 </div>
 
             </article>
@@ -161,13 +195,24 @@
 
             <article class="stat-card">
 
-                <div class="stat-icon purple">
+                <div class="stat-icon stat-icon-green">
                     <i data-lucide="phone"></i>
                 </div>
 
-                <div>
-                    <span>Escenarios de llamadas</span>
-                    <strong>12</strong>
+                <div class="stat-content">
+
+                    <span>
+                        Llamadas simuladas
+                    </span>
+
+                    <strong>
+                        32
+                    </strong>
+
+                    <small class="stat-positive">
+                        ↑ 8% <em>vs. ayer</em>
+                    </small>
+
                 </div>
 
             </article>
@@ -175,13 +220,24 @@
 
             <article class="stat-card">
 
-                <div class="stat-icon green">
+                <div class="stat-icon stat-icon-purple">
                     <i data-lucide="message-circle"></i>
                 </div>
 
-                <div>
-                    <span>Escenarios de chat</span>
-                    <strong>8</strong>
+                <div class="stat-content">
+
+                    <span>
+                        Chats simulados
+                    </span>
+
+                    <strong>
+                        18
+                    </strong>
+
+                    <small class="stat-positive">
+                        ↑ 15% <em>vs. ayer</em>
+                    </small>
+
                 </div>
 
             </article>
@@ -189,13 +245,24 @@
 
             <article class="stat-card">
 
-                <div class="stat-icon orange">
+                <div class="stat-icon stat-icon-orange">
                     <i data-lucide="clipboard-check"></i>
                 </div>
 
-                <div>
-                    <span>Evaluaciones realizadas</span>
-                    <strong>36</strong>
+                <div class="stat-content">
+
+                    <span>
+                        Evaluaciones realizadas
+                    </span>
+
+                    <strong>
+                        36
+                    </strong>
+
+                    <small class="stat-positive">
+                        ↑ 10% <em>vs. ayer</em>
+                    </small>
+
                 </div>
 
             </article>
@@ -203,174 +270,400 @@
         </section>
 
 
-        <!-- Acciones principales -->
+        <!-- =========================
+             CONTENIDO SUPERIOR
+        ========================== -->
 
-        <section class="content-section">
+        <section class="dashboard-grid">
 
-            <div class="section-header">
 
-                <div>
-                    <h2>Gestión de la plataforma</h2>
-                    <p>
-                        Accede rápidamente a las principales funciones administrativas.
-                    </p>
+            <!-- ACTIVIDAD GENERAL -->
+
+            <article class="dashboard-card activity-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h2>Actividad general</h2>
+                        <p>
+                            Actividad registrada durante los últimos días.
+                        </p>
+                    </div>
+
+                    <select class="period-select">
+                        <option>Últimos 7 días</option>
+                        <option>Últimos 30 días</option>
+                        <option>Este mes</option>
+                    </select>
+
                 </div>
 
-            </div>
 
+                <div class="chart-area">
 
-            <div class="management-grid">
+                    <div class="chart-legend">
 
-                <a href="admin-users.html" class="management-card">
+                        <span>
+                            <i class="legend-dot calls"></i>
+                            Llamadas
+                        </span>
 
-                    <div class="management-icon">
-                        <i data-lucide="users"></i>
+                        <span>
+                            <i class="legend-dot chats"></i>
+                            Chats
+                        </span>
+
+                        <span>
+                            <i class="legend-dot evaluations"></i>
+                            Evaluaciones
+                        </span>
+
                     </div>
 
-                    <div>
-                        <h3>Gestionar usuarios</h3>
 
+<div class="chart">
+
+    <!-- Escala vertical -->
+    <div class="chart-y-axis">
+        <span>40</span>
+        <span>30</span>
+        <span>20</span>
+        <span>10</span>
+        <span>0</span>
+    </div>
+
+    <!-- Líneas horizontales -->
+    <div class="chart-lines">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <svg
+        class="activity-chart"
+        viewBox="0 0 700 230"
+        preserveAspectRatio="none">
+
+        <polyline
+            class="line-calls"
+            points="20,150 120,150 220,120 320,135 420,150 520,120 620,145 680,125" />
+
+        <polyline
+            class="line-chats"
+            points="20,185 120,175 220,165 320,145 420,165 520,150 620,160 680,145" />
+
+        <polyline
+            class="line-evaluations"
+            points="20,205 120,205 220,190 320,180 420,190 520,185 620,195 680,180" />
+
+    </svg>
+
+</div>
+
+
+                    <div class="chart-days">
+
+                        <span>Lun</span>
+                        <span>Mar</span>
+                        <span>Mié</span>
+                        <span>Jue</span>
+                        <span>Vie</span>
+                        <span>Sáb</span>
+                        <span>Dom</span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- DISTRIBUCIÓN -->
+
+            <article class="dashboard-card distribution-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h2>Distribución de actividad</h2>
                         <p>
-                            Registrar y modificar participantes y administradores.
+                            Actividades registradas.
                         </p>
                     </div>
 
-                    <i data-lucide="arrow-right" class="card-arrow"></i>
-
-                </a>
+                </div>
 
 
-                <a href="#" class="management-card">
+                <div class="distribution-content">
 
-                    <div class="management-icon">
-                        <i data-lucide="phone"></i>
+                    <div class="donut">
+
+                        <div class="donut-center">
+                            <strong>86</strong>
+                            <span>actividades</span>
+                        </div>
+
                     </div>
 
-                    <div>
-                        <h3>Simulaciones de llamadas</h3>
 
-                        <p>
-                            Crear y configurar escenarios de atención telefónica.
-                        </p>
+                    <div class="distribution-legend">
+
+                        <div class="distribution-item">
+
+                            <span class="distribution-color calls"></span>
+
+                            <div>
+                                <strong>Llamadas</strong>
+                                <small>37% · 32</small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="distribution-item">
+
+                            <span class="distribution-color chats"></span>
+
+                            <div>
+                                <strong>Chats</strong>
+                                <small>21% · 18</small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="distribution-item">
+
+                            <span class="distribution-color evaluations"></span>
+
+                            <div>
+                                <strong>Evaluaciones</strong>
+                                <small>42% · 36</small>
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <i data-lucide="arrow-right" class="card-arrow"></i>
+                </div>
 
-                </a>
-
-
-                <a href="#" class="management-card">
-
-                    <div class="management-icon">
-                        <i data-lucide="message-circle"></i>
-                    </div>
-
-                    <div>
-                        <h3>Simulaciones de chat</h3>
-
-                        <p>
-                            Crear y configurar escenarios de atención escrita.
-                        </p>
-                    </div>
-
-                    <i data-lucide="arrow-right" class="card-arrow"></i>
-
-                </a>
-
-
-                <a href="#" class="management-card">
-
-                    <div class="management-icon">
-                        <i data-lucide="clipboard-check"></i>
-                    </div>
-
-                    <div>
-                        <h3>Evaluaciones</h3>
-
-                        <p>
-                            Consultar y gestionar las evaluaciones de los participantes.
-                        </p>
-                    </div>
-
-                    <i data-lucide="arrow-right" class="card-arrow"></i>
-
-                </a>
-
-            </div>
+            </article>
 
         </section>
 
 
-        <!-- Actividad reciente -->
+        <!-- =========================
+             PARTE INFERIOR
+        ========================== -->
 
-        <section class="content-section">
-
-            <div class="section-header">
-
-                <div>
-                    <h2>Actividad reciente</h2>
-                    <p>
-                        Últimas acciones registradas en la plataforma.
-                    </p>
-                </div>
-
-                <a href="#" class="view-all">
-                    Ver todas
-                </a>
-
-            </div>
+        <section class="bottom-grid">
 
 
-            <div class="activity-card">
+            <!-- ACTIVIDAD RECIENTE -->
 
-                <div class="activity-row">
+            <article class="dashboard-card recent-card">
 
-                    <div class="activity-icon">
-                        <i data-lucide="user-plus"></i>
+                <div class="card-header">
+
+                    <div>
+                        <h2>Actividad reciente</h2>
+                        <p>
+                            Últimas acciones realizadas en la plataforma.
+                        </p>
                     </div>
 
-                    <div class="activity-info">
-                        <strong>Nuevo participante registrado</strong>
-                        <span>María Rodríguez fue registrada en la plataforma.</span>
-                    </div>
-
-                    <time>Hace 15 min</time>
+                    <a href="admin-reports.html">
+                        Ver todo
+                    </a>
 
                 </div>
 
 
-                <div class="activity-row">
+                <div class="activity-list">
 
-                    <div class="activity-icon">
+
+                    <div class="activity-item">
+
+                        <div class="recent-icon blue">
+                            <i data-lucide="user-plus"></i>
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Nuevo usuario registrado
+                            </strong>
+
+                            <span>
+                                María Rodríguez
+                            </span>
+
+                        </div>
+
+                        <time>
+                            Hace 15 min
+                        </time>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="recent-icon green">
+                            <i data-lucide="phone"></i>
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Escenario de llamada completado
+                            </strong>
+
+                            <span>
+                                Cliente inconforme
+                            </span>
+
+                        </div>
+
+                        <time>
+                            Hace 1 hora
+                        </time>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="recent-icon orange">
+                            <i data-lucide="clipboard-check"></i>
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Evaluación completada
+                            </strong>
+
+                            <span>
+                                Juan Pérez · Servicio al cliente
+                            </span>
+
+                        </div>
+
+                        <time>
+                            Hace 2 horas
+                        </time>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="recent-icon purple">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Nuevo chat simulado
+                            </strong>
+
+                            <span>
+                                Consulta sobre productos
+                            </span>
+
+                        </div>
+
+                        <time>
+                            Hace 3 horas
+                        </time>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="recent-icon blue">
+                            <i data-lucide="calendar-check"></i>
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Asignación actualizada
+                            </strong>
+
+                            <span>
+                                Escenario: Banca digital
+                            </span>
+
+                        </div>
+
+                        <time>
+                            Hace 4 horas
+                        </time>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- ACCESOS RÁPIDOS -->
+
+            <article class="dashboard-card quick-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h2>Accesos rápidos</h2>
+                        <p>
+                            Gestión rápida de la plataforma.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+                    <a href="admin-users.html" class="quick-item">
+                        <i data-lucide="users"></i>
+                        <span>Usuarios</span>
+                    </a>
+
+                    <a href="admin-calls.html" class="quick-item">
                         <i data-lucide="phone"></i>
-                    </div>
+                        <span>Llamadas</span>
+                    </a>
 
-                    <div class="activity-info">
-                        <strong>Escenario actualizado</strong>
-                        <span>Se modificó el escenario "Cliente inconforme".</span>
-                    </div>
+                    <a href="admin-chats.html" class="quick-item">
+                        <i data-lucide="message-circle"></i>
+                        <span>Chats</span>
+                    </a>
 
-                    <time>Hace 1 hora</time>
+                    <a href="admin-assignments.html" class="quick-item">
+                        <i data-lucide="calendar-check"></i>
+                        <span>Asignaciones</span>
+                    </a>
 
-                </div>
-
-
-                <div class="activity-row">
-
-                    <div class="activity-icon">
+                    <a href="admin-evaluations.html" class="quick-item">
                         <i data-lucide="clipboard-check"></i>
-                    </div>
+                        <span>Evaluaciones</span>
+                    </a>
 
-                    <div class="activity-info">
-                        <strong>Evaluación registrada</strong>
-                        <span>Se completó una evaluación de llamada.</span>
-                    </div>
-
-                    <time>Hace 2 horas</time>
+                    <a href="admin-reports.html" class="quick-item">
+                        <i data-lucide="file-text"></i>
+                        <span>Reportes</span>
+                    </a>
 
                 </div>
 
-            </div>
+            </article>
 
         </section>
 
@@ -378,11 +671,14 @@
 
 
     <script>
-        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+        });
     </script>
 
-    <script src="../JS/admin-common.js"></script>
-
 </body>
-
 </html>
