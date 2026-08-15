@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimuBank | Mi perfil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="../CSS/perfil-usuario.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar__left">
+    <div class="brand-mark">
+      <i data-lucide="landmark"></i>
+      <span>SimuBank</span>
+    </div>
+
+    <nav class="navbar__links">
+      <a href="home.html" class="nav-link">Inicio</a>
+      <a href="#" class="nav-link">Simulaciones</a>
+      <a href="#" class="nav-link">Historial</a>
+      <a href="#" class="nav-link">Reportes</a>
+    </nav>
+  </div>
+
+  <div class="navbar__right">
+    <button class="icon-btn" aria-label="Notificaciones">
+      <i data-lucide="bell"></i>
+      <span class="icon-btn__dot"></span>
+    </button>
+
+    <a href="perfil-usuario.html" class="user-chip user-chip--active">
+      <div class="user-avatar">JP</div>
+      <div class="user-chip__info">
+        <span class="user-chip__name">Juan Pérez</span>
+        <span class="user-chip__role">Agente en formación</span>
+      </div>
+      <i data-lucide="chevron-down"></i>
+    </a>
+  </div>
+</header>
+
+<main class="main">
+
+  <a href="home.html" class="back-link">
+    <i data-lucide="arrow-left"></i>
+    Volver al inicio
+  </a>
+
+  <!-- Encabezado de perfil -->
+  <section class="profile-header">
+    <div class="profile-header__left">
+      <div class="profile-avatar">JP</div>
+
+      <div class="profile-header__info">
+        <div class="profile-header__name-row">
+          <h1>Juan Pérez</h1>
+          <span class="badge badge--available">
+            <span class="status-dot status-dot--available"></span>
+            Disponible
+          </span>
+        </div>
+        <p class="profile-header__role">Agente en formación · Banking Academy</p>
+
+        <div class="profile-header__meta">
+          <span><i data-lucide="mail"></i> juan.perez@bankingacademy.com</span>
+          <span><i data-lucide="phone"></i> +506 8888 8888</span>
+          <span><i data-lucide="calendar"></i> Miembro desde ene. 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-secondary">
+      <i data-lucide="pencil"></i>
+      Editar perfil
+    </button>
+  </section>
+
+  <!-- Resumen -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--primary">
+        <i data-lucide="check-circle-2"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">142</p>
+        <p class="stat-card__label">Simulaciones completadas</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--success">
+        <i data-lucide="star"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">92%</p>
+        <p class="stat-card__label">Evaluación promedio</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--secondary">
+        <i data-lucide="clock"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">4:32</p>
+        <p class="stat-card__label">Tiempo promedio de atención</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon stat-card__icon--primary">
+        <i data-lucide="flame"></i>
+      </div>
+      <div>
+        <p class="stat-card__value">6 días</p>
+        <p class="stat-card__label">Racha activa</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-grid">
+
+    <!-- ultimas evaluaciones -->
+    <section class="panel">
+      <div class="panel__head">
+        <h3>Últimas evaluaciones</h3>
+        <a href="#" class="link">Ver todas</a>
+      </div>
+
+      <div class="eval-list">
+
+        <div class="eval-item">
+          <div class="eval-item__icon eval-item__icon--call">
+            <i data-lucide="phone"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Apertura de cuenta · María G.</p>
+            <p class="eval-item__meta">Llamada · 12 ago 2026</p>
+          </div>
+          <span class="score score--high">95</span>
+        </div>
+
+        <div class="eval-item">
+          <div class="eval-item__icon eval-item__icon--chat">
+            <i data-lucide="message-square"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Consulta de saldo · Kevin R.</p>
+            <p class="eval-item__meta">Chat · 11 ago 2026</p>
+          </div>
+          <span class="score score--high">90</span>
+        </div>
+
+        <div class="eval-item">
+          <div class="eval-item__icon eval-item__icon--call">
+            <i data-lucide="phone"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Bloqueo de tarjeta · Ana T.</p>
+            <p class="eval-item__meta">Llamada · 10 ago 2026</p>
+          </div>
+          <span class="score score--mid">78</span>
+        </div>
+
+        <div class="eval-item">
+          <div class="eval-item__icon eval-item__icon--chat">
+            <i data-lucide="message-square"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Reclamo de cobro · Diego M.</p>
+            <p class="eval-item__meta">Chat · 09 ago 2026</p>
+          </div>
+          <span class="score score--low">62</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Transcripciones recientes -->
+    <section class="panel">
+      <div class="panel__head">
+        <h3>Transcripciones recientes</h3>
+        <a href="#" class="link">Ver todas</a>
+      </div>
+
+      <div class="transcript-list">
+
+        <div class="transcript-item">
+          <div class="eval-item__icon eval-item__icon--call">
+            <i data-lucide="phone"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Apertura de cuenta · María G.</p>
+            <p class="eval-item__meta">12 ago 2026 · 5:12 min</p>
+          </div>
+          <button class="btn-outline">
+            <i data-lucide="file-text"></i>
+            Ver
+          </button>
+        </div>
+
+        <div class="transcript-item">
+          <div class="eval-item__icon eval-item__icon--chat">
+            <i data-lucide="message-square"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Consulta de saldo · Kevin R.</p>
+            <p class="eval-item__meta">11 ago 2026 · 3:40 min</p>
+          </div>
+          <button class="btn-outline">
+            <i data-lucide="file-text"></i>
+            Ver
+          </button>
+        </div>
+
+        <div class="transcript-item">
+          <div class="eval-item__icon eval-item__icon--call">
+            <i data-lucide="phone"></i>
+          </div>
+          <div class="eval-item__info">
+            <p class="eval-item__title">Bloqueo de tarjeta · Ana T.</p>
+            <p class="eval-item__meta">10 ago 2026 · 6:05 min</p>
+          </div>
+          <button class="btn-outline">
+            <i data-lucide="file-text"></i>
+            Ver
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

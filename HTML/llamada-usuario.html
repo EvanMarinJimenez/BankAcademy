@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimuBank | Llamada en curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="../CSS/llamada-usuario.css">
+</head>
+<body>
+
+<header class="session-bar">
+  <a href="home.html" class="session-bar__exit">
+    <i data-lucide="x"></i>
+  </a>
+
+  <div class="session-bar__center">
+    <span class="session-tag">
+      <span class="session-tag__dot"></span>
+      Simulación en curso · Llamada
+    </span>
+    <span class="session-timer">04:12</span>
+  </div>
+
+  <div class="session-bar__right">
+    <span class="brand-mark">
+      <i data-lucide="landmark"></i>
+      SimuBank
+    </span>
+  </div>
+</header>
+
+<main class="session-main">
+
+  <!-- Panel izquierdo: info del cliente -->
+  <aside class="panel client-panel">
+    <div class="client-panel__head">
+      <div class="client-avatar">MG</div>
+      <h2>María González</h2>
+      <p class="client-meta">Cliente desde 2021</p>
+      <span class="priority-tag priority-tag--normal">Prioridad normal</span>
+    </div>
+
+    <div class="client-info-list">
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="hash"></i> N.º de cuenta</span>
+        <span class="client-info-item__value">CR•• •••• 4821</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="wallet"></i> Producto</span>
+        <span class="client-info-item__value">Cuenta de ahorros</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="phone"></i> Teléfono</span>
+        <span class="client-info-item__value">+506 8888 4821</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="flag"></i> Motivo</span>
+        <span class="client-info-item__value">Apertura de cuenta</span>
+      </div>
+    </div>
+
+    <div class="client-panel__note">
+      <i data-lucide="info"></i>
+      <p>Cliente nuevo en el segmento joven. Interesada en tarjeta de débito y banca móvil.</p>
+    </div>
+  </aside>
+
+  <!-- Centro: llamada activa -->
+  <section class="call-stage">
+    <div class="call-visual">
+      <span class="call-ring call-ring--1"></span>
+      <span class="call-ring call-ring--2"></span>
+      <div class="call-avatar">MG</div>
+    </div>
+
+    <h1 class="call-name">María González</h1>
+    <p class="call-status">Llamada en curso</p>
+
+    <div class="call-controls">
+      <button class="call-control" data-tooltip="Silenciar">
+        <i data-lucide="mic-off"></i>
+      </button>
+      <button class="call-control" data-tooltip="Retener">
+        <i data-lucide="pause"></i>
+      </button>
+      <button class="call-control" data-tooltip="Teclado">
+        <i data-lucide="grid-3x3"></i>
+      </button>
+      <button class="call-control" data-tooltip="Altavoz">
+        <i data-lucide="volume-2"></i>
+      </button>
+      <button class="call-control" data-tooltip="Transferir">
+        <i data-lucide="phone-forwarded"></i>
+      </button>
+    </div>
+
+    <button class="end-call-btn">
+      <i data-lucide="phone-off"></i>
+      Finalizar llamada
+    </button>
+  </section>
+
+  <!-- Panel derecho: guía y notas -->
+  <aside class="panel guide-panel">
+    <div class="guide-panel__section">
+      <h3>Guion sugerido</h3>
+      <ul class="checklist">
+        <li>
+          <span class="checklist__box checked"></span>
+          Saludar y verificar identidad del cliente
+        </li>
+        <li>
+          <span class="checklist__box checked"></span>
+          Confirmar motivo de la llamada
+        </li>
+        <li>
+          <span class="checklist__box"></span>
+          Explicar requisitos para apertura de cuenta
+        </li>
+        <li>
+          <span class="checklist__box"></span>
+          Ofrecer productos adicionales (tarjeta, app)
+        </li>
+        <li>
+          <span class="checklist__box"></span>
+          Confirmar próximos pasos y cerrar llamada
+        </li>
+      </ul>
+    </div>
+
+    <div class="guide-panel__section">
+      <h3>Notas de la simulación</h3>
+      <textarea class="notes-area" placeholder="Escribe aquí tus notas sobre la llamada..."></textarea>
+    </div>
+  </aside>
+
+</main>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

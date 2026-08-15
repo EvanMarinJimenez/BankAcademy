@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimuBank | Chat en curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="../CSS/chat-usuario.css">
+</head>
+<body>
+
+<header class="session-bar">
+  <a href="home.html" class="session-bar__exit">
+    <i data-lucide="x"></i>
+  </a>
+
+  <div class="session-bar__center">
+    <span class="session-tag session-tag--chat">
+      <span class="session-tag__dot"></span>
+      Simulación en curso · Chat
+    </span>
+    <span class="session-timer">03:40</span>
+  </div>
+
+  <div class="session-bar__right">
+    <span class="brand-mark">
+      <i data-lucide="landmark"></i>
+      SimuBank
+    </span>
+  </div>
+</header>
+
+<main class="session-main">
+
+  <!-- Panel izquierdo: info del cliente -->
+  <aside class="panel client-panel">
+    <div class="client-panel__head">
+      <div class="client-avatar">KR</div>
+      <h2>Kevin Rodríguez</h2>
+      <p class="client-meta">Cliente desde 2019</p>
+      <span class="priority-tag priority-tag--normal">Prioridad normal</span>
+    </div>
+
+    <div class="client-info-list">
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="hash"></i> N.º de cuenta</span>
+        <span class="client-info-item__value">CR•• •••• 1093</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="wallet"></i> Producto</span>
+        <span class="client-info-item__value">Cuenta corriente</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="mail"></i> Correo</span>
+        <span class="client-info-item__value">kevin.r@correo.com</span>
+      </div>
+      <div class="client-info-item">
+        <span class="client-info-item__label"><i data-lucide="flag"></i> Motivo</span>
+        <span class="client-info-item__value">Consulta de saldo</span>
+      </div>
+    </div>
+
+    <div class="client-panel__note">
+      <i data-lucide="info"></i>
+      <p>Cliente frecuente, prefiere respuestas breves y directas.</p>
+    </div>
+  </aside>
+
+  <!-- Centro: conversación -->
+  <section class="chat-stage">
+
+    <div class="chat-thread">
+
+      <div class="chat-day-divider"><span>Hoy</span></div>
+
+      <div class="chat-bubble chat-bubble--client">
+        <div class="chat-avatar chat-avatar--client">KR</div>
+        <div class="chat-bubble__content">
+          <p>Hola, buenas tardes. Quisiera saber el saldo disponible de mi cuenta corriente.</p>
+          <span class="chat-bubble__time">10:02 a.m.</span>
+        </div>
+      </div>
+
+      <div class="chat-bubble chat-bubble--agent">
+        <div class="chat-bubble__content">
+          <p>Buenas tardes, Kevin. Con gusto te ayudo. Antes de continuar, ¿me confirmas tu número de identificación para verificar tu identidad?</p>
+          <span class="chat-bubble__time">10:02 a.m.</span>
+        </div>
+      </div>
+
+      <div class="chat-bubble chat-bubble--client">
+        <div class="chat-avatar chat-avatar--client">KR</div>
+        <div class="chat-bubble__content">
+          <p>Claro, es 1-0234-0567.</p>
+          <span class="chat-bubble__time">10:03 a.m.</span>
+        </div>
+      </div>
+
+      <div class="chat-bubble chat-bubble--agent">
+        <div class="chat-bubble__content">
+          <p>Perfecto, identidad verificada ✅. Tu saldo disponible en la cuenta corriente es de ₡485,320.00.</p>
+          <span class="chat-bubble__time">10:04 a.m.</span>
+        </div>
+      </div>
+
+      <div class="chat-bubble chat-bubble--client">
+        <div class="chat-avatar chat-avatar--client">KR</div>
+        <div class="chat-bubble__content">
+          <p>Excelente, muchas gracias.</p>
+          <span class="chat-bubble__time">10:04 a.m.</span>
+        </div>
+      </div>
+
+      <div class="typing-indicator">
+        <div class="chat-avatar chat-avatar--client">KR</div>
+        <div class="typing-indicator__dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input-bar">
+      <button class="chat-input-icon" aria-label="Adjuntar">
+        <i data-lucide="paperclip"></i>
+      </button>
+      <input type="text" class="chat-input" placeholder="Escribe tu respuesta...">
+      <button class="chat-input-icon" aria-label="Emojis">
+        <i data-lucide="smile"></i>
+      </button>
+      <button class="chat-send-btn">
+        <i data-lucide="send"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- Panel derecho: guía y notas -->
+  <aside class="panel guide-panel">
+    <div class="guide-panel__section">
+      <h3>Respuestas rápidas</h3>
+      <div class="quick-replies">
+        <button class="quick-reply">Verificar identidad</button>
+        <button class="quick-reply">Consultar saldo</button>
+        <button class="quick-reply">Explicar movimientos</button>
+        <button class="quick-reply">Cerrar conversación</button>
+      </div>
+    </div>
+
+    <div class="guide-panel__section">
+      <h3>Guion sugerido</h3>
+      <ul class="checklist">
+        <li>
+          <span class="checklist__box checked"></span>
+          Saludar y verificar identidad del cliente
+        </li>
+        <li>
+          <span class="checklist__box checked"></span>
+          Resolver la consulta principal
+        </li>
+        <li>
+          <span class="checklist__box"></span>
+          Ofrecer ayuda adicional
+        </li>
+        <li>
+          <span class="checklist__box"></span>
+          Cerrar con cordialidad
+        </li>
+      </ul>
+    </div>
+
+    <div class="guide-panel__section">
+      <h3>Notas de la simulación</h3>
+      <textarea class="notes-area" placeholder="Escribe aquí tus notas sobre el chat..."></textarea>
+    </div>
+
+    <button class="end-chat-btn">
+      <i data-lucide="log-out"></i>
+      Finalizar chat
+    </button>
+  </aside>
+
+</main>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

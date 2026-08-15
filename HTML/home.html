@@ -8,11 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<link rel="stylesheet" href="/CSS/home.css">
+<link rel="stylesheet" href="../CSS/home.css">
 </head>
 <body>
 
-<!--  NAVBAR -->
 <header class="navbar">
   <div class="navbar__left">
     <div class="brand-mark">
@@ -34,18 +33,17 @@
       <span class="icon-btn__dot"></span>
     </button>
 
-    <div class="user-chip">
+    <a href="perfil-usuario.html" class="user-chip">
       <div class="user-avatar">JP</div>
       <div class="user-chip__info">
         <span class="user-chip__name">Juan Pérez</span>
         <span class="user-chip__role">Agente en formación</span>
       </div>
       <i data-lucide="chevron-down"></i>
-    </div>
+    </a>
   </div>
 </header>
 
-<!-- MAIN -->
 <main class="main">
 
   <div class="page-head">
@@ -81,7 +79,7 @@
     </div>
   </section>
 
-  <!-- Metricas rapidas -->
+  <!-- Métricas rápidas -->
   <section class="stats-grid">
     <div class="stat-card">
       <div class="stat-card__icon stat-card__icon--primary">
@@ -142,7 +140,7 @@
           <p class="queue-item__meta">Llamada entrante · Apertura de cuenta</p>
         </div>
         <span class="queue-item__wait">Esperando 0:42</span>
-        <button class="btn-primary btn-primary--sm">Atender</button>
+        <a href="llamada-usuario.html" class="btn-primary btn-primary--sm">Atender</a>
       </div>
 
       <div class="queue-item">
@@ -154,7 +152,7 @@
           <p class="queue-item__meta">Chat entrante · Consulta de saldo</p>
         </div>
         <span class="queue-item__wait">Esperando 1:10</span>
-        <button class="btn-primary btn-primary--sm">Atender</button>
+        <a href="chat-usuario.html" class="btn-primary btn-primary--sm">Atender</a>
       </div>
 
       <div class="queue-item">
@@ -166,7 +164,7 @@
           <p class="queue-item__meta">Llamada entrante · Bloqueo de tarjeta</p>
         </div>
         <span class="queue-item__wait">Esperando 2:05</span>
-        <button class="btn-primary btn-primary--sm">Atender</button>
+        <a href="llamada-usuario.html" class="btn-primary btn-primary--sm">Atender</a>
       </div>
 
     </div>
