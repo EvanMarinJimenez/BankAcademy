@@ -14,11 +14,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="../JS/admin-common.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-    <link rel="stylesheet" href="../CSS/admin-chats.css">
-    <link rel="stylesheet" href="../CSS/admin-common.css">
+<link rel="stylesheet" href="../CSS/admin-common.css">
+<link rel="stylesheet" href="../CSS/admin-chats.css">
+
+<script src="../JS/admin-common.js"></script>
 </head>
 
 <body>
@@ -31,52 +32,66 @@
             <span>SimuBank</span>
         </div>
 
-        <nav class="sidebar-nav">
+<nav class="sidebar-nav">
 
-            <a href="admin-home.html" class="nav-item">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Panel principal</span>
-            </a>
+    <a href="admin-home.html" class="nav-item">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Panel principal</span>
+    </a>
 
-            <a href="admin-users.html" class="nav-item">
-                <i data-lucide="users"></i>
-                <span>Usuarios</span>
-            </a>
+    <a href="admin-users.html" class="nav-item">
+        <i data-lucide="users"></i>
+        <span>Usuarios</span>
+    </a>
 
-            <div class="nav-section-title">
-                SIMULACIONES
-            </div>
+    <div class="nav-section-title">
+        SIMULACIONES
+    </div>
 
-            <a href="admin-calls.html" class="nav-item">
-                <i data-lucide="phone"></i>
-                <span>Llamadas</span>
-            </a>
+    <a href="admin-calls.html" class="nav-item">
+        <i data-lucide="phone"></i>
+        <span>Llamadas</span>
+    </a>
 
-            <a href="admin-chats.html" class="nav-item active">
-                <i data-lucide="message-circle"></i>
-                <span>Chats</span>
-            </a>
+    <a href="admin-chats.html" class="nav-item">
+        <i data-lucide="message-circle"></i>
+        <span>Chats</span>
+    </a>
 
-            <a href="admin-assignments.html" class="nav-item">
-    <i data-lucide="calendar-check"></i>
-    <span>Asignaciones</span>
-</a>
+    <a href="admin-assignments.html" class="nav-item">
+        <i data-lucide="calendar-check"></i>
+        <span>Asignaciones</span>
+    </a>
 
-            <div class="nav-section-title">
-                EVALUACIÓN
-            </div>
+    <div class="nav-section-title">
+        OPERACIÓN
+    </div>
 
-            <a href="admin-evaluations.html" class="nav-item">
-    <i data-lucide="clipboard-check"></i>
-    <span>Evaluaciones</span>
-</a>
+    <a href="admin-monitoring.html" class="nav-item">
+        <i data-lucide="activity"></i>
+        <span>Monitoreo</span>
+    </a>
 
-            <a href="admin-reports.html" class="nav-item">
-    <i data-lucide="file-text"></i>
-    <span>Reportes</span>
-</a>
+    <div class="nav-section-title">
+        EVALUACIÓN
+    </div>
 
-        </nav>
+    <a href="admin-evaluations.html" class="nav-item">
+        <i data-lucide="clipboard-check"></i>
+        <span>Evaluaciones</span>
+    </a>
+
+    <a href="admin-recordings.html" class="nav-item">
+        <i data-lucide="mic"></i>
+        <span>Grabaciones</span>
+    </a>
+
+    <a href="admin-reports.html" class="nav-item">
+        <i data-lucide="file-text"></i>
+        <span>Reportes</span>
+    </a>
+
+</nav>
 
         <div class="sidebar-bottom">
 
@@ -96,32 +111,37 @@
         <!-- Header -->
         <header class="topbar">
 
-            <div>
-                <p class="page-label">Simulaciones</p>
-                <h1>Simulaciones de chats</h1>
-            </div>
+<div class="scenario-actions">
 
-            <div class="admin-profile">
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver escenario">
+        <i data-lucide="eye"></i>
+    </button>
 
-                <div class="notification">
-                    <i data-lucide="bell"></i>
-                    <span class="notification-dot"></span>
-                </div>
+    <a
+        href="admin-call-edit.html"
+        class="action-btn"
+        title="Editar escenario">
+        <i data-lucide="pencil"></i>
+    </a>
 
-                <div class="profile-info">
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Desactivar escenario">
+        <i data-lucide="power"></i>
+    </button>
 
-                    <div class="profile-avatar">
-                        AD
-                    </div>
+    <button
+        type="button"
+        class="action-btn"
+        title="Más opciones">
+        <i data-lucide="more-horizontal"></i>
+    </button>
 
-                    <div>
-                        <strong>Admin Banking Academy</strong>
-                        <span>Administrador</span>
-                    </div>
-
-                </div>
-
-            </div>
+</div>
 
         </header>
 
@@ -279,17 +299,37 @@
 
                     </div>
 
-                    <div class="scenario-actions">
+<div class="scenario-actions">
 
-                        <button class="icon-action" title="Ver escenario">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver escenario">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar escenario">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <a
+        href="admin-call-edit.html"
+        class="action-btn"
+        title="Editar escenario">
+        <i data-lucide="pencil"></i>
+    </a>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Desactivar escenario">
+        <i data-lucide="power"></i>
+    </button>
+
+    <button
+        type="button"
+        class="action-btn"
+        title="Más opciones">
+        <i data-lucide="more-horizontal"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -339,17 +379,37 @@
 
                     </div>
 
-                    <div class="scenario-actions">
+<div class="scenario-actions">
 
-                        <button class="icon-action" title="Ver escenario">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver escenario">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar escenario">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <a
+        href="admin-call-edit.html"
+        class="action-btn"
+        title="Editar escenario">
+        <i data-lucide="pencil"></i>
+    </a>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Desactivar escenario">
+        <i data-lucide="power"></i>
+    </button>
+
+    <button
+        type="button"
+        class="action-btn"
+        title="Más opciones">
+        <i data-lucide="more-horizontal"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -399,17 +459,37 @@
 
                     </div>
 
-                    <div class="scenario-actions">
+<div class="scenario-actions">
 
-                        <button class="icon-action" title="Ver escenario">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver escenario">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar escenario">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <a
+        href="admin-call-edit.html"
+        class="action-btn"
+        title="Editar escenario">
+        <i data-lucide="pencil"></i>
+    </a>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Desactivar escenario">
+        <i data-lucide="power"></i>
+    </button>
+
+    <button
+        type="button"
+        class="action-btn"
+        title="Más opciones">
+        <i data-lucide="more-horizontal"></i>
+    </button>
+
+</div>
 
                 </article>
 
@@ -459,17 +539,37 @@
 
                     </div>
 
-                    <div class="scenario-actions">
+<div class="scenario-actions">
 
-                        <button class="icon-action" title="Ver escenario">
-                            <i data-lucide="eye"></i>
-                        </button>
+    <button
+        type="button"
+        class="action-btn"
+        title="Ver escenario">
+        <i data-lucide="eye"></i>
+    </button>
 
-                        <button class="icon-action" title="Editar escenario">
-                            <i data-lucide="edit-3"></i>
-                        </button>
+    <a
+        href="admin-call-edit.html"
+        class="action-btn"
+        title="Editar escenario">
+        <i data-lucide="pencil"></i>
+    </a>
 
-                    </div>
+    <button
+        type="button"
+        class="action-btn action-danger"
+        title="Desactivar escenario">
+        <i data-lucide="power"></i>
+    </button>
+
+    <button
+        type="button"
+        class="action-btn"
+        title="Más opciones">
+        <i data-lucide="more-horizontal"></i>
+    </button>
+
+</div>
 
                 </article>
 

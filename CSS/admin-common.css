@@ -1,6 +1,11 @@
 /* =========================================================
-   SIMUBANK - ADMIN COMMON
-   Sidebar colapsable mediante hover
+   SIMUBANK - SHARED ADMIN NAVIGATION
+   Sidebar colapsable por hover
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
    ========================================================= */
 
 :root {
@@ -11,6 +16,7 @@
     --admin-sidebar-blue-hover: #2949A5;
 
     --admin-sidebar-text: rgba(255, 255, 255, 0.78);
+    --admin-sidebar-text-strong: #FFFFFF;
 }
 
 
@@ -26,149 +32,220 @@
     width: var(--admin-sidebar-width) !important;
     height: 100vh !important;
 
+    margin: 0 !important;
+    padding: 0 !important;
+
     background: var(--admin-sidebar-blue) !important;
+    border: none !important;
+
+    box-shadow:
+        8px 0 24px rgba(30, 58, 138, 0.10) !important;
 
     z-index: 1000 !important;
 
     overflow: hidden !important;
 
-    transition: width 0.25s ease !important;
-}
-
-
-/* Expandir al poner el mouse */
-
-.sidebar:hover {
-    width: var(--admin-sidebar-expanded) !important;
-}
-
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-
-.sidebar-brand {
-    height: 76px !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 10px !important;
-
-    padding: 0 !important;
-
-    color: #FFFFFF !important;
-
-    flex-shrink: 0 !important;
-
-    border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+    transition:
+        width 0.25s ease,
+        box-shadow 0.25s ease !important;
 
     box-sizing: border-box !important;
 }
 
 
-/* Icono SimuBank */
+/* Sidebar expandido */
 
-.sidebar-brand i,
-.sidebar-brand svg {
-    width: 24px !important;
-    height: 24px !important;
+.sidebar:hover {
+    width: var(--admin-sidebar-expanded) !important;
 
-    min-width: 24px !important;
+    box-shadow:
+        12px 0 30px rgba(30, 58, 138, 0.18) !important;
+}
+
+
+/* =========================================================
+   LOGO SIMUBANK
+   ========================================================= */
+
+.sidebar-brand {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 11px !important;
+
+    background: transparent !important;
+
+    color: #FFFFFF !important;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.10) !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* =========================================================
+   LOGO - ESTADO CERRADO
+   ========================================================= */
+
+.sidebar:not(:hover) .sidebar-brand {
+    justify-content: center !important;
+
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
+/* Icono del banco */
+
+.sidebar .sidebar-brand .brand-bank-icon,
+.sidebar .sidebar-brand > svg,
+.sidebar .sidebar-brand > i {
+    position: static !important;
+
+    display: block !important;
+
+    width: 25px !important;
+    height: 25px !important;
+
+    min-width: 25px !important;
+    max-width: 25px !important;
+
+    min-height: 25px !important;
+    max-height: 25px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    flex: 0 0 25px !important;
 
     color: #FFFFFF !important;
     stroke: #FFFFFF !important;
 
-    flex-shrink: 0 !important;
+    fill: none !important;
 
-    margin: 0 !important;
+    stroke-width: 2.2 !important;
+
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+
+    transform: none !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 
-/* Texto SimuBank */
+/* Texto oculto cuando está cerrado */
 
-.sidebar-brand span {
-    white-space: nowrap !important;
+.sidebar:not(:hover) .sidebar-brand span {
+    display: none !important;
 
     opacity: 0 !important;
     visibility: hidden !important;
-
-    width: 0 !important;
-
-    overflow: hidden !important;
-
-    transform: translateX(-8px);
-
-    transition:
-        opacity 0.18s ease,
-        transform 0.20s ease,
-        width 0.20s ease,
-        visibility 0.20s ease;
 }
 
 
-/* Logo expandido */
+/* =========================================================
+   LOGO - ESTADO EXPANDIDO
+   ========================================================= */
 
 .sidebar:hover .sidebar-brand {
     justify-content: flex-start !important;
 
     padding-left: 22px !important;
+    padding-right: 10px !important;
+
+    gap: 11px !important;
 }
 
 
 .sidebar:hover .sidebar-brand span {
+    display: block !important;
+
     opacity: 1 !important;
     visibility: visible !important;
 
     width: auto !important;
 
-    transform: translateX(0);
+    white-space: nowrap !important;
+
+    color: #FFFFFF !important;
+
+    font-family: 'Inter', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+
+    letter-spacing: -0.02em !important;
+
+    transform: none !important;
 }
 
 
 /* =========================================================
-   NAVEGACIÓN
+   CONTENEDOR DE NAVEGACIÓN
    ========================================================= */
 
 .sidebar-nav {
     width: 100% !important;
 
-    padding: 24px 8px 10px !important;
+    margin: 0 !important;
 
-    box-sizing: border-box !important;
+    padding: 22px 10px 10px !important;
 
     display: flex !important;
     flex-direction: column !important;
 
     gap: 5px !important;
+
+    box-sizing: border-box !important;
 }
 
 
 /* =========================================================
-   ITEMS
+   NAV ITEMS
    ========================================================= */
 
-.sidebar .nav-item {
+.nav-item {
     position: relative !important;
 
     width: 100% !important;
+    min-width: 0 !important;
     min-height: 46px !important;
 
-    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
     display: flex !important;
     align-items: center !important;
-
     justify-content: center !important;
 
-    padding: 0 !important;
-
     gap: 13px !important;
+
+    box-sizing: border-box !important;
 
     border-radius: 11px !important;
 
     color: var(--admin-sidebar-text) !important;
+
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
 
     text-decoration: none !important;
 
@@ -176,62 +253,72 @@
 
     transition:
         background-color 0.15s ease,
-        color 0.15s ease,
-        padding 0.25s ease !important;
+        color 0.15s ease !important;
 }
 
 
 /* =========================================================
-   ICONOS
+   ICONOS - ESTADO CERRADO
    ========================================================= */
 
-.sidebar .nav-item i,
-.sidebar .nav-item svg {
+.sidebar:not(:hover) .nav-item {
+    justify-content: center !important;
+
+    padding: 0 !important;
+}
+
+
+/*
+   El icono se posiciona exactamente
+   en el centro del item.
+*/
+
+.sidebar:not(:hover) .nav-item i,
+.sidebar:not(:hover) .nav-item svg {
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
     width: 20px !important;
     height: 20px !important;
 
     min-width: 20px !important;
-    max-width: 20px !important;
+    min-height: 20px !important;
 
     margin: 0 !important;
 
-    flex-shrink: 0 !important;
+    transform:
+        translate(-50%, -50%) !important;
 
     color: currentColor !important;
     stroke: currentColor !important;
+
+    stroke-width: 2 !important;
 }
 
 
 /* =========================================================
-   TEXTO DE LOS ITEMS
+   TEXTO - ESTADO CERRADO
    ========================================================= */
 
-.sidebar .nav-item span {
+.sidebar:not(:hover) .nav-item span {
     opacity: 0 !important;
     visibility: hidden !important;
 
     width: 0 !important;
 
     overflow: hidden !important;
-
-    white-space: nowrap !important;
-
-    transform: translateX(-8px);
-
-    transition:
-        opacity 0.15s ease,
-        transform 0.20s ease,
-        width 0.20s ease,
-        visibility 0.20s ease;
 }
 
 
 /* =========================================================
-   HOVER ITEM
+   HOVER
    ========================================================= */
 
-.sidebar .nav-item:hover {
-    background: rgba(255,255,255,0.10) !important;
+.nav-item:hover {
+    background:
+        rgba(255, 255, 255, 0.10) !important;
 
     color: #FFFFFF !important;
 }
@@ -241,8 +328,9 @@
    ITEM ACTIVO
    ========================================================= */
 
-.sidebar .nav-item.active {
-    background: rgba(255,255,255,0.16) !important;
+.nav-item.active {
+    background:
+        rgba(255, 255, 255, 0.16) !important;
 
     color: #FFFFFF !important;
 
@@ -250,30 +338,31 @@
 }
 
 
-/* Indicador del módulo activo */
+/* Indicador lateral */
 
-.sidebar .nav-item.active::before {
+.nav-item.active::before {
     content: "";
 
     position: absolute;
 
-    left: -8px;
-
+    left: -10px;
     top: 50%;
 
     width: 3px;
     height: 24px;
 
-    transform: translateY(-50%);
-
-    border-radius: 0 4px 4px 0;
+    border-radius:
+        0 4px 4px 0;
 
     background: #FFFFFF;
+
+    transform:
+        translateY(-50%);
 }
 
 
 /* =========================================================
-   SIDEBAR EXPANDIDO
+   ESTADO EXPANDIDO
    ========================================================= */
 
 .sidebar:hover .nav-item {
@@ -283,35 +372,85 @@
 }
 
 
+/* Iconos expandidos */
+
+.sidebar:hover .nav-item i,
+.sidebar:hover .nav-item svg {
+    position: static !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    min-width: 20px !important;
+
+    margin: 0 !important;
+
+    transform: none !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* Texto expandido */
+
 .sidebar:hover .nav-item span {
     opacity: 1 !important;
     visibility: visible !important;
 
     width: auto !important;
 
-    transform: translateX(0);
+    overflow: visible !important;
+
+    transform: none !important;
 }
 
 
 /* =========================================================
-   TÍTULOS DE SECCIÓN
+   SECCIONES
    ========================================================= */
 
-.sidebar .nav-section-title {
+.nav-section-title {
     opacity: 0 !important;
     visibility: hidden !important;
+
+    height: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    color:
+        rgba(255, 255, 255, 0.42) !important;
+
+    font-family: 'Inter', sans-serif !important;
+
+    font-size: 9px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: 0.12em !important;
 
     white-space: nowrap !important;
 
     transition:
         opacity 0.15s ease,
-        visibility 0.15s ease;
+        visibility 0.15s ease,
+        height 0.20s ease,
+        margin 0.20s ease !important;
 }
 
+
+/* Secciones visibles al expandir */
 
 .sidebar:hover .nav-section-title {
     opacity: 1 !important;
     visibility: visible !important;
+
+    height: auto !important;
+
+    margin:
+        20px 12px 7px !important;
 }
 
 
@@ -324,20 +463,23 @@
 
     margin-top: auto !important;
 
-    padding: 12px 8px 18px !important;
+    padding:
+        12px 10px 18px !important;
 
     box-sizing: border-box !important;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.10) !important;
 }
 
 
-/* =========================================================
-   LOGOUT
-   ========================================================= */
+/* Logout */
 
-.sidebar .nav-item.logout:hover {
-    background: rgba(239,68,68,0.18) !important;
-
+.nav-item.logout:hover {
     color: #FFFFFF !important;
+
+    background:
+        rgba(239, 68, 68, 0.18) !important;
 }
 
 
@@ -353,15 +495,14 @@
     left: calc(100% + 12px);
     top: 50%;
 
-    transform: translateY(-50%) translateX(-5px);
-
     padding: 7px 10px;
 
     border-radius: 7px;
 
     background: #172554;
-
     color: #FFFFFF;
+
+    font-family: 'Inter', sans-serif !important;
 
     font-size: 11px;
     font-weight: 500;
@@ -369,190 +510,60 @@
     white-space: nowrap;
 
     opacity: 0;
-    visibility: hidden;
 
     pointer-events: none;
+
+    transform:
+        translateY(-50%)
+        translateX(-4px);
+
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
 
     z-index: 1200;
 
     box-shadow:
-        0 8px 20px rgba(15,23,42,0.18);
-
-    transition:
-        opacity 0.12s ease,
-        transform 0.12s ease,
-        visibility 0.12s ease;
+        0 8px 20px rgba(15, 23, 42, 0.18);
 }
 
 
 .sidebar:not(:hover) .nav-item[data-label]:hover::after {
     opacity: 1;
-    visibility: visible;
 
-    transform: translateY(-50%) translateX(0);
+    transform:
+        translateY(-50%)
+        translateX(0);
 }
 
 
 /* =========================================================
-   CONTENIDO
+   CONTENIDO PRINCIPAL
    ========================================================= */
 
 .main-content {
-    margin-left: var(--admin-sidebar-width) !important;
+    margin-left:
+        var(--admin-sidebar-width) !important;
+
+    transition: none !important;
 }
 
 
 /* =========================================================
-   TOPBAR / HEADER
+   TOPBAR
    ========================================================= */
 
-.topbar {
-    min-height: 96px;
+.main-content .topbar {
+    position: sticky;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    top: 0;
 
-    padding: 20px 0;
+    z-index: 10;
 
-    box-sizing: border-box;
-}
+    background:
+        rgba(248, 250, 252, 0.94);
 
-
-/* Información izquierda del header */
-
-.topbar > div:first-child {
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-}
-
-
-/* "Panel administrativo" */
-
-.page-label {
-    margin: 0 0 4px 0;
-
-    font-size: 14px;
-    line-height: 1.2;
-
-    color: #64748B;
-}
-
-
-/* Bienvenido */
-
-.topbar h1 {
-    margin: 0;
-
-    font-size: 28px;
-    line-height: 1.2;
-
-    font-weight: 700;
-
-    color: #1E293B;
-}
-
-
-/* =========================================================
-   PERFIL ADMINISTRADOR
-   ========================================================= */
-
-.admin-profile {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-
-/* Campana */
-
-.notification {
-    position: relative;
-
-    width: 38px;
-    height: 38px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.notification i {
-    width: 22px;
-    height: 22px;
-
-    color: #64748B;
-}
-
-
-/* Punto rojo */
-
-.notification-dot {
-    position: absolute;
-
-    top: 5px;
-    right: 5px;
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: #EF4444;
-
-    border: 2px solid #F8FAFC;
-}
-
-
-/* Perfil */
-
-.profile-info {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-}
-
-
-.profile-avatar {
-    width: 46px;
-    height: 46px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #1E3A8A;
-
-    color: #FFFFFF;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-.profile-info strong {
-    display: block;
-
-    margin-bottom: 3px;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    color: #1E293B;
-}
-
-
-.profile-info span {
-    display: block;
-
-    font-size: 13px;
-
-    color: #64748B;
+    backdrop-filter: blur(8px);
 }
 
 
@@ -571,10 +582,581 @@
     }
 
     .sidebar:hover {
-        width: min(245px, 82vw) !important;
+        width:
+            min(245px, 82vw) !important;
     }
 
     .main-content {
         margin-left: 64px !important;
     }
 }
+
+
+/* =========================================================
+   SIMUBANK - ADMIN DESIGN TOKENS
+   Fuente única para todos los módulos administrativos
+   ========================================================= */
+
+:root {
+    --color-primario: #1E3A8A;
+    --color-secundario: #3B82F6;
+
+    --color-fondo: #F8FAFC;
+    --color-superficie: #FFFFFF;
+
+    --color-texto: #1E293B;
+    --color-texto-suave: #64748B;
+
+    --color-borde: #E2E8F0;
+
+    --color-exito: #22C55E;
+    --color-error: #EF4444;
+    --color-advertencia: #F59E0B;
+    --color-offline: #94A3B8;
+
+    --font-primaria: 'Inter', sans-serif;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    --shadow-sm: 0 1px 2px rgba(30, 41, 59, 0.06);
+    --shadow-md: 0 8px 24px -8px rgba(30, 58, 138, 0.14);
+}
+
+
+
+/* =========================================================
+   FINAL SHARED ADMIN THEME
+   Esta sección tiene prioridad sobre los CSS individuales
+   de cada módulo. Los módulos NO deben redefinir el shell.
+   ========================================================= */
+
+html,
+body {
+    min-width: 320px !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+
+    color: #1E293B !important;
+    background-color: #F8FAFC !important;
+
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit !important;
+}
+
+button {
+    cursor: pointer !important;
+}
+
+/* ----- Shell ----- */
+
+.sidebar {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+
+    width: var(--admin-sidebar-width) !important;
+    height: 100vh !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    background: var(--admin-sidebar-blue) !important;
+    border: 0 !important;
+
+    overflow: hidden !important;
+}
+
+.sidebar:hover {
+    width: var(--admin-sidebar-expanded) !important;
+}
+
+/* ----- Sidebar brand ----- */
+
+.sidebar-brand {
+    width: 100% !important;
+    height: 76px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 11px !important;
+
+    flex-shrink: 0 !important;
+
+    background: transparent !important;
+    color: #FFFFFF !important;
+
+    border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+}
+
+.sidebar-brand > i,
+.sidebar-brand > svg {
+    width: 25px !important;
+    height: 25px !important;
+    min-width: 25px !important;
+    min-height: 25px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    fill: none !important;
+
+    flex: 0 0 25px !important;
+
+    transform: none !important;
+}
+
+.sidebar-brand span {
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    width: auto !important;
+
+    white-space: nowrap !important;
+
+    color: #FFFFFF !important;
+
+    font-size: 18px !important;
+    font-weight: 700 !important;
+
+    transform: translateX(-8px) !important;
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.20s ease,
+        visibility 0.20s ease !important;
+}
+
+.sidebar:hover .sidebar-brand {
+    justify-content: flex-start !important;
+    padding-left: 22px !important;
+}
+
+.sidebar:hover .sidebar-brand span {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(0) !important;
+}
+
+/* ----- Sidebar navigation ----- */
+
+.sidebar-nav {
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 22px 10px 10px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+
+    box-sizing: border-box !important;
+}
+
+.nav-item {
+    position: relative !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 13px !important;
+
+    border: 0 !important;
+    border-radius: 11px !important;
+
+    background: transparent !important;
+
+    color: rgba(255,255,255,0.78) !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+
+    text-decoration: none !important;
+}
+
+.sidebar:not(:hover) .nav-item i,
+.sidebar:not(:hover) .nav-item svg {
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    min-width: 20px !important;
+    min-height: 20px !important;
+
+    margin: 0 !important;
+
+    transform: translate(-50%, -50%) !important;
+}
+
+.nav-item i,
+.nav-item svg {
+    color: currentColor !important;
+    stroke: currentColor !important;
+    flex-shrink: 0 !important;
+}
+
+.sidebar:not(:hover) .nav-item span {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+.sidebar:hover .nav-item {
+    justify-content: flex-start !important;
+    padding: 0 13px !important;
+}
+
+.sidebar:hover .nav-item i,
+.sidebar:hover .nav-item svg {
+    position: static !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    min-width: 20px !important;
+
+    margin: 0 !important;
+
+    transform: none !important;
+}
+
+.sidebar:hover .nav-item span {
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: auto !important;
+    overflow: visible !important;
+    transform: none !important;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.10) !important;
+    color: #FFFFFF !important;
+}
+
+.nav-item.active {
+    background: rgba(255,255,255,0.16) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+.nav-item.active::before {
+    content: "" !important;
+
+    position: absolute !important;
+    left: -10px !important;
+    top: 50% !important;
+
+    width: 3px !important;
+    height: 24px !important;
+
+    border-radius: 0 4px 4px 0 !important;
+
+    background: #FFFFFF !important;
+
+    transform: translateY(-50%) !important;
+}
+
+.nav-section-title {
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    color: rgba(255,255,255,0.42) !important;
+
+    font-size: 9px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: 0.12em !important;
+    white-space: nowrap !important;
+}
+
+.sidebar:hover .nav-section-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    height: auto !important;
+
+    margin: 20px 12px 7px !important;
+}
+
+.sidebar-bottom {
+    width: 100% !important;
+
+    margin-top: auto !important;
+    padding: 12px 10px 18px !important;
+
+    border-top: 1px solid rgba(255,255,255,0.10) !important;
+}
+
+.nav-item.logout:hover {
+    background: rgba(239,68,68,0.18) !important;
+    color: #FFFFFF !important;
+}
+
+/* ----- Tooltips ----- */
+
+.sidebar:not(:hover) .nav-item[data-label]::after {
+    content: attr(data-label) !important;
+
+    position: absolute !important;
+
+    left: calc(100% + 12px) !important;
+    top: 50% !important;
+
+    padding: 7px 10px !important;
+
+    border-radius: 7px !important;
+
+    background: #172554 !important;
+    color: #FFFFFF !important;
+
+    font-size: 11px !important;
+    font-weight: 500 !important;
+
+    white-space: nowrap !important;
+
+    opacity: 0 !important;
+    pointer-events: none !important;
+
+    transform: translateY(-50%) translateX(-4px) !important;
+
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease !important;
+
+    z-index: 1200 !important;
+}
+
+.sidebar:not(:hover) .nav-item[data-label]:hover::after {
+    opacity: 1 !important;
+    transform: translateY(-50%) translateX(0) !important;
+}
+
+/* ----- Main / topbar ----- */
+
+.main-content {
+    min-height: 100vh !important;
+
+    margin-left: var(--admin-sidebar-width) !important;
+
+    padding: 0 38px 60px !important;
+}
+
+.topbar {
+    min-height: 88px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border-bottom: 1px solid var(--color-borde, #E2E8F0) !important;
+
+    box-sizing: border-box !important;
+}
+
+.page-label {
+    margin: 0 0 4px !important;
+
+    color: #3B82F6 !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.topbar h1 {
+    margin: 0 !important;
+
+    color: #1E293B !important;
+
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+
+    letter-spacing: 0 !important;
+}
+
+/* ----- Admin profile / notification ----- */
+
+.admin-profile {
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 20px !important;
+}
+
+.notification {
+    position: relative !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+
+    color: #64748B !important;
+
+    border-radius: 8px !important;
+
+    box-sizing: border-box !important;
+}
+
+.notification:hover {
+    background: #F8FAFC !important;
+    color: #1E293B !important;
+}
+
+.notification i,
+.notification svg {
+    width: 19px !important;
+    height: 19px !important;
+
+    margin: 0 !important;
+
+    color: currentColor !important;
+    stroke: currentColor !important;
+}
+
+.notification-dot {
+    position: absolute !important;
+
+    top: 6px !important;
+    right: 7px !important;
+
+    width: 7px !important;
+    height: 7px !important;
+
+    border-radius: 50% !important;
+
+    background: #EF4444 !important;
+    border: 1.5px solid #FFFFFF !important;
+}
+
+.profile-info {
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 10px !important;
+}
+
+.profile-avatar {
+    width: 36px !important;
+    height: 36px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    flex-shrink: 0 !important;
+
+    border-radius: 50% !important;
+
+    background: #1E3A8A !important;
+    color: #FFFFFF !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.profile-info strong {
+    display: block !important;
+
+    color: #1E293B !important;
+
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+}
+
+.profile-info span {
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    color: #64748B !important;
+
+    font-size: 11px !important;
+}
+
+@media (max-width: 700px) {
+    :root {
+        --admin-sidebar-width: 64px;
+    }
+
+    .sidebar {
+        width: 64px !important;
+    }
+
+    .sidebar:hover {
+        width: min(245px, 82vw) !important;
+    }
+
+    .main-content {
+        margin-left: 64px !important;
+        padding: 0 22px 50px !important;
+    }
+
+    .profile-info {
+        display: none !important;
+    }
+}
+

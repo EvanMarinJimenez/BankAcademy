@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Grabaciones</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="../CSS/admin-common.css">
+    <link rel="stylesheet" href="../CSS/admin-recordings.css">
+
+    <script src="../JS/admin-common.js"></script>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+                <i data-lucide="message-circle"></i>
+                <span>Chats</span>
+            </a>
+
+            <a href="admin-assignments.html" class="nav-item">
+                <i data-lucide="calendar-check"></i>
+                <span>Asignaciones</span>
+            </a>
+
+            <div class="nav-section-title">
+                OPERACIÓN
+            </div>
+
+            <a href="admin-monitoring.html" class="nav-item">
+                <i data-lucide="activity"></i>
+                <span>Monitoreo</span>
+            </a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+                <i data-lucide="clipboard-check"></i>
+                <span>Evaluaciones</span>
+            </a>
+
+            <a href="admin-recordings.html" class="nav-item active">
+                <i data-lucide="mic"></i>
+                <span>Grabaciones</span>
+            </a>
+
+            <a href="admin-reports.html" class="nav-item">
+                <i data-lucide="file-text"></i>
+                <span>Reportes</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Evaluación</p>
+                <h1>Grabaciones</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- INTRO -->
+
+        <section class="page-intro">
+
+            <div>
+                <h2>Registro de grabaciones</h2>
+
+                <p>
+                    Consulta y administra las grabaciones obtenidas
+                    durante las simulaciones de llamadas y chats.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- FILTROS -->
+
+        <section class="filters-card">
+
+            <div class="search-box">
+
+                <i data-lucide="search"></i>
+
+                <input
+                    type="text"
+                    placeholder="Buscar participante o escenario..."
+                    aria-label="Buscar grabación"
+                >
+
+            </div>
+
+            <select>
+                <option>Todos los tipos</option>
+                <option>Llamadas</option>
+                <option>Chats</option>
+            </select>
+
+            <select>
+                <option>Todas las fechas</option>
+                <option>Hoy</option>
+                <option>Esta semana</option>
+                <option>Este mes</option>
+            </select>
+
+        </section>
+
+
+        <!-- RESUMEN -->
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i data-lucide="mic"></i>
+                </div>
+
+                <div>
+                    <span>Total de grabaciones</span>
+                    <strong>48</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon green">
+                    <i data-lucide="phone"></i>
+                </div>
+
+                <div>
+                    <span>Grabaciones de llamadas</span>
+                    <strong>31</strong>
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon purple">
+                    <i data-lucide="message-circle"></i>
+                </div>
+
+                <div>
+                    <span>Grabaciones de chats</span>
+                    <strong>17</strong>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- LISTADO -->
+
+        <section class="content-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Grabaciones recientes</h2>
+
+                    <p>
+                        Consulta las sesiones registradas en la plataforma.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="recordings-section">
+
+                <!-- GRABACIÓN 1 -->
+
+                <article class="recording-card">
+
+                    <div class="recording-icon call">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="recording-info">
+
+                        <div class="recording-title">
+                            <h3>María Rodríguez</h3>
+
+                            <span class="recording-type call">
+                                Llamada
+                            </span>
+                        </div>
+
+                        <p>
+                            Escenario: Cliente inconforme
+                        </p>
+
+                        <div class="recording-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                12:48
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                10/08/2026
+                            </span>
+
+                            <span>
+                                <i data-lucide="user"></i>
+                                Participante
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="recording-actions">
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Reproducir">
+                            <i data-lucide="play"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Descargar">
+                            <i data-lucide="download"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Más opciones">
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- GRABACIÓN 2 -->
+
+                <article class="recording-card">
+
+                    <div class="recording-icon chat">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+
+                    <div class="recording-info">
+
+                        <div class="recording-title">
+                            <h3>Juan Sánchez</h3>
+
+                            <span class="recording-type chat">
+                                Chat
+                            </span>
+                        </div>
+
+                        <p>
+                            Escenario: Transacción no reconocida
+                        </p>
+
+                        <div class="recording-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                08:24
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                09/08/2026
+                            </span>
+
+                            <span>
+                                <i data-lucide="user"></i>
+                                Participante
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="recording-actions">
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Reproducir">
+                            <i data-lucide="play"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Descargar">
+                            <i data-lucide="download"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Más opciones">
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- GRABACIÓN 3 -->
+
+                <article class="recording-card">
+
+                    <div class="recording-icon call">
+                        <i data-lucide="phone"></i>
+                    </div>
+
+                    <div class="recording-info">
+
+                        <div class="recording-title">
+                            <h3>Laura Pérez</h3>
+
+                            <span class="recording-type call">
+                                Llamada
+                            </span>
+                        </div>
+
+                        <p>
+                            Escenario: Consulta sobre tarjeta
+                        </p>
+
+                        <div class="recording-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                10:16
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                08/08/2026
+                            </span>
+
+                            <span>
+                                <i data-lucide="user"></i>
+                                Participante
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="recording-actions">
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Reproducir">
+                            <i data-lucide="play"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Descargar">
+                            <i data-lucide="download"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Más opciones">
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- GRABACIÓN 4 -->
+
+                <article class="recording-card">
+
+                    <div class="recording-icon chat">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+
+                    <div class="recording-info">
+
+                        <div class="recording-title">
+                            <h3>Carlos González</h3>
+
+                            <span class="recording-type chat">
+                                Chat
+                            </span>
+                        </div>
+
+                        <p>
+                            Escenario: Cliente inconforme
+                        </p>
+
+                        <div class="recording-meta">
+
+                            <span>
+                                <i data-lucide="clock"></i>
+                                14:02
+                            </span>
+
+                            <span>
+                                <i data-lucide="calendar"></i>
+                                07/08/2026
+                            </span>
+
+                            <span>
+                                <i data-lucide="user"></i>
+                                Participante
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="recording-actions">
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Reproducir">
+                            <i data-lucide="play"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Descargar">
+                            <i data-lucide="download"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="icon-action"
+                            title="Más opciones">
+                            <i data-lucide="more-horizontal"></i>
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- PAGINACIÓN -->
+
+            <div class="table-footer">
+
+                <span>
+                    Mostrando 1–4 de 48 grabaciones
+                </span>
+
+                <div class="pagination">
+
+                    <button
+                        class="pagination-btn disabled"
+                        type="button"
+                        aria-label="Página anterior">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+
+                    <button
+                        class="pagination-btn active"
+                        type="button">
+                        1
+                    </button>
+
+                    <button
+                        class="pagination-btn"
+                        type="button">
+                        2
+                    </button>
+
+                    <button
+                        class="pagination-btn"
+                        type="button">
+                        3
+                    </button>
+
+                    <button
+                        class="pagination-btn"
+                        type="button"
+                        aria-label="Página siguiente">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

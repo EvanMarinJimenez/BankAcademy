@@ -355,53 +355,78 @@ button {
    FILTERS
    ========================================= */
 
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
 .filters-card {
-    margin-bottom: 22px;
-    padding: 16px;
+    margin-top: 20px;
+
+    width: 100%;
+
+    min-height: 64px;
 
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
 
-    background-color: var(--color-superficie);
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radius-lg);
+    padding: 14px;
 
-    box-shadow: var(--shadow-sm);
+    background-color: #FFFFFF;
+
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+
+    box-shadow: 0 1px 2px rgba(30, 41, 59, 0.06);
+
+    box-sizing: border-box;
 }
+
+
+/* Campo de búsqueda */
 
 .search-box {
     position: relative;
+
     flex: 1;
+
+    height: 40px;
+
+    display: flex;
+    align-items: center;
 }
 
-.search-box i {
+.search-box i,
+.search-box svg {
     position: absolute;
-    top: 50%;
-    left: 13px;
+
+    left: 12px;
 
     width: 17px;
     height: 17px;
 
-    transform: translateY(-50%);
+    color: #64748B;
 
-    color: var(--color-texto-suave);
+    pointer-events: none;
 }
+
 
 .search-box input {
     width: 100%;
     height: 40px;
 
-    padding: 0 14px 0 40px;
+    padding: 0 14px 0 38px;
 
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radius-sm);
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
 
     outline: none;
 
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
+    background-color: #FFFFFF;
 
+    color: #1E293B;
+
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
 }
 
@@ -410,40 +435,36 @@ button {
 }
 
 .search-box input:focus {
-    border-color: var(--color-secundario);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.10);
+    border-color: #3B82F6;
 }
 
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
 
-.filter-group label {
-    color: var(--color-texto-suave);
-    font-size: 12.5px;
-    font-weight: 500;
-}
+/* Filtro de estado */
 
-.filter-group select {
+.filters-card select {
+    width: 190px;
+
     height: 40px;
 
     padding: 0 34px 0 12px;
 
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radius-sm);
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+
+    background-color: #FFFFFF;
+
+    color: #1E293B;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
 
     outline: none;
 
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-
-    font-size: 13px;
+    cursor: pointer;
 }
 
-.filter-group select:focus {
-    border-color: var(--color-secundario);
+.filters-card select:focus {
+    border-color: #3B82F6;
 }
 
 
@@ -685,6 +706,7 @@ button {
     background-color: #EAFBF0;
     color: #15803D;
 }
+
 
 
 /* =========================================

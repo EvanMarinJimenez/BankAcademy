@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SimuBank | Monitoreo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<link rel="stylesheet" href="../CSS/admin-common.css">
+<link rel="stylesheet" href="../CSS/admin-monitoring.css">
+
+<script src="../JS/admin-common.js"></script>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <i data-lucide="landmark"></i>
+            <span>SimuBank</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="admin-home.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Panel principal</span>
+            </a>
+
+            <a href="admin-users.html" class="nav-item">
+                <i data-lucide="users"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="nav-section-title">
+                SIMULACIONES
+            </div>
+
+            <a href="admin-calls.html" class="nav-item">
+                <i data-lucide="phone"></i>
+                <span>Llamadas</span>
+            </a>
+
+            <a href="admin-chats.html" class="nav-item">
+                <i data-lucide="message-circle"></i>
+                <span>Chats</span>
+            </a>
+
+            <a href="admin-assignments.html" class="nav-item">
+                <i data-lucide="calendar-check"></i>
+                <span>Asignaciones</span>
+            </a>
+
+            <div class="nav-section-title">
+                OPERACIÓN
+            </div>
+
+            <a href="admin-monitoring.html" class="nav-item active">
+                <i data-lucide="activity"></i>
+                <span>Monitoreo</span>
+            </a>
+
+            <div class="nav-section-title">
+                EVALUACIÓN
+            </div>
+
+            <a href="admin-evaluations.html" class="nav-item">
+                <i data-lucide="clipboard-check"></i>
+                <span>Evaluaciones</span>
+            </a>
+
+            <a href="admin-recordings.html" class="nav-item">
+                <i data-lucide="mic"></i>
+                <span>Grabaciones</span>
+            </a>
+
+            <a href="admin-reports.html" class="nav-item">
+                <i data-lucide="file-text"></i>
+                <span>Reportes</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="admin-login.html" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <p class="page-label">Operación</p>
+                <h1>Monitoreo</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="notification">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+
+                <div class="profile-info">
+
+                    <div class="profile-avatar">
+                        AD
+                    </div>
+
+                    <div>
+                        <strong>Admin Banking Academy</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- INTRO -->
+
+        <section class="monitoring-intro">
+
+            <div>
+                <h2>Monitoreo en tiempo real</h2>
+
+                <p>
+                    Supervisa el estado de los participantes y las simulaciones activas.
+                </p>
+            </div>
+
+            <div class="live-status">
+                <span></span>
+                Actualización en tiempo real
+            </div>
+
+        </section>
+
+
+        <!-- KPI -->
+
+        <section class="monitoring-stats">
+
+            <article class="monitor-stat">
+                <div class="monitor-stat-icon blue">
+                    <i data-lucide="users"></i>
+                </div>
+
+                <div>
+                    <span>Agentes conectados</span>
+                    <strong>24</strong>
+                </div>
+            </article>
+
+
+            <article class="monitor-stat">
+                <div class="monitor-stat-icon green">
+                    <i data-lucide="circle-check"></i>
+                </div>
+
+                <div>
+                    <span>Disponibles</span>
+                    <strong>12</strong>
+                </div>
+            </article>
+
+
+            <article class="monitor-stat">
+                <div class="monitor-stat-icon call">
+                    <i data-lucide="phone"></i>
+                </div>
+
+                <div>
+                    <span>En llamada</span>
+                    <strong>7</strong>
+                </div>
+            </article>
+
+
+            <article class="monitor-stat">
+                <div class="monitor-stat-icon chat">
+                    <i data-lucide="message-circle"></i>
+                </div>
+
+                <div>
+                    <span>En chat</span>
+                    <strong>5</strong>
+                </div>
+            </article>
+
+
+            <article class="monitor-stat">
+                <div class="monitor-stat-icon wait">
+                    <i data-lucide="clock-3"></i>
+                </div>
+
+                <div>
+                    <span>En espera</span>
+                    <strong>3</strong>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- AGENTES -->
+
+        <section class="monitor-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>Estado de los agentes</h2>
+                    <p>
+                        Actividad actual de los participantes conectados.
+                    </p>
+                </div>
+
+                <span class="agent-count">
+                    24 agentes
+                </span>
+
+            </div>
+
+
+            <div class="agents-table">
+
+                <div class="table-heading">
+                    <span>Agente</span>
+                    <span>Estado</span>
+                    <span>Actividad</span>
+                    <span>Tiempo</span>
+                </div>
+
+
+                <div class="agent-row">
+
+                    <div class="agent-cell agent-name">
+                        <div class="agent-avatar">MR</div>
+
+                        <div>
+                            <strong>María Rodríguez</strong>
+                            <span>Participante</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-cell">
+                        <span class="state available">
+                            <i></i>
+                            Disponible
+                        </span>
+                    </div>
+
+                    <div class="agent-cell">
+                        —
+                    </div>
+
+                    <div class="agent-cell">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="agent-row">
+
+                    <div class="agent-cell agent-name">
+                        <div class="agent-avatar">CM</div>
+
+                        <div>
+                            <strong>Carlos Méndez</strong>
+                            <span>Participante</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-cell">
+                        <span class="state on-call">
+                            <i></i>
+                            En llamada
+                        </span>
+                    </div>
+
+                    <div class="agent-cell">
+                        Cliente inconforme
+                    </div>
+
+                    <div class="agent-cell time-active">
+                        04:32
+                    </div>
+
+                </div>
+
+
+                <div class="agent-row">
+
+                    <div class="agent-cell agent-name">
+                        <div class="agent-avatar">AL</div>
+
+                        <div>
+                            <strong>Ana López</strong>
+                            <span>Participante</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-cell">
+                        <span class="state on-call">
+                            <i></i>
+                            En llamada
+                        </span>
+                    </div>
+
+                    <div class="agent-cell">
+                        Reclamo por cobro
+                    </div>
+
+                    <div class="agent-cell time-active">
+                        08:17
+                    </div>
+
+                </div>
+
+
+                <div class="agent-row">
+
+                    <div class="agent-cell agent-name">
+                        <div class="agent-avatar">LJ</div>
+
+                        <div>
+                            <strong>Laura Jiménez</strong>
+                            <span>Participante</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-cell">
+                        <span class="state in-chat">
+                            <i></i>
+                            En chat
+                        </span>
+                    </div>
+
+                    <div class="agent-cell">
+                        Consulta sobre tarjeta
+                    </div>
+
+                    <div class="agent-cell time-active">
+                        06:23
+                    </div>
+
+                </div>
+
+
+                <div class="agent-row">
+
+                    <div class="agent-cell agent-name">
+                        <div class="agent-avatar">JV</div>
+
+                        <div>
+                            <strong>José Vargas</strong>
+                            <span>Participante</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-cell">
+                        <span class="state waiting">
+                            <i></i>
+                            En espera
+                        </span>
+                    </div>
+
+                    <div class="agent-cell">
+                        Llamada
+                    </div>
+
+                    <div class="agent-cell time-wait">
+                        02:41
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PARTE INFERIOR -->
+
+        <section class="monitor-bottom">
+
+
+            <!-- LLAMADAS -->
+
+            <article class="monitor-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Llamadas activas</h2>
+                        <p>
+                            Comunicaciones en curso.
+                        </p>
+                    </div>
+
+                    <span class="panel-badge call">
+                        7 activas
+                    </span>
+
+                </div>
+
+                <div class="activity-list">
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon call">
+                            <i data-lucide="phone"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Carlos Méndez</strong>
+                            <span>Cliente inconforme</span>
+                        </div>
+
+                        <time>04:32</time>
+
+                    </div>
+
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon call">
+                            <i data-lucide="phone"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Ana López</strong>
+                            <span>Reclamo por cobro</span>
+                        </div>
+
+                        <time>08:17</time>
+
+                    </div>
+
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon call">
+                            <i data-lucide="phone"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Pedro Solís</strong>
+                            <span>Solicitud de información</span>
+                        </div>
+
+                        <time>03:51</time>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CHATS -->
+
+            <article class="monitor-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Chats activos</h2>
+                        <p>
+                            Conversaciones en curso.
+                        </p>
+                    </div>
+
+                    <span class="panel-badge chat">
+                        5 activos
+                    </span>
+
+                </div>
+
+                <div class="activity-list">
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon chat">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Laura Jiménez</strong>
+                            <span>Consulta sobre tarjeta</span>
+                        </div>
+
+                        <time>06:23</time>
+
+                    </div>
+
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon chat">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Pedro Solís</strong>
+                            <span>Bloqueo de tarjeta</span>
+                        </div>
+
+                        <time>11:08</time>
+
+                    </div>
+
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon chat">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+
+                        <div class="activity-data">
+                            <strong>Sofía Castro</strong>
+                            <span>Consulta general</span>
+                        </div>
+
+                        <time>03:46</time>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- COLA -->
+
+            <article class="monitor-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Cola de espera</h2>
+                        <p>
+                            Solicitudes pendientes.
+                        </p>
+                    </div>
+
+                    <span class="panel-badge waiting">
+                        3 pendientes
+                    </span>
+
+                </div>
+
+                <div class="queue-list">
+
+                    <div class="queue-row">
+
+                        <span class="queue-type call">
+                            <i data-lucide="phone"></i>
+                        </span>
+
+                        <div>
+                            <strong>Cliente #1042</strong>
+                            <span>Llamada</span>
+                        </div>
+
+                        <time>02:41</time>
+
+                    </div>
+
+
+                    <div class="queue-row">
+
+                        <span class="queue-type call">
+                            <i data-lucide="phone"></i>
+                        </span>
+
+                        <div>
+                            <strong>Cliente #1051</strong>
+                            <span>Llamada</span>
+                        </div>
+
+                        <time>01:18</time>
+
+                    </div>
+
+
+                    <div class="queue-row">
+
+                        <span class="queue-type chat">
+                            <i data-lucide="message-circle"></i>
+                        </span>
+
+                        <div>
+                            <strong>Cliente #1063</strong>
+                            <span>Chat</span>
+                        </div>
+
+                        <time>00:54</time>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

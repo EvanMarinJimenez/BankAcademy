@@ -552,29 +552,58 @@ select {
     color: #94A3B8;
 }
 
-.icon-button {
-    width: 36px;
-    height: 36px;
+/* =========================================
+   ACCIONES DE REPORTES
+   ========================================= */
+
+.icon-action {
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+    margin: 0;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    border: none;
+    outline: none;
+
     border-radius: var(--radius-sm);
 
+    background: transparent;
     color: var(--color-texto-suave);
 
     cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
 }
 
-.icon-button:hover {
-    background-color: #EFF4FF;
+.icon-action:hover {
     color: var(--color-primario);
+    background-color: #EFF4FF;
 }
 
-.icon-button i {
+.icon-action:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.icon-action i,
+.icon-action svg {
     width: 17px;
     height: 17px;
+
+    margin: 0;
+    padding: 0;
+
+    stroke-width: 2;
 }
 
 
