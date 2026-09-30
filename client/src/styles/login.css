@@ -278,26 +278,49 @@ button {
 }
 
 .checkbox {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   font-weight: 400;
   font-size: 13px;
   color: var(--color-texto);
   cursor: pointer;
+  user-select: none;
 }
 
 .checkbox input {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .checkbox__box {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border: 1.5px solid var(--color-borde);
   border-radius: 4px;
   background-color: var(--color-superficie);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.checkbox:hover .checkbox__box {
+  border-color: var(--color-primario);
+}
+
+.checkbox input:checked ~ .checkbox__box,
+.checkbox input:checked + .checkbox__box {
+  background-color: var(--color-primario);
+  border-color: var(--color-primario);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .link {
