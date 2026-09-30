@@ -15,6 +15,7 @@ export default function ProfilePage() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [phone, setPhone] = useState('')
+  const [wantChangePassword, setWantChangePassword] = useState(false)
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -26,8 +27,11 @@ export default function ProfilePage() {
       setFirstName(profile.first_name || '')
       setLastName(profile.last_name || '')
       setPhone(profile.phone || '')
+      setWantChangePassword(false)
+      setNewPassword('')
+      setConfirmPassword('')
     }
-  }, [profile])
+  }, [profile, isEditing])
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type })
@@ -42,8 +46,8 @@ export default function ProfilePage() {
       return
     }
 
-    if (newPassword) {
-      if (newPassword.length < 6) {
+    if (wantChangePassword) {
+      if (!newPassword || newPassword.length < 6) {
         showToast('La nueva contraseña debe tener al menos 6 caracteres.', 'error')
         return
       }
@@ -66,11 +70,12 @@ export default function ProfilePage() {
       if (profileError) throw profileError
 
       // 2. Update password if specified
-      if (newPassword) {
+      if (wantChangePassword && newPassword) {
         const { error: passError } = await updatePassword(newPassword)
         if (passError) throw passError
         setNewPassword('')
         setConfirmPassword('')
+        setWantChangePassword(false)
       }
 
       showToast('¡Perfil actualizado con éxito!')
@@ -189,7 +194,7 @@ export default function ProfilePage() {
               Modificar Información Personal (HUU03)
             </h2>
 
-            <form onSubmit={handleSaveProfile}>
+            <form onSubmit={handleSaveProfile} autoComplete="off">
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
@@ -201,6 +206,7 @@ export default function ProfilePage() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={loading}
+                    autoComplete="given-name"
                     style={{
                       width: '100%',
                       padding: '0.65rem 0.85rem',
@@ -222,6 +228,7 @@ export default function ProfilePage() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={loading}
+                    autoComplete="family-name"
                     style={{
                       width: '100%',
                       padding: '0.65rem 0.85rem',
@@ -235,14 +242,37 @@ export default function ProfilePage() {
 
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+                    Correo electrónico
+                  </label>
+                  <input
+                    type="email"
+                    value={profile?.email || ''}
+                    disabled
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      border: '1px solid #E2E8F0',
+                      borderRadius: '8px',
+                      fontSize: '0.9rem',
+                      backgroundColor: '#F1F5F9',
+                      color: '#64748B',
+                      cursor: 'not-allowed',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
                     Teléfono
                   </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+52 55 1234 5678"
+                    placeholder="+506 8888 8888"
                     disabled={loading}
+                    autoComplete="tel"
                     style={{
                       width: '100%',
                       padding: '0.65rem 0.85rem',
@@ -255,53 +285,75 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div style={{ padding: '1rem', backgroundColor: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#1E293B', marginBottom: '0.75rem' }}>
-                  Cambiar Contraseña (opcional)
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.3rem' }}>
-                      Nueva Contraseña
-                    </label>
-                    <input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Dejar en blanco si no deseas cambiarla"
-                      disabled={loading}
-                      style={{
-                        width: '100%',
-                        padding: '0.55rem 0.75rem',
-                        border: '1px solid #CBD5E1',
-                        borderRadius: '8px',
-                        fontSize: '0.875rem',
-                        boxSizing: 'border-box',
-                      }}
-                    />
-                  </div>
+              {/* Toggle para cambiar contraseña */}
+              <div style={{ padding: '1rem 1.25rem', backgroundColor: '#F8FAFC', borderRadius: '10px', border: '1px solid #E2E8F0', marginBottom: '1.5rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', userSelect: 'none' }}>
+                  <input
+                    type="checkbox"
+                    checked={wantChangePassword}
+                    onChange={(e) => {
+                      setWantChangePassword(e.target.checked)
+                      if (!e.target.checked) {
+                        setNewPassword('')
+                        setConfirmPassword('')
+                      }
+                    }}
+                    style={{ width: '16px', height: '16px', accentColor: '#1E3A8A', cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1E293B' }}>
+                    Deseo cambiar mi contraseña
+                  </span>
+                </label>
 
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.3rem' }}>
-                      Confirmar Nueva Contraseña
-                    </label>
-                    <input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Repetir nueva contraseña"
-                      disabled={loading}
-                      style={{
-                        width: '100%',
-                        padding: '0.55rem 0.75rem',
-                        border: '1px solid #CBD5E1',
-                        borderRadius: '8px',
-                        fontSize: '0.875rem',
-                        boxSizing: 'border-box',
-                      }}
-                    />
+                {wantChangePassword && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #E2E8F0' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.3rem' }}>
+                        Nueva Contraseña (mínimo 6 caracteres) *
+                      </label>
+                      <input
+                        type="password"
+                        required={wantChangePassword}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••"
+                        disabled={loading}
+                        autoComplete="new-password"
+                        style={{
+                          width: '100%',
+                          padding: '0.55rem 0.75rem',
+                          border: '1px solid #CBD5E1',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.3rem' }}>
+                        Confirmar Nueva Contraseña *
+                      </label>
+                      <input
+                        type="password"
+                        required={wantChangePassword}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Repetir nueva contraseña"
+                        disabled={loading}
+                        autoComplete="new-password"
+                        style={{
+                          width: '100%',
+                          padding: '0.55rem 0.75rem',
+                          border: '1px solid #CBD5E1',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
