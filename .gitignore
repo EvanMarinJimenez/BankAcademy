@@ -10,3 +10,9 @@
 *.suo
 *.userosscache
 *.sln.docstates
+
+#Node
+node_modules/
+.env
+dist/
+.DS_Store
