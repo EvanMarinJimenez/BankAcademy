@@ -22,14 +22,17 @@ export default function ProtectedRoute({ children, requiredRole }) {
     return <Navigate to="/login" replace />
   }
 
-  // Se requiere un rol específico y no coincide
-  if (requiredRole && profile?.role !== requiredRole) {
-    // Si es admin intentando acceder a área de participante, redirigir a su home
-    if (profile?.role === 'admin') {
-      return <Navigate to="/admin" replace />
-    }
-    // Si es participante intentando acceder a área admin, redirigir a su home
+  // Obtener rol actual (del perfil o de user_metadata, por defecto participant)
+  const currentRole = profile?.role || session.user?.user_metadata?.role || 'participant'
+
+  // Si se requiere rol admin y el usuario no es admin
+  if (requiredRole === 'admin' && currentRole !== 'admin') {
     return <Navigate to="/home" replace />
+  }
+
+  // Si se requiere rol participante y el usuario es admin
+  if (requiredRole === 'participant' && currentRole === 'admin') {
+    return <Navigate to="/admin" replace />
   }
 
   return children

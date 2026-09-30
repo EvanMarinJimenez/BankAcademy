@@ -9,18 +9,35 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   // Obtener perfil del usuario desde la tabla profiles
-  const fetchProfile = async (userId) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
+  const fetchProfile = async (userId, userObj = null) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
 
-    if (error) {
-      console.error('Error fetching profile:', error)
-      return null
+      if (!error && data) {
+        return data
+      }
+    } catch (err) {
+      console.warn('Error fetching profile from DB:', err)
     }
-    return data
+
+    // Fallback con metadata del usuario
+    const u = userObj || session?.user
+    if (u) {
+      return {
+        id: userId,
+        email: u.email,
+        first_name: u.user_metadata?.first_name || '',
+        last_name: u.user_metadata?.last_name || '',
+        phone: u.user_metadata?.phone || '',
+        role: u.user_metadata?.role || 'participant',
+        is_active: true,
+      }
+    }
+    return null
   }
 
   useEffect(() => {
@@ -28,7 +45,7 @@ export function AuthProvider({ children }) {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       if (session?.user) {
-        const prof = await fetchProfile(session.user.id)
+        const prof = await fetchProfile(session.user.id, session.user)
         setProfile(prof)
       }
       setLoading(false)
@@ -39,7 +56,7 @@ export function AuthProvider({ children }) {
       async (event, session) => {
         setSession(session)
         if (session?.user) {
-          const prof = await fetchProfile(session.user.id)
+          const prof = await fetchProfile(session.user.id, session.user)
           setProfile(prof)
         } else {
           setProfile(null)
@@ -61,7 +78,7 @@ export function AuthProvider({ children }) {
     if (error) return { data, error }
 
     if (data?.user) {
-      const prof = await fetchProfile(data.user.id)
+      const prof = await fetchProfile(data.user.id, data.user)
       if (prof && prof.is_active === false) {
         await supabase.auth.signOut()
         return {
