@@ -5,6 +5,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 // Pages
 import LoginPage from './pages/LoginPage'
 import AdminLoginPage from './pages/AdminLoginPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import HomePage from './pages/HomePage'
 import AdminHomePage from './pages/AdminHomePage'
 
@@ -49,6 +51,14 @@ function AppRoutes() {
           <AdminLoginPage />
         </RedirectIfAuth>
       } />
+
+      {/* Recuperación de contraseña */}
+      <Route path="/forgot-password" element={
+        <RedirectIfAuth>
+          <ForgotPasswordPage />
+        </RedirectIfAuth>
+      } />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* Home participante (protegido) */}
       <Route path="/home" element={
