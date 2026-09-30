@@ -58,59 +58,48 @@ CREATE TRIGGER on_auth_user_created
     FOR EACH ROW
     EXECUTE FUNCTION public.handle_new_user();
 
--- 5. Habilitar Row Level Security
+-- 5. Función helper SECURITY DEFINER para verificar rol admin sin recursión RLS
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM public.profiles
+        WHERE id = auth.uid() AND role = 'admin'
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 6. Habilitar Row Level Security
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- 6. Políticas RLS
+-- 7. Limpiar políticas anteriores si existen
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Admins can view all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Admins can update all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Admins can insert profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Service role can insert profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Profiles select policy" ON public.profiles;
+DROP POLICY IF EXISTS "Profiles update policy" ON public.profiles;
+DROP POLICY IF EXISTS "Profiles insert policy" ON public.profiles;
 
--- Cualquier usuario autenticado puede ver su propio perfil
-CREATE POLICY "Users can view own profile"
+-- 8. Políticas RLS sin recursión
+
+-- SELECT: El usuario puede ver su propio perfil, o si es admin puede ver todos
+CREATE POLICY "Profiles select policy"
     ON public.profiles
     FOR SELECT
-    USING (auth.uid() = id);
+    USING (auth.uid() = id OR public.is_admin());
 
--- Cualquier usuario autenticado puede actualizar su propio perfil
-CREATE POLICY "Users can update own profile"
+-- UPDATE: El usuario puede actualizar su propio perfil, o si es admin puede actualizar cualquiera
+CREATE POLICY "Profiles update policy"
     ON public.profiles
     FOR UPDATE
-    USING (auth.uid() = id)
-    WITH CHECK (auth.uid() = id);
+    USING (auth.uid() = id OR public.is_admin())
+    WITH CHECK (auth.uid() = id OR public.is_admin());
 
--- Los admins pueden ver todos los perfiles
-CREATE POLICY "Admins can view all profiles"
-    ON public.profiles
-    FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    );
-
--- Los admins pueden actualizar cualquier perfil
-CREATE POLICY "Admins can update all profiles"
-    ON public.profiles
-    FOR UPDATE
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    );
-
--- Los admins pueden insertar perfiles (registrar usuarios)
-CREATE POLICY "Admins can insert profiles"
-    ON public.profiles
-    FOR INSERT
-    WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    );
-
--- Permitir que el trigger SECURITY DEFINER inserte perfiles para nuevos usuarios
-CREATE POLICY "Service role can insert profiles"
+-- INSERT: Permitir inserción para nuevos registros y servicio
+CREATE POLICY "Profiles insert policy"
     ON public.profiles
     FOR INSERT
     WITH CHECK (true);
