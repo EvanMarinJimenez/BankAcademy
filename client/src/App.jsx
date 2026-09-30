@@ -1,35 +1,81 @@
-import { useEffect, useState } from 'react'
-import { io } from 'socket.io-client'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
-const socket = io()
+// Pages
+import LoginPage from './pages/LoginPage'
+import AdminLoginPage from './pages/AdminLoginPage'
+import HomePage from './pages/HomePage'
+import AdminHomePage from './pages/AdminHomePage'
 
-export default function App() {
-  const [status, setStatus] = useState('...')
-  const [mensajes, setMensajes] = useState([])
-  const [texto, setTexto] = useState('')
+// Si está logueado y va al login, redirigir a su home
+function RedirectIfAuth({ children }) {
+  const { session, profile, loading } = useAuth()
 
-  useEffect(() => {
-    fetch('/api/health')
-      .then((r) => r.json())
-      .then((d) => setStatus(d.status))
-      .catch(() => setStatus('error'))
-
-    socket.on('mensaje', (m) => setMensajes((prev) => [...prev, m]))
-    return () => socket.off('mensaje')
-  }, [])
-
-  const enviar = () => {
-    if (!texto.trim()) return
-    socket.emit('mensaje', texto)
-    setTexto('')
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    )
   }
 
+  if (session && profile) {
+    return profile.role === 'admin'
+      ? <Navigate to="/admin" replace />
+      : <Navigate to="/home" replace />
+  }
+
+  return children
+}
+
+function AppRoutes() {
   return (
-    <main>
-      <h1>API: {status}</h1>
-      <input value={texto} onChange={(e) => setTexto(e.target.value)} />
-      <button onClick={enviar}>Enviar</button>
-      <ul>{mensajes.map((m, i) => <li key={i}>{m}</li>)}</ul>
-    </main>
+    <Routes>
+      {/* Raíz redirige al login */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      {/* Login participante */}
+      <Route path="/login" element={
+        <RedirectIfAuth>
+          <LoginPage />
+        </RedirectIfAuth>
+      } />
+
+      {/* Login admin */}
+      <Route path="/admin/login" element={
+        <RedirectIfAuth>
+          <AdminLoginPage />
+        </RedirectIfAuth>
+      } />
+
+      {/* Home participante (protegido) */}
+      <Route path="/home" element={
+        <ProtectedRoute requiredRole="participant">
+          <HomePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Home admin (protegido) */}
+      <Route path="/admin" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminHomePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Catch-all → login */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }

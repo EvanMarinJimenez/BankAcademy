@@ -1,0 +1,571 @@
+/* =========================================================
+   SIMUBANK - GRABACIONES
+   Solo estilos propios del módulo
+   ========================================================= */
+
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.filters-card {
+    margin-top: 24px;
+
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    background-color: var(--color-superficie);
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.search-box {
+    position: relative;
+
+    flex: 1;
+
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+}
+
+.search-box i,
+.search-box svg {
+    position: absolute;
+
+    left: 12px;
+
+    width: 17px;
+    height: 17px;
+
+    color: var(--color-texto-suave);
+
+    pointer-events: none;
+}
+
+.search-box input {
+    width: 100%;
+    height: 40px;
+
+    padding: 0 14px 0 38px;
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    background-color: var(--color-superficie);
+
+    color: var(--color-texto);
+
+    font-family: var(--font-primaria);
+    font-size: 13px;
+}
+
+.search-box input::placeholder {
+    color: #94A3B8;
+}
+
+.search-box input:focus {
+    border-color: var(--color-secundario);
+}
+
+.filters-card > select {
+    width: 180px;
+
+    height: 40px;
+
+    padding: 0 32px 0 12px;
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-sm);
+
+    background-color: var(--color-superficie);
+
+    color: var(--color-texto);
+
+    font-family: var(--font-primaria);
+    font-size: 13px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   ESTADÍSTICAS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 16px;
+
+    margin-top: 20px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    background-color: var(--color-superficie);
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+}
+
+.stat-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.stat-icon.blue {
+    background-color: #EFF4FF;
+    color: var(--color-primario);
+}
+
+.stat-icon.green {
+    background-color: #EAFBF0;
+    color: var(--color-exito);
+}
+
+.stat-icon.purple {
+    background-color: #F3E8FF;
+    color: #7C3AED;
+}
+
+.stat-card span {
+    display: block;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12px;
+}
+
+.stat-card strong {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--color-texto);
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   LISTA DE GRABACIONES
+   ========================================================= */
+
+.content-section {
+    margin-top: 28px;
+}
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.section-header p {
+    margin-top: 4px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12.5px;
+}
+
+.recordings-section {
+    overflow: hidden;
+
+    background-color: var(--color-superficie);
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* =========================================================
+   TARJETA DE GRABACIÓN
+   ========================================================= */
+
+.recording-card {
+    min-height: 104px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--color-borde);
+
+    transition:
+        background-color 0.15s ease;
+}
+
+.recording-card:last-child {
+    border-bottom: none;
+}
+
+.recording-card:hover {
+    background-color: #FAFBFD;
+}
+
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+
+.recording-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+}
+
+.recording-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.recording-icon.call {
+    background-color: #EFF4FF;
+    color: var(--color-primario);
+}
+
+.recording-icon.chat {
+    background-color: #F3E8FF;
+    color: #7C3AED;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.recording-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.recording-title {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 5px;
+}
+
+.recording-title h3 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.recording-info > p {
+    margin: 0;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   TIPO
+   ========================================================= */
+
+.recording-type {
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+.recording-type.call {
+    background-color: #EFF4FF;
+    color: #1D4ED8;
+}
+
+.recording-type.chat {
+    background-color: #F3E8FF;
+    color: #7C3AED;
+}
+
+
+/* =========================================================
+   METADATA
+   ========================================================= */
+
+.recording-meta {
+    margin-top: 9px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 11px;
+}
+
+.recording-meta span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.recording-meta svg {
+    width: 13px;
+    height: 13px;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.recording-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    margin-left: auto;
+
+    flex-shrink: 0;
+}
+
+.icon-action {
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    color: var(--color-texto-suave);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.icon-action:hover {
+    background-color: #EFF4FF;
+    color: var(--color-primario);
+}
+
+.icon-action:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.icon-action svg {
+    width: 17px;
+    height: 17px;
+}
+
+
+/* =========================================================
+   PAGINACIÓN
+   ========================================================= */
+
+.table-footer {
+    min-height: 64px;
+
+    padding: 12px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+.pagination-btn {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-sm);
+
+    background-color: var(--color-superficie);
+
+    color: var(--color-texto-suave);
+
+    font-family: var(--font-primaria);
+    font-size: 12px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    border-color: var(--color-secundario);
+
+    color: var(--color-primario);
+
+    background-color: #EFF4FF;
+}
+
+.pagination-btn.active {
+    border-color: var(--color-primario);
+
+    background-color: var(--color-primario);
+
+    color: #FFFFFF;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+.pagination-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-card {
+        flex-wrap: wrap;
+    }
+
+    .filters-card > select {
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .recording-card {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .recording-info {
+        width: calc(100% - 62px);
+    }
+
+    .recording-actions {
+        width: 100%;
+
+        justify-content: flex-end;
+
+        padding-left: 60px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .filters-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-card > select {
+        width: 100%;
+    }
+
+    .recording-title {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .recording-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}

@@ -1,0 +1,634 @@
+/* =========================================================
+   SIMUBANK - MONITOREO
+   Estilos exclusivos del módulo de monitoreo
+
+   El sidebar, topbar, perfil, notificaciones,
+   tipografía base y main-content pertenecen a:
+   admin-common.css
+   ========================================================= */
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.monitoring-intro {
+    margin-top: 34px;
+    margin-bottom: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.monitoring-intro h2 {
+    margin: 0;
+
+    color: var(--color-texto);
+
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.monitoring-intro p {
+    margin-top: 5px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ESTADO EN TIEMPO REAL
+   ========================================================= */
+
+.live-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: #ECFDF3;
+    color: #15803D;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.live-status span {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--color-exito);
+}
+
+
+/* =========================================================
+   ESTADÍSTICAS
+   ========================================================= */
+
+.monitoring-stats {
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.monitor-stat {
+    min-height: 100px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    background: var(--color-superficie);
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.monitor-stat-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+}
+
+.monitor-stat-icon svg {
+    width: 20px;
+    height: 20px;
+
+    stroke-width: 2;
+}
+
+.monitor-stat-icon.blue {
+    background: #EFF4FF;
+    color: var(--color-primario);
+}
+
+.monitor-stat-icon.green {
+    background: #EAFBF0;
+    color: #16A34A;
+}
+
+.monitor-stat-icon.call {
+    background: #EFF4FF;
+    color: #2563EB;
+}
+
+.monitor-stat-icon.chat {
+    background: #F3EEFF;
+    color: #7C3AED;
+}
+
+.monitor-stat-icon.wait {
+    background: #FFF7E8;
+    color: #D97706;
+}
+
+.monitor-stat span {
+    display: block;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.monitor-stat strong {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--color-texto);
+
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   PANELES
+   ========================================================= */
+
+.monitor-panel {
+    background: var(--color-superficie);
+
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+
+    overflow: hidden;
+}
+
+.panel-header {
+    min-height: 72px;
+
+    padding: 18px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.panel-header h2 {
+    margin: 0;
+
+    color: var(--color-texto);
+
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.panel-header p {
+    margin-top: 4px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.agent-count {
+    flex-shrink: 0;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #EFF4FF;
+    color: var(--color-secundario);
+
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLA DE AGENTES
+   ========================================================= */
+
+.agents-table {
+    width: 100%;
+}
+
+.table-heading,
+.agent-row {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1.5fr
+        0.6fr;
+
+    align-items: center;
+}
+
+.table-heading {
+    min-height: 40px;
+
+    padding: 0 20px;
+
+    background: #F8FAFC;
+
+    color: #94A3B8;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.agent-row {
+    min-height: 72px;
+
+    padding: 10px 20px;
+
+    border-top: 1px solid #F1F5F9;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12.5px;
+}
+
+.agent-cell {
+    min-width: 0;
+}
+
+.agent-name {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.agent-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #EFF4FF;
+    color: var(--color-primario);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.agent-name strong {
+    display: block;
+
+    color: var(--color-texto);
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.agent-name span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ESTADOS
+   ========================================================= */
+
+.state {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.state i {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+.state.available {
+    color: #15803D;
+}
+
+.state.available i {
+    background: var(--color-exito);
+}
+
+.state.on-call {
+    color: #1D4ED8;
+}
+
+.state.on-call i {
+    background: #2563EB;
+}
+
+.state.in-chat {
+    color: #7C3AED;
+}
+
+.state.in-chat i {
+    background: #8B5CF6;
+}
+
+.state.waiting {
+    color: #B45309;
+}
+
+.state.waiting i {
+    background: var(--color-advertencia);
+}
+
+
+/* =========================================================
+   TIEMPOS
+   ========================================================= */
+
+.time-active {
+    color: #1D4ED8;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.time-wait {
+    color: #B45309;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PARTE INFERIOR
+   ========================================================= */
+
+.monitor-bottom {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 18px;
+}
+
+
+/* =========================================================
+   LISTAS
+   ========================================================= */
+
+.activity-list,
+.queue-list {
+    padding: 8px 20px 12px;
+}
+
+.activity-row,
+.queue-row {
+    min-height: 60px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.activity-row:last-child,
+.queue-row:last-child {
+    border-bottom: none;
+}
+
+.activity-icon,
+.queue-type {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+}
+
+.activity-icon svg,
+.queue-type svg {
+    width: 17px;
+    height: 17px;
+
+    stroke-width: 2;
+}
+
+.activity-icon.call,
+.queue-type.call {
+    background: #EFF4FF;
+    color: #2563EB;
+}
+
+.activity-icon.chat,
+.queue-type.chat {
+    background: #F3EEFF;
+    color: #7C3AED;
+}
+
+.activity-data,
+.queue-row > div {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-data strong,
+.queue-row strong {
+    color: var(--color-texto);
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.activity-data span,
+.queue-row span {
+    margin-top: 2px;
+
+    color: var(--color-texto-suave);
+
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.activity-row time,
+.queue-row time {
+    color: var(--color-texto-suave);
+
+    font-size: 11px;
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.panel-badge {
+    flex-shrink: 0;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: 10.5px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.panel-badge.call {
+    background: #EFF4FF;
+    color: #1D4ED8;
+}
+
+.panel-badge.chat {
+    background: #F3EEFF;
+    color: #7C3AED;
+}
+
+.panel-badge.waiting {
+    background: #FFF7E8;
+    color: #B45309;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .monitoring-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .monitor-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 900px) {
+
+    .monitoring-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .table-heading,
+    .agent-row {
+        grid-template-columns:
+            1.4fr
+            1fr
+            1.3fr
+            0.7fr;
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .table-heading {
+        display: none;
+    }
+
+    .agent-row {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+
+        padding: 14px 20px;
+    }
+
+    .monitoring-intro {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .monitoring-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .monitoring-intro {
+        gap: 12px;
+    }
+
+    .live-status {
+        align-self: flex-start;
+    }
+
+    .panel-header {
+        align-items: flex-start;
+    }
+}
