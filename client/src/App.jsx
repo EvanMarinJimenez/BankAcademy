@@ -7,8 +7,11 @@ import LoginPage from './pages/LoginPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
+import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
 import AdminHomePage from './pages/AdminHomePage'
+import AdminUsersPage from './pages/AdminUsersPage'
+import ProfilePage from './pages/ProfilePage'
 
 // Si está logueado y va al login, redirigir a su home
 function RedirectIfAuth({ children }) {
@@ -52,6 +55,13 @@ function AppRoutes() {
         </RedirectIfAuth>
       } />
 
+      {/* Registro participante */}
+      <Route path="/register" element={
+        <RedirectIfAuth>
+          <RegisterPage />
+        </RedirectIfAuth>
+      } />
+
       {/* Recuperación de contraseña */}
       <Route path="/forgot-password" element={
         <RedirectIfAuth>
@@ -67,10 +77,24 @@ function AppRoutes() {
         </ProtectedRoute>
       } />
 
+      {/* Perfil participante (protegido) */}
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      } />
+
       {/* Home admin (protegido) */}
       <Route path="/admin" element={
         <ProtectedRoute requiredRole="admin">
           <AdminHomePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Gestión de usuarios admin (protegido) */}
+      <Route path="/admin/users" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminUsersPage />
         </ProtectedRoute>
       } />
 
