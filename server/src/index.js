@@ -3,6 +3,8 @@ import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 
+import usersRouter from './routes/users.js'
+
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -11,6 +13,8 @@ const io = new Server(httpServer, {
 
 app.use(cors({ origin: process.env.CLIENT_URL }))
 app.use(express.json())
+
+app.use('/api/users', usersRouter)
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() })

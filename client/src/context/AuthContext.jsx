@@ -57,6 +57,21 @@ export function AuthProvider({ children }) {
       email,
       password,
     })
+
+    if (error) return { data, error }
+
+    if (data?.user) {
+      const prof = await fetchProfile(data.user.id)
+      if (prof && prof.is_active === false) {
+        await supabase.auth.signOut()
+        return {
+          data: null,
+          error: { message: 'Tu cuenta ha sido desactivada. Por favor, contacta a un administrador.' }
+        }
+      }
+      setProfile(prof)
+    }
+
     return { data, error }
   }
 
@@ -66,9 +81,26 @@ export function AuthProvider({ children }) {
       email,
       password,
       options: {
-        data: metadata, // first_name, last_name, role
+        data: metadata, // first_name, last_name, role, phone
       },
     })
+    return { data, error }
+  }
+
+  // Actualizar perfil de usuario
+  const updateProfile = async (updates) => {
+    if (!session?.user?.id) return { error: { message: 'No hay sesión activa' } }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', session.user.id)
+      .select()
+      .single()
+
+    if (!error && data) {
+      setProfile(data)
+    }
     return { data, error }
   }
 
@@ -108,6 +140,7 @@ export function AuthProvider({ children }) {
     signOut,
     resetPassword,
     updatePassword,
+    updateProfile,
     fetchProfile,
   }
 
