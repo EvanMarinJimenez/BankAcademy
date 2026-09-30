@@ -23,14 +23,14 @@ roles y perfiles de la plataforma.
 
 ### Historias de usuario
 
-- [ ] HUU01 — Inicio de sesión.
-- [ ] HUU02 — Registro de participantes y administradores.
-- [ ] HUU03 — Modificación de información de usuarios.
-- [ ] HUU04 — Desactivación de participantes.
-- [ ] HUU05 — Recuperación de contraseña.
-- [ ] HUU06 — Gestión de roles y permisos.
-- [ ] HUU07 — Búsqueda y filtrado de usuarios.
-- [ ] HUU08 — Perfil del estudiante.
+- [x] HUU01 — Inicio de sesión.
+- [x] HUU02 — Registro de participantes y administradores.
+- [x] HUU03 — Modificación de información de usuarios.
+- [x] HUU04 — Desactivación de participantes.
+- [x] HUU05 — Recuperación de contraseña.
+- [x] HUU06 — Gestión de roles y permisos.
+- [x] HUU07 — Búsqueda y filtrado de usuarios.
+- [x] HUU08 — Perfil del estudiante.
 
 ---
 
