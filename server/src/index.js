@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import cors from 'cors'
 
 import usersRouter from './routes/users.js'
+import simulacionesRouter from './routes/simulaciones.js'
 
 const app = express()
 const httpServer = createServer(app)
@@ -15,6 +16,7 @@ app.use(cors({ origin: process.env.CLIENT_URL }))
 app.use(express.json())
 
 app.use('/api/users', usersRouter)
+app.use('/api/simulaciones', simulacionesRouter)
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() })

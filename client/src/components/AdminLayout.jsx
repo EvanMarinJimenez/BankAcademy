@@ -67,11 +67,11 @@ export default function AdminLayout({ children, pageTitle = 'Administración', s
           <div className="nav-section-title">SIMULACIONES</div>
 
           <NavLink
-            to="/admin/calls"
+            to="/admin/scenarios"
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
             <Phone size={20} />
-            <span>Llamadas</span>
+            <span>Escenarios</span>
           </NavLink>
 
           <NavLink

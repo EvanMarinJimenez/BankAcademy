@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
 import AdminHomePage from './pages/AdminHomePage'
 import AdminUsersPage from './pages/AdminUsersPage'
+import AdminScenariosPage from './pages/AdminScenariosPage'
 import ProfilePage from './pages/ProfilePage'
 
 // Si está logueado y va al login, redirigir a su home
@@ -95,6 +96,13 @@ function AppRoutes() {
       <Route path="/admin/users" element={
         <ProtectedRoute requiredRole="admin">
           <AdminUsersPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Escenarios de llamadas (protegido) */}
+      <Route path="/admin/scenarios" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminScenariosPage />
         </ProtectedRoute>
       } />
 
