@@ -60,7 +60,37 @@ export default function AdminUsersPage() {
   }
 
   useEffect(() => {
-    loadUsers()
+    let isMounted = true
+
+    const fetchUsers = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch('http://localhost:3000/api/users')
+        if (res.ok) {
+          const data = await res.json()
+          if (isMounted) setUsers(data.users || [])
+        } else {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false })
+
+          if (error) throw error
+          if (isMounted) setUsers(data || [])
+        }
+      } catch (err) {
+        console.error('Error loading users:', err)
+        const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false })
+        if (isMounted && data) setUsers(data)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    fetchUsers()
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   // Filtered users
@@ -139,7 +169,7 @@ export default function AdminUsersPage() {
     }
   }
 
-  const handleFormSuccess = (updatedUser) => {
+  const handleFormSuccess = () => {
     showToast(
       formMode === 'create'
         ? '¡Participante registrado exitosamente!'
@@ -381,6 +411,7 @@ export default function AdminUsersPage() {
 
       {/* User Form Modal (HUU02 & HUU03) */}
       <UserFormModal
+        key={`${formMode}-${selectedUser?.id ?? 'new'}-${isFormModalOpen}`}
         isOpen={isFormModalOpen}
         mode={formMode}
         user={selectedUser}

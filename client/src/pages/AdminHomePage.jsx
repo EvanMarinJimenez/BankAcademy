@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import AdminLayout from '../components/AdminLayout'
 import {
-  Users, Phone, MessageCircle, Activity,
-  ArrowRight, CheckCircle2, Clock, ShieldAlert,
-  TrendingUp, Calendar, UserPlus, FileText
+  Users, Phone, Activity, TrendingUp, MessageCircle, UserPlus, FileText
 } from 'lucide-react'
 import '../styles/admin-home.css'
 

@@ -95,7 +95,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// POST /api/simulaciones — crear escenario (HUL01)
+// POST /api/simulaciones — crear escenario (HUL01, HUL04, HUL05)
 router.post('/', async (req, res) => {
   try {
     const {
@@ -105,6 +105,8 @@ router.post('/', async (req, res) => {
       modalidad,
       fecha_inicio,
       fecha_fin,
+      estado,
+      parametros,
       creado_por,
     } = req.body
 
@@ -117,18 +119,34 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: `Tipo inválido. Use: ${tiposValidos.join(', ')}` })
     }
 
+    // HUL05: Determinar estado (programada si fecha_inicio es a futuro o se especificó programada)
+    let estadoFinal = estado || 'activa'
+    if (!estado && fecha_inicio) {
+      const fechaInicioDate = new Date(fecha_inicio)
+      if (!isNaN(fechaInicioDate.getTime()) && fechaInicioDate > new Date()) {
+        estadoFinal = 'programada'
+      }
+    }
+
+    const insertData = {
+      nombre: nombre.trim(),
+      descripcion: descripcion?.trim() || '',
+      tipo,
+      modalidad: modalidad || 'individual',
+      fecha_inicio: fecha_inicio || null,
+      fecha_fin: fecha_fin || null,
+      estado: estadoFinal,
+      creado_por: creado_por || null,
+    }
+
+    // HUL04: Parámetros de simulación
+    if (parametros !== undefined) {
+      insertData.parametros = typeof parametros === 'object' ? parametros : JSON.parse(parametros)
+    }
+
     const { data, error } = await supabaseAdmin
       .from('simulacion')
-      .insert({
-        nombre: nombre.trim(),
-        descripcion: descripcion?.trim() || '',
-        tipo,
-        modalidad: modalidad || 'individual',
-        fecha_inicio: fecha_inicio || null,
-        fecha_fin: fecha_fin || null,
-        estado: 'activa',
-        creado_por: creado_por || null,
-      })
+      .insert(insertData)
       .select()
       .single()
 
@@ -141,11 +159,11 @@ router.post('/', async (req, res) => {
   }
 })
 
-// PUT /api/simulaciones/:id — modificar escenario (HUL02)
+// PUT /api/simulaciones/:id — modificar escenario (HUL02, HUL04, HUL05)
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { nombre, descripcion, tipo, modalidad, fecha_inicio, fecha_fin, estado } = req.body
+    const { nombre, descripcion, tipo, modalidad, fecha_inicio, fecha_fin, estado, parametros } = req.body
 
     const payload = {}
     if (nombre !== undefined)       payload.nombre      = nombre.trim()
@@ -155,6 +173,9 @@ router.put('/:id', async (req, res) => {
     if (fecha_inicio !== undefined) payload.fecha_inicio = fecha_inicio || null
     if (fecha_fin !== undefined)    payload.fecha_fin    = fecha_fin || null
     if (estado !== undefined)       payload.estado       = estado
+    if (parametros !== undefined) {
+      payload.parametros = typeof parametros === 'object' ? parametros : JSON.parse(parametros)
+    }
 
     if (Object.keys(payload).length === 0) {
       return res.status(400).json({ error: 'No se enviaron campos para actualizar.' })

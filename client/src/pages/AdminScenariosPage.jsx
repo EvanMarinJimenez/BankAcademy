@@ -6,7 +6,7 @@ import ConfirmModal from '../components/ConfirmModal'
 import {
   Plus, Search, Phone, MessageCircle, Layers,
   Edit2, XCircle, Users, RefreshCw, Filter,
-  CheckCircle2, Clock, AlertTriangle
+  CheckCircle2, Clock, Sliders
 } from 'lucide-react'
 
 const API = 'http://localhost:3000/api/simulaciones'
@@ -25,6 +25,12 @@ const ESTADO_CONFIG = {
   finalizada: { label: 'Finalizada', bg: '#F0FDF4', color: '#15803D' },
 }
 
+const DIFICULTAD_CONFIG = {
+  baja: { label: 'Baja', bg: '#DCFCE7', color: '#15803D' },
+  media: { label: 'Media', bg: '#FEF3C7', color: '#B45309' },
+  alta: { label: 'Alta', bg: '#FEE2E2', color: '#B91C1C' },
+}
+
 function Badge({ estado }) {
   const cfg = ESTADO_CONFIG[estado] || { label: estado, bg: '#F1F5F9', color: '#475569' }
   return (
@@ -32,6 +38,18 @@ function Badge({ estado }) {
       fontSize: '0.72rem', fontWeight: 700, padding: '0.25rem 0.65rem',
       borderRadius: '999px', backgroundColor: cfg.bg, color: cfg.color,
       textTransform: 'uppercase', letterSpacing: '0.04em',
+    }}>
+      {cfg.label}
+    </span>
+  )
+}
+
+function DificultadBadge({ dificultad }) {
+  const cfg = DIFICULTAD_CONFIG[dificultad] || DIFICULTAD_CONFIG.media
+  return (
+    <span style={{
+      fontSize: '0.7rem', fontWeight: 600, padding: '0.15rem 0.5rem',
+      borderRadius: '6px', backgroundColor: cfg.bg, color: cfg.color,
     }}>
       {cfg.label}
     </span>
@@ -56,6 +74,13 @@ function formatFecha(iso) {
   if (!iso) return '—'
   return new Date(iso).toLocaleDateString('es-MX', {
     day: '2-digit', month: 'short', year: 'numeric',
+  })
+}
+
+function formatFechaHora(iso) {
+  if (!iso) return '—'
+  return new Date(iso).toLocaleDateString('es-MX', {
+    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
   })
 }
 
@@ -94,7 +119,7 @@ export default function AdminScenariosPage() {
     return () => clearTimeout(timeout)
   }, [fetchSimulaciones])
 
-  const handleFormSuccess = (simulacion) => {
+  const handleFormSuccess = () => {
     fetchSimulaciones()
   }
 
@@ -261,7 +286,7 @@ export default function AdminScenariosPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                    {['Escenario', 'Tipo', 'Modalidad', 'Participantes', 'Fecha inicio', 'Estado', 'Acciones'].map((h) => (
+                    {['Escenario', 'Tipo', 'Modalidad', 'Parámetros (HUL04)', 'Participantes', 'Programación (HUL05)', 'Estado', 'Acciones'].map((h) => (
                       <th key={h} style={{
                         padding: '0.85rem 1rem', textAlign: 'left',
                         fontSize: '0.75rem', fontWeight: 700,
@@ -296,14 +321,28 @@ export default function AdminScenariosPage() {
                           </div>
                         </div>
                       </td>
+
                       {/* Tipo */}
                       <td style={{ padding: '0.9rem 1rem', color: '#475569' }}>
                         {TIPO_CONFIG[sim.tipo]?.label || sim.tipo}
                       </td>
+
                       {/* Modalidad */}
                       <td style={{ padding: '0.9rem 1rem', color: '#475569', textTransform: 'capitalize' }}>
                         {sim.modalidad || '—'}
                       </td>
+
+                      {/* Parámetros HUL04 */}
+                      <td style={{ padding: '0.9rem 1rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', alignItems: 'flex-start' }}>
+                          <DificultadBadge dificultad={sim.parametros?.dificultad} />
+                          <span style={{ fontSize: '0.75rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <Clock size={12} />
+                            {sim.parametros?.duracion_minutos || 10} min
+                          </span>
+                        </div>
+                      </td>
+
                       {/* Participantes */}
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#475569' }}>
@@ -311,14 +350,28 @@ export default function AdminScenariosPage() {
                           <span>{sim.participante_simulacion?.[0]?.count ?? 0}</span>
                         </div>
                       </td>
-                      {/* Fecha inicio */}
+
+                      {/* Fecha inicio / Programación HUL05 */}
                       <td style={{ padding: '0.9rem 1rem', color: '#475569', whiteSpace: 'nowrap' }}>
-                        {formatFecha(sim.fecha_inicio)}
+                        {sim.estado === 'programada' && sim.fecha_inicio ? (
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                            color: '#1E40AF', backgroundColor: '#EFF6FF', padding: '0.25rem 0.6rem',
+                            borderRadius: '6px', fontSize: '0.78rem', fontWeight: 500,
+                          }}>
+                            <Clock size={13} />
+                            {formatFechaHora(sim.fecha_inicio)}
+                          </span>
+                        ) : (
+                          formatFecha(sim.fecha_inicio)
+                        )}
                       </td>
+
                       {/* Estado */}
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <Badge estado={sim.estado} />
                       </td>
+
                       {/* Acciones */}
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <div style={{ display: 'flex', gap: '0.4rem' }}>
@@ -377,6 +430,7 @@ export default function AdminScenariosPage() {
 
       {/* Modales */}
       <ScenarioFormModal
+        key={`${formModal.mode}-${formModal.scenario?.id_simulacion ?? 'new'}-${formModal.isOpen}`}
         isOpen={formModal.isOpen}
         mode={formModal.mode}
         scenario={formModal.scenario}

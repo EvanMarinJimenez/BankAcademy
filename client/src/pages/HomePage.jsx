@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import ParticipantNavbar from '../components/ParticipantNavbar'
 import {
-  PhoneCall, MessageSquare, Clock, Star, Phone, MessageCircle, ArrowRight, Layers, CheckCircle2
+  PhoneCall, MessageSquare, Clock, Star, Phone, MessageCircle, Layers, CheckCircle2
 } from 'lucide-react'
 import '../styles/home.css'
 

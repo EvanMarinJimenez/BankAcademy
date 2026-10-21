@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import ParticipantNavbar from '../components/ParticipantNavbar'
 import {
   ArrowLeft, Mail, Phone, Calendar, Pencil, CheckCircle2,
-  Star, Clock, Flame, Shield, X, Lock, AlertCircle, Save
+  Star, Clock, Flame, X, AlertCircle, Save
 } from 'lucide-react'
 import '../styles/perfil-usuario.css'
 
@@ -22,16 +22,14 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState(null)
 
-  useEffect(() => {
-    if (profile) {
-      setFirstName(profile.first_name || '')
-      setLastName(profile.last_name || '')
-      setPhone(profile.phone || '')
-      setWantChangePassword(false)
-      setNewPassword('')
-      setConfirmPassword('')
-    }
-  }, [profile, isEditing])
+  const resetProfileForm = () => {
+    setFirstName(profile?.first_name || '')
+    setLastName(profile?.last_name || '')
+    setPhone(profile?.phone || '')
+    setWantChangePassword(false)
+    setNewPassword('')
+    setConfirmPassword('')
+  }
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type })
@@ -169,7 +167,12 @@ export default function ProfilePage() {
 
           <button
             className="btn-secondary"
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={() => {
+              if (!isEditing) {
+                resetProfileForm()
+              }
+              setIsEditing((prev) => !prev)
+            }}
             style={{ cursor: 'pointer' }}
           >
             {isEditing ? <X size={16} /> : <Pencil size={16} />}

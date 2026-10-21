@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
@@ -9,7 +10,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   // Obtener perfil del usuario desde la tabla profiles
-  const fetchProfile = async (userId, userObj = null) => {
+  const fetchProfile = useCallback(async (userId, userObj = null) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -38,7 +39,7 @@ export function AuthProvider({ children }) {
       }
     }
     return null
-  }
+  }, [session?.user])
 
   useEffect(() => {
     // Obtener sesión actual
@@ -66,7 +67,7 @@ export function AuthProvider({ children }) {
     )
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [fetchProfile])
 
   // Login con email y password
   const signIn = async (email, password) => {

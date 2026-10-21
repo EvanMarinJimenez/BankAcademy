@@ -58,7 +58,6 @@ export default function AssignParticipantsModal({
     }
 
     fetchData()
-    setSearch('')
 
     return () => {
       isMounted = false

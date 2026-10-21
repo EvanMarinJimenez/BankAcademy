@@ -50,7 +50,7 @@ export default function RegisterPage() {
 
     setLoading(true)
 
-    const { data, error: signUpError } = await signUp(email.trim(), password, {
+    const { error: signUpError } = await signUp(email.trim(), password, {
       first_name: firstName.trim(),
       last_name: lastName.trim(),
       phone: phone.trim(),

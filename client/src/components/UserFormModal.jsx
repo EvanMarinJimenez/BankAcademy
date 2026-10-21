@@ -1,5 +1,29 @@
-import { useState, useEffect } from 'react'
-import { X, User, Mail, Phone, Lock, Shield, CheckCircle2, AlertCircle } from 'lucide-react'
+import { useState } from 'react'
+import { X, User, Mail, Phone, Lock, Shield, AlertCircle } from 'lucide-react'
+
+function getInitialUserFormState(user, mode) {
+  if (user && mode === 'edit') {
+    return {
+      firstName: user.first_name || '',
+      lastName: user.last_name || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      role: user.role || 'participant',
+      password: '',
+      isActive: user.is_active !== undefined ? user.is_active : true,
+    }
+  }
+
+  return {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    role: 'participant',
+    password: '',
+    isActive: true,
+  }
+}
 
 export default function UserFormModal({
   isOpen,
@@ -8,37 +32,18 @@ export default function UserFormModal({
   onClose,
   onSuccess,
 }) {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [role, setRole] = useState('participant')
-  const [password, setPassword] = useState('')
-  const [isActive, setIsActive] = useState(true)
+  const initialState = getInitialUserFormState(user, mode)
+
+  const [firstName, setFirstName] = useState(initialState.firstName)
+  const [lastName, setLastName] = useState(initialState.lastName)
+  const [email, setEmail] = useState(initialState.email)
+  const [phone, setPhone] = useState(initialState.phone)
+  const [role, setRole] = useState(initialState.role)
+  const [password, setPassword] = useState(initialState.password)
+  const [isActive, setIsActive] = useState(initialState.isActive)
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    if (user && mode === 'edit') {
-      setFirstName(user.first_name || '')
-      setLastName(user.last_name || '')
-      setEmail(user.email || '')
-      setPhone(user.phone || '')
-      setRole(user.role || 'participant')
-      setIsActive(user.is_active !== undefined ? user.is_active : true)
-      setPassword('')
-    } else {
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setPhone('')
-      setRole('participant')
-      setIsActive(true)
-      setPassword('')
-    }
-    setError('')
-  }, [user, mode, isOpen])
 
   if (!isOpen) return null
 
