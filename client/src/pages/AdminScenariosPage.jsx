@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import AdminLayout from '../components/AdminLayout'
 import ScenarioFormModal from '../components/ScenarioFormModal'
+import AssignParticipantsModal from '../components/AssignParticipantsModal'
 import ConfirmModal from '../components/ConfirmModal'
 import {
   Plus, Search, Phone, MessageCircle, Layers,
-  Edit2, XCircle, RefreshCw, Filter,
-  CheckCircle2, Clock
+  Edit2, XCircle, Users, RefreshCw, Filter,
+  CheckCircle2, Clock, AlertTriangle
 } from 'lucide-react'
 
 const API = 'http://localhost:3000/api/simulaciones'
@@ -27,18 +28,11 @@ const ESTADO_CONFIG = {
 function Badge({ estado }) {
   const cfg = ESTADO_CONFIG[estado] || { label: estado, bg: '#F1F5F9', color: '#475569' }
   return (
-    <span
-      style={{
-        fontSize: '0.72rem',
-        fontWeight: 700,
-        padding: '0.25rem 0.65rem',
-        borderRadius: '999px',
-        backgroundColor: cfg.bg,
-        color: cfg.color,
-        textTransform: 'uppercase',
-        letterSpacing: '0.04em',
-      }}
-    >
+    <span style={{
+      fontSize: '0.72rem', fontWeight: 700, padding: '0.25rem 0.65rem',
+      borderRadius: '999px', backgroundColor: cfg.bg, color: cfg.color,
+      textTransform: 'uppercase', letterSpacing: '0.04em',
+    }}>
       {cfg.label}
     </span>
   )
@@ -48,19 +42,11 @@ function TipoIcon({ tipo }) {
   const cfg = TIPO_CONFIG[tipo] || TIPO_CONFIG.llamada
   const Icon = cfg.icon
   return (
-    <div
-      style={{
-        width: '38px',
-        height: '38px',
-        borderRadius: '8px',
-        backgroundColor: cfg.color,
-        color: cfg.iconColor,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-      }}
-    >
+    <div style={{
+      width: '38px', height: '38px', borderRadius: '8px',
+      backgroundColor: cfg.color, color: cfg.iconColor,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+    }}>
       <Icon size={18} />
     </div>
   )
@@ -69,9 +55,7 @@ function TipoIcon({ tipo }) {
 function formatFecha(iso) {
   if (!iso) return '—'
   return new Date(iso).toLocaleDateString('es-MX', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+    day: '2-digit', month: 'short', year: 'numeric',
   })
 }
 
@@ -82,8 +66,9 @@ export default function AdminScenariosPage() {
   const [filterTipo, setFilterTipo] = useState('all')
   const [filterEstado, setFilterEstado] = useState('all')
 
-  // Modales HUL01 + HUL02
+  // Modales
   const [formModal, setFormModal] = useState({ isOpen: false, mode: 'create', scenario: null })
+  const [assignModal, setAssignModal] = useState({ isOpen: false, scenario: null })
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, scenario: null })
 
   const fetchSimulaciones = useCallback(async () => {
@@ -98,7 +83,7 @@ export default function AdminScenariosPage() {
       const data = await res.json()
       if (res.ok) setSimulaciones(data.simulaciones || [])
     } catch (err) {
-      console.error('Error cargando escenarios:', err)
+      console.error('Error cargando simulaciones:', err)
     } finally {
       setLoading(false)
     }
@@ -108,6 +93,10 @@ export default function AdminScenariosPage() {
     const timeout = setTimeout(fetchSimulaciones, 300)
     return () => clearTimeout(timeout)
   }, [fetchSimulaciones])
+
+  const handleFormSuccess = (simulacion) => {
+    fetchSimulaciones()
+  }
 
   const handleDesactivar = async () => {
     const { scenario } = confirmModal
@@ -132,15 +121,9 @@ export default function AdminScenariosPage() {
   return (
     <AdminLayout pageTitle="Sprint 2" sectionTitle="Escenarios de Llamadas">
       <div style={{ padding: '0 2rem 2rem' }}>
+
         {/* KPIs */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '1rem',
-            margin: '1.5rem 0',
-          }}
-        >
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', margin: '1.5rem 0' }}>
           {[
             { label: 'Total escenarios', value: simulaciones.length, icon: Layers, bg: '#EFF6FF', color: '#3B82F6' },
             { label: 'Activos', value: totalActivos, icon: CheckCircle2, bg: '#ECFDF5', color: '#10B981' },
@@ -148,39 +131,17 @@ export default function AdminScenariosPage() {
           ].map((kpi) => {
             const Icon = kpi.icon
             return (
-              <div
-                key={kpi.label}
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  padding: '1.25rem 1.5rem',
-                  borderRadius: '12px',
-                  border: '1px solid #E2E8F0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                }}
-              >
-                <div
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '10px',
-                    backgroundColor: kpi.bg,
-                    color: kpi.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+              <div key={kpi.label} style={{
+                backgroundColor: '#FFFFFF', padding: '1.25rem 1.5rem',
+                borderRadius: '12px', border: '1px solid #E2E8F0',
+                display: 'flex', alignItems: 'center', gap: '1rem',
+              }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '10px', backgroundColor: kpi.bg, color: kpi.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Icon size={22} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '0.8rem', color: '#64748B', margin: 0, fontWeight: 500 }}>
-                    {kpi.label}
-                  </p>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1E293B', margin: '0.1rem 0 0' }}>
-                    {kpi.value}
-                  </h3>
+                  <p style={{ fontSize: '0.8rem', color: '#64748B', margin: 0, fontWeight: 500 }}>{kpi.label}</p>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1E293B', margin: '0.1rem 0 0' }}>{kpi.value}</h3>
                 </div>
               </div>
             )
@@ -188,72 +149,38 @@ export default function AdminScenariosPage() {
         </div>
 
         {/* Toolbar */}
-        <div
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '12px',
-            border: '1px solid #E2E8F0',
-            padding: '1rem 1.25rem',
-            display: 'flex',
-            gap: '0.75rem',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '1rem',
-          }}
-        >
+        <div style={{
+          backgroundColor: '#FFFFFF', borderRadius: '12px',
+          border: '1px solid #E2E8F0', padding: '1rem 1.25rem',
+          display: 'flex', gap: '0.75rem', alignItems: 'center',
+          flexWrap: 'wrap', marginBottom: '1rem',
+        }}>
           {/* Buscador */}
           <div style={{ position: 'relative', flex: '1', minWidth: '200px' }}>
-            <Search
-              size={16}
-              style={{
-                position: 'absolute',
-                left: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#94A3B8',
-              }}
-            />
+            <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
             <input
               type="text"
               placeholder="Buscar escenario..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{
-                width: '100%',
-                padding: '0.5rem 0.75rem 0.5rem 2.2rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.875rem',
-                outline: 'none',
-                boxSizing: 'border-box',
+                width: '100%', padding: '0.5rem 0.75rem 0.5rem 2.2rem',
+                border: '1px solid #CBD5E1', borderRadius: '8px',
+                fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box',
               }}
             />
           </div>
 
           {/* Filtro tipo */}
           <div style={{ position: 'relative' }}>
-            <Filter
-              size={14}
-              style={{
-                position: 'absolute',
-                left: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#94A3B8',
-                pointerEvents: 'none',
-              }}
-            />
+            <Filter size={14} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8', pointerEvents: 'none' }} />
             <select
               value={filterTipo}
               onChange={(e) => setFilterTipo(e.target.value)}
               style={{
                 padding: '0.5rem 0.75rem 0.5rem 1.8rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-                outline: 'none',
-                backgroundColor: '#FFFFFF',
+                border: '1px solid #CBD5E1', borderRadius: '8px',
+                fontSize: '0.8rem', cursor: 'pointer', outline: 'none', backgroundColor: '#FFFFFF',
               }}
             >
               <option value="all">Todos los tipos</option>
@@ -265,28 +192,14 @@ export default function AdminScenariosPage() {
 
           {/* Filtro estado */}
           <div style={{ position: 'relative' }}>
-            <Filter
-              size={14}
-              style={{
-                position: 'absolute',
-                left: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#94A3B8',
-                pointerEvents: 'none',
-              }}
-            />
+            <Filter size={14} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8', pointerEvents: 'none' }} />
             <select
               value={filterEstado}
               onChange={(e) => setFilterEstado(e.target.value)}
               style={{
                 padding: '0.5rem 0.75rem 0.5rem 1.8rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-                outline: 'none',
-                backgroundColor: '#FFFFFF',
+                border: '1px solid #CBD5E1', borderRadius: '8px',
+                fontSize: '0.8rem', cursor: 'pointer', outline: 'none', backgroundColor: '#FFFFFF',
               }}
             >
               <option value="all">Todos los estados</option>
@@ -301,14 +214,9 @@ export default function AdminScenariosPage() {
             onClick={fetchSimulaciones}
             title="Recargar"
             style={{
-              padding: '0.5rem',
-              borderRadius: '8px',
-              border: '1px solid #CBD5E1',
-              backgroundColor: '#FFFFFF',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              color: '#64748B',
+              padding: '0.5rem', borderRadius: '8px', border: '1px solid #CBD5E1',
+              backgroundColor: '#FFFFFF', cursor: 'pointer', display: 'flex',
+              alignItems: 'center', color: '#64748B',
             }}
           >
             <RefreshCw size={16} />
@@ -318,18 +226,11 @@ export default function AdminScenariosPage() {
           <button
             onClick={() => setFormModal({ isOpen: true, mode: 'create', scenario: null })}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.5rem 1.1rem',
-              borderRadius: '8px',
-              backgroundColor: '#1E3A8A',
-              color: '#FFFFFF',
-              border: 'none',
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: '0 4px 6px -1px rgba(30,58,138,0.2)',
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.5rem 1.1rem', borderRadius: '8px',
+              backgroundColor: '#1E3A8A', color: '#FFFFFF',
+              border: 'none', fontSize: '0.875rem', fontWeight: 600,
+              cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(30,58,138,0.2)',
               marginLeft: 'auto',
             }}
           >
@@ -338,15 +239,8 @@ export default function AdminScenariosPage() {
           </button>
         </div>
 
-        {/* Tabla de escenarios */}
-        <div
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '12px',
-            border: '1px solid #E2E8F0',
-            overflow: 'hidden',
-          }}
-        >
+        {/* Tabla */}
+        <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
           {loading ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94A3B8' }}>
               <RefreshCw size={28} style={{ margin: '0 auto 0.75rem', animation: 'spin 1s linear infinite' }} />
@@ -367,22 +261,13 @@ export default function AdminScenariosPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                    {['Escenario', 'Tipo', 'Modalidad', 'Fecha inicio', 'Estado', 'Acciones'].map((h) => (
-                      <th
-                        key={h}
-                        style={{
-                          padding: '0.85rem 1rem',
-                          textAlign: 'left',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          color: '#64748B',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {h}
-                      </th>
+                    {['Escenario', 'Tipo', 'Modalidad', 'Participantes', 'Fecha inicio', 'Estado', 'Acciones'].map((h) => (
+                      <th key={h} style={{
+                        padding: '0.85rem 1rem', textAlign: 'left',
+                        fontSize: '0.75rem', fontWeight: 700,
+                        color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em',
+                        whiteSpace: 'nowrap',
+                      }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -394,8 +279,8 @@ export default function AdminScenariosPage() {
                         borderBottom: i < simulaciones.length - 1 ? '1px solid #F1F5F9' : 'none',
                         transition: 'background-color 0.1s',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8FAFC'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       {/* Nombre */}
                       <td style={{ padding: '0.9rem 1rem' }}>
@@ -404,17 +289,7 @@ export default function AdminScenariosPage() {
                           <div>
                             <p style={{ margin: 0, fontWeight: 600, color: '#1E293B' }}>{sim.nombre}</p>
                             {sim.descripcion && (
-                              <p
-                                style={{
-                                  margin: '0.15rem 0 0',
-                                  fontSize: '0.78rem',
-                                  color: '#94A3B8',
-                                  maxWidth: '280px',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
+                              <p style={{ margin: '0.15rem 0 0', fontSize: '0.78rem', color: '#94A3B8', maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {sim.descripcion}
                               </p>
                             )}
@@ -429,6 +304,13 @@ export default function AdminScenariosPage() {
                       <td style={{ padding: '0.9rem 1rem', color: '#475569', textTransform: 'capitalize' }}>
                         {sim.modalidad || '—'}
                       </td>
+                      {/* Participantes */}
+                      <td style={{ padding: '0.9rem 1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#475569' }}>
+                          <Users size={15} />
+                          <span>{sim.participante_simulacion?.[0]?.count ?? 0}</span>
+                        </div>
+                      </td>
                       {/* Fecha inicio */}
                       <td style={{ padding: '0.9rem 1rem', color: '#475569', whiteSpace: 'nowrap' }}>
                         {formatFecha(sim.fecha_inicio)}
@@ -437,31 +319,34 @@ export default function AdminScenariosPage() {
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <Badge estado={sim.estado} />
                       </td>
-                      {/* Acciones (HUL02) */}
+                      {/* Acciones */}
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <div style={{ display: 'flex', gap: '0.4rem' }}>
                           <button
-                            onClick={() => setFormModal({ isOpen: true, mode: 'edit', scenario: sim })}
-                            title="Editar escenario"
+                            onClick={() => setAssignModal({ isOpen: true, scenario: sim })}
+                            title="Asignar participantes"
                             style={{
-                              padding: '0.4rem',
-                              borderRadius: '6px',
-                              border: '1px solid #CBD5E1',
-                              backgroundColor: '#FFFFFF',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              color: '#475569',
+                              padding: '0.4rem', borderRadius: '6px', border: '1px solid #CBD5E1',
+                              backgroundColor: '#FFFFFF', cursor: 'pointer', display: 'flex',
+                              alignItems: 'center', color: '#475569',
                               transition: 'all 0.15s',
                             }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = '#EFF6FF'
-                              e.currentTarget.style.color = '#1D4ED8'
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFF6FF'; e.currentTarget.style.color = '#1D4ED8' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#475569' }}
+                          >
+                            <Users size={15} />
+                          </button>
+                          <button
+                            onClick={() => setFormModal({ isOpen: true, mode: 'edit', scenario: sim })}
+                            title="Editar"
+                            style={{
+                              padding: '0.4rem', borderRadius: '6px', border: '1px solid #CBD5E1',
+                              backgroundColor: '#FFFFFF', cursor: 'pointer', display: 'flex',
+                              alignItems: 'center', color: '#475569',
+                              transition: 'all 0.15s',
                             }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = '#FFFFFF'
-                              e.currentTarget.style.color = '#475569'
-                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFF6FF'; e.currentTarget.style.color = '#1D4ED8' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#475569' }}
                           >
                             <Edit2 size={15} />
                           </button>
@@ -469,24 +354,13 @@ export default function AdminScenariosPage() {
                             onClick={() => setConfirmModal({ isOpen: true, scenario: sim })}
                             title={sim.estado === 'inactiva' ? 'Activar' : 'Desactivar'}
                             style={{
-                              padding: '0.4rem',
-                              borderRadius: '6px',
-                              border: '1px solid #CBD5E1',
-                              backgroundColor: '#FFFFFF',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              color: '#475569',
+                              padding: '0.4rem', borderRadius: '6px', border: '1px solid #CBD5E1',
+                              backgroundColor: '#FFFFFF', cursor: 'pointer', display: 'flex',
+                              alignItems: 'center', color: '#475569',
                               transition: 'all 0.15s',
                             }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = '#FEF2F2'
-                              e.currentTarget.style.color = '#B91C1C'
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = '#FFFFFF'
-                              e.currentTarget.style.color = '#475569'
-                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FEF2F2'; e.currentTarget.style.color = '#B91C1C' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#475569' }}
                           >
                             <XCircle size={15} />
                           </button>
@@ -501,13 +375,20 @@ export default function AdminScenariosPage() {
         </div>
       </div>
 
-      {/* Modales HUL01 + HUL02 */}
+      {/* Modales */}
       <ScenarioFormModal
         isOpen={formModal.isOpen}
         mode={formModal.mode}
         scenario={formModal.scenario}
         onClose={() => setFormModal({ isOpen: false, mode: 'create', scenario: null })}
-        onSuccess={() => fetchSimulaciones()}
+        onSuccess={handleFormSuccess}
+      />
+
+      <AssignParticipantsModal
+        isOpen={assignModal.isOpen}
+        scenario={assignModal.scenario}
+        onClose={() => setAssignModal({ isOpen: false, scenario: null })}
+        onSuccess={handleFormSuccess}
       />
 
       <ConfirmModal
