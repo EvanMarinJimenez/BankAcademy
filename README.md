@@ -41,9 +41,9 @@ programación de escenarios de llamadas.
 
 ### Historias de usuario
 
-- [ ] HUL01 — Crear escenarios de llamadas.
-- [ ] HUL02 — Modificar escenarios.
-- [ ] HUL03 — Asignar escenarios a participantes.
+- [x] HUL01 — Crear escenarios de llamadas.
+- [x] HUL02 — Modificar escenarios.
+- [x] HUL03 — Asignar escenarios a participantes.
 - [ ] HUL04 — Configurar parámetros.
 - [ ] HUL05 — Programar simulaciones.
 - [ ] HUL12 — Cancelar llamadas programadas.
