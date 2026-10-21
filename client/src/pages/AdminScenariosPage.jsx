@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import AdminLayout from '../components/AdminLayout'
 import ScenarioFormModal from '../components/ScenarioFormModal'
+import ConfirmModal from '../components/ConfirmModal'
 import {
   Plus, Search, Phone, MessageCircle, Layers,
-  RefreshCw, Filter, CheckCircle2, Clock
+  Edit2, XCircle, RefreshCw, Filter,
+  CheckCircle2, Clock
 } from 'lucide-react'
 
 const API = 'http://localhost:3000/api/simulaciones'
@@ -79,7 +81,10 @@ export default function AdminScenariosPage() {
   const [search, setSearch] = useState('')
   const [filterTipo, setFilterTipo] = useState('all')
   const [filterEstado, setFilterEstado] = useState('all')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Modales HUL01 + HUL02
+  const [formModal, setFormModal] = useState({ isOpen: false, mode: 'create', scenario: null })
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, scenario: null })
 
   const fetchSimulaciones = useCallback(async () => {
     setLoading(true)
@@ -103,6 +108,23 @@ export default function AdminScenariosPage() {
     const timeout = setTimeout(fetchSimulaciones, 300)
     return () => clearTimeout(timeout)
   }, [fetchSimulaciones])
+
+  const handleDesactivar = async () => {
+    const { scenario } = confirmModal
+    if (!scenario) return
+    try {
+      const nuevoEstado = scenario.estado === 'inactiva' ? 'activa' : 'inactiva'
+      await fetch(`${API}/${scenario.id_simulacion}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado: nuevoEstado }),
+      })
+      setConfirmModal({ isOpen: false, scenario: null })
+      fetchSimulaciones()
+    } catch (err) {
+      console.error('Error al cambiar estado:', err)
+    }
+  }
 
   const totalActivos = simulaciones.filter((s) => s.estado === 'activa').length
   const totalProgramados = simulaciones.filter((s) => s.estado === 'programada').length
@@ -292,9 +314,9 @@ export default function AdminScenariosPage() {
             <RefreshCw size={16} />
           </button>
 
-          {/* Botón crear (HUL01) */}
+          {/* Botón crear */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setFormModal({ isOpen: true, mode: 'create', scenario: null })}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -345,7 +367,7 @@ export default function AdminScenariosPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                    {['Escenario', 'Tipo', 'Modalidad', 'Fecha inicio', 'Estado'].map((h) => (
+                    {['Escenario', 'Tipo', 'Modalidad', 'Fecha inicio', 'Estado', 'Acciones'].map((h) => (
                       <th
                         key={h}
                         style={{
@@ -415,6 +437,61 @@ export default function AdminScenariosPage() {
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <Badge estado={sim.estado} />
                       </td>
+                      {/* Acciones (HUL02) */}
+                      <td style={{ padding: '0.9rem 1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.4rem' }}>
+                          <button
+                            onClick={() => setFormModal({ isOpen: true, mode: 'edit', scenario: sim })}
+                            title="Editar escenario"
+                            style={{
+                              padding: '0.4rem',
+                              borderRadius: '6px',
+                              border: '1px solid #CBD5E1',
+                              backgroundColor: '#FFFFFF',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              color: '#475569',
+                              transition: 'all 0.15s',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#EFF6FF'
+                              e.currentTarget.style.color = '#1D4ED8'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#FFFFFF'
+                              e.currentTarget.style.color = '#475569'
+                            }}
+                          >
+                            <Edit2 size={15} />
+                          </button>
+                          <button
+                            onClick={() => setConfirmModal({ isOpen: true, scenario: sim })}
+                            title={sim.estado === 'inactiva' ? 'Activar' : 'Desactivar'}
+                            style={{
+                              padding: '0.4rem',
+                              borderRadius: '6px',
+                              border: '1px solid #CBD5E1',
+                              backgroundColor: '#FFFFFF',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              color: '#475569',
+                              transition: 'all 0.15s',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#FEF2F2'
+                              e.currentTarget.style.color = '#B91C1C'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#FFFFFF'
+                              e.currentTarget.style.color = '#475569'
+                            }}
+                          >
+                            <XCircle size={15} />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -424,11 +501,27 @@ export default function AdminScenariosPage() {
         </div>
       </div>
 
-      {/* Modal Crear Escenario (HUL01) */}
+      {/* Modales HUL01 + HUL02 */}
       <ScenarioFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={formModal.isOpen}
+        mode={formModal.mode}
+        scenario={formModal.scenario}
+        onClose={() => setFormModal({ isOpen: false, mode: 'create', scenario: null })}
         onSuccess={() => fetchSimulaciones()}
+      />
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.scenario?.estado === 'inactiva' ? 'Activar escenario' : 'Desactivar escenario'}
+        message={
+          confirmModal.scenario?.estado === 'inactiva'
+            ? `¿Deseas activar el escenario "${confirmModal.scenario?.nombre}"? Los participantes podrán verlo nuevamente.`
+            : `¿Deseas desactivar el escenario "${confirmModal.scenario?.nombre}"? Los participantes no podrán acceder a él.`
+        }
+        confirmText={confirmModal.scenario?.estado === 'inactiva' ? 'Activar' : 'Desactivar'}
+        isDanger={confirmModal.scenario?.estado !== 'inactiva'}
+        onConfirm={handleDesactivar}
+        onCancel={() => setConfirmModal({ isOpen: false, scenario: null })}
       />
     </AdminLayout>
   )
