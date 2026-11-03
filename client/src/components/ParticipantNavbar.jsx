@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import NotificationBell from './NotificationBell'
 import {
-  Landmark, Bell, ChevronDown, User, LogOut, Shield
+  Landmark, ChevronDown, User, LogOut, Shield
 } from 'lucide-react'
 
 export default function ParticipantNavbar() {
@@ -52,10 +53,7 @@ export default function ParticipantNavbar() {
       </div>
 
       <div className="navbar__right">
-        <button className="icon-btn" aria-label="Notificaciones" title="Notificaciones">
-          <Bell size={20} />
-          <span className="icon-btn__dot"></span>
-        </button>
+        <NotificationBell />
 
         <div style={{ position: 'relative' }}>
           <div

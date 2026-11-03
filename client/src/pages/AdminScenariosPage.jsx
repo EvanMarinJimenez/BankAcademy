@@ -6,7 +6,7 @@ import ConfirmModal from '../components/ConfirmModal'
 import {
   Plus, Search, Phone, MessageCircle, Layers,
   Edit2, XCircle, Users, RefreshCw, Filter,
-  CheckCircle2, Clock, Sliders
+  CheckCircle2, Clock, Sliders, CalendarX, Bell
 } from 'lucide-react'
 
 const API = 'http://localhost:3000/api/simulaciones'
@@ -95,6 +95,9 @@ export default function AdminScenariosPage() {
   const [formModal, setFormModal] = useState({ isOpen: false, mode: 'create', scenario: null })
   const [assignModal, setAssignModal] = useState({ isOpen: false, scenario: null })
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, scenario: null })
+  const [cancelModal, setCancelModal] = useState({ isOpen: false, scenario: null })
+  const [cancelando, setCancelando] = useState(false)
+  const [avisoAccion, setAvisoAccion] = useState('')
 
   const fetchSimulaciones = useCallback(async () => {
     setLoading(true)
@@ -119,7 +122,8 @@ export default function AdminScenariosPage() {
     return () => clearTimeout(timeout)
   }, [fetchSimulaciones])
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = (_simulacion, advertencia = '') => {
+    setAvisoAccion(advertencia)
     fetchSimulaciones()
   }
 
@@ -137,6 +141,26 @@ export default function AdminScenariosPage() {
       fetchSimulaciones()
     } catch (err) {
       console.error('Error al cambiar estado:', err)
+    }
+  }
+
+  // cancelar una llamada programada
+  const handleCancelarLlamada = async () => {
+    const { scenario } = cancelModal
+    if (!scenario) return
+    setCancelando(true)
+    setAvisoAccion('')
+    try {
+      const res = await fetch(`${API}/${scenario.id_simulacion}/cancel`, { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'No se pudo cancelar la llamada.')
+      if (data.advertencia) setAvisoAccion(data.advertencia)
+      fetchSimulaciones()
+    } catch (err) {
+      setAvisoAccion(err.message || 'No se pudo cancelar la llamada.')
+    } finally {
+      setCancelando(false)
+      setCancelModal({ isOpen: false, scenario: null })
     }
   }
 
@@ -264,6 +288,16 @@ export default function AdminScenariosPage() {
           </button>
         </div>
 
+        {avisoAccion && (
+          <div role="alert" style={{
+            padding: '0.75rem 1rem', marginBottom: '1rem', borderRadius: '8px',
+            backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5',
+            color: '#B91C1C', fontSize: '0.875rem',
+          }}>
+            {avisoAccion}
+          </div>
+        )}
+
         {/* Tabla */}
         <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
           {loading ? (
@@ -286,7 +320,7 @@ export default function AdminScenariosPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                    {['Escenario', 'Tipo', 'Modalidad', 'Parámetros (HUL04)', 'Participantes', 'Programación (HUL05)', 'Estado', 'Acciones'].map((h) => (
+                    {['Escenario', 'Tipo', 'Modalidad', 'Parámetros', 'Participantes', 'Programación', 'Estado', 'Acciones'].map((h) => (
                       <th key={h} style={{
                         padding: '0.85rem 1rem', textAlign: 'left',
                         fontSize: '0.75rem', fontWeight: 700,
@@ -332,7 +366,7 @@ export default function AdminScenariosPage() {
                         {sim.modalidad || '—'}
                       </td>
 
-                      {/* Parámetros HUL04 */}
+                      {/* Parámetros */}
                       <td style={{ padding: '0.9rem 1rem' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', alignItems: 'flex-start' }}>
                           <DificultadBadge dificultad={sim.parametros?.dificultad} />
@@ -351,7 +385,7 @@ export default function AdminScenariosPage() {
                         </div>
                       </td>
 
-                      {/* Fecha inicio / Programación HUL05 */}
+                      {/* Fecha inicio / Programación */}
                       <td style={{ padding: '0.9rem 1rem', color: '#475569', whiteSpace: 'nowrap' }}>
                         {sim.estado === 'programada' && sim.fecha_inicio ? (
                           <span style={{
@@ -364,6 +398,12 @@ export default function AdminScenariosPage() {
                           </span>
                         ) : (
                           formatFecha(sim.fecha_inicio)
+                        )}
+                        {sim.estado === 'programada' && sim.parametros?.recordatorio?.activo && (
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.3rem', fontSize: '0.72rem', color: '#64748B' }}>
+                            <Bell size={12} />
+                            Recordatorio {sim.parametros.recordatorio.horas_antes} h antes
+                          </span>
                         )}
                       </td>
 
@@ -417,6 +457,20 @@ export default function AdminScenariosPage() {
                           >
                             <XCircle size={15} />
                           </button>
+                          {sim.estado === 'programada' && (
+                            <button
+                              onClick={() => setCancelModal({ isOpen: true, scenario: sim })}
+                              title="Cancelar llamada programada"
+                              aria-label="Cancelar llamada programada"
+                              style={{
+                                padding: '0.4rem', borderRadius: '6px', border: '1px solid #FCA5A5',
+                                backgroundColor: '#FFFFFF', cursor: 'pointer', display: 'flex',
+                                alignItems: 'center', color: '#B91C1C',
+                              }}
+                            >
+                              <CalendarX size={15} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -457,6 +511,18 @@ export default function AdminScenariosPage() {
         isDanger={confirmModal.scenario?.estado !== 'inactiva'}
         onConfirm={handleDesactivar}
         onCancel={() => setConfirmModal({ isOpen: false, scenario: null })}
+      />
+
+      <ConfirmModal
+        isOpen={cancelModal.isOpen}
+        title="Cancelar llamada programada"
+        message={`¿Deseas cancelar "${cancelModal.scenario?.nombre}"? Se avisará a los participantes asignados y no se enviarán más recordatorios.`}
+        confirmText="Cancelar llamada"
+        cancelText="Volver"
+        isDanger
+        loading={cancelando}
+        onConfirm={handleCancelarLlamada}
+        onCancel={() => setCancelModal({ isOpen: false, scenario: null })}
       />
     </AdminLayout>
   )

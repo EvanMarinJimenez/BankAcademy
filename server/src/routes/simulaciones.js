@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { supabaseAdmin } from '../lib/supabase.js'
+import { formatearFecha, notificarParticipantes } from '../lib/recordatorios.js'
 
 const router = Router()
 
@@ -220,6 +221,50 @@ router.patch('/:id/status', async (req, res) => {
     return res.json({ message: `Escenario ${estado} exitosamente`, simulacion: data })
   } catch (err) {
     console.error('PATCH /api/simulaciones/:id/status:', err)
+    return res.status(500).json({ error: 'Error del servidor' })
+  }
+})
+
+// POST /api/simulaciones/:id/cancel — cancelar una llamada programada (HUL12)
+router.post('/:id/cancel', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    // La condición sobre estado evita cancelar algo que ya no esté programado.
+    const { data: simulacion, error } = await supabaseAdmin
+      .from('simulacion')
+      .update({ estado: 'cancelada' })
+      .eq('id_simulacion', id)
+      .eq('estado', 'programada')
+      .select()
+      .maybeSingle()
+
+    if (error) return res.status(400).json({ error: error.message })
+    if (!simulacion) {
+      return res.status(409).json({ error: 'Solo se pueden cancelar llamadas en estado programada.' })
+    }
+
+    const fecha = simulacion.fecha_inicio
+      ? ` del ${formatearFecha(simulacion.fecha_inicio)}`
+      : ''
+
+    try {
+      const avisados = await notificarParticipantes(simulacion, {
+        tipo: 'cancelacion',
+        titulo: 'Llamada cancelada',
+        mensaje: `Tu llamada "${simulacion.nombre}"${fecha} fue cancelada.`,
+      })
+      return res.json({ message: 'Llamada cancelada exitosamente', simulacion, participantes_avisados: avisados })
+    } catch (errorAviso) {
+      console.error('POST /api/simulaciones/:id/cancel (avisos):', errorAviso)
+      return res.json({
+        message: 'Llamada cancelada exitosamente',
+        simulacion,
+        advertencia: 'La llamada se canceló, pero no se pudo avisar a los participantes.',
+      })
+    }
+  } catch (err) {
+    console.error('POST /api/simulaciones/:id/cancel:', err)
     return res.status(500).json({ error: 'Error del servidor' })
   }
 })

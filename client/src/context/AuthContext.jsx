@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
     }
 
     // Fallback con metadata del usuario
-    const u = userObj || session?.user
+    const u = userObj 
     if (u) {
       return {
         id: userId,
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
       }
     }
     return null
-  }, [session?.user])
+  }, [])
 
   useEffect(() => {
     // Obtener sesión actual

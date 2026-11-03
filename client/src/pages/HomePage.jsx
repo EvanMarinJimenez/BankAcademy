@@ -205,9 +205,13 @@ export default function HomePage() {
                           }`}
                       </p>
                     </div>
-                    <button className="btn-primary" style={{ padding: '0.55rem 1.15rem' }}>
-                      {isChat ? 'Atender chat' : 'Atender llamada'}
-                    </button>
+                    {sim.estado === 'cancelada' ? (
+                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#B91C1C' }}>Cancelada</span>
+                    ) : (
+                      <button className="btn-primary" style={{ padding: '0.55rem 1.15rem' }}>
+                        {isChat ? 'Atender chat' : 'Atender llamada'}
+                      </button>
+                    )}
                   </div>
                 )
               })

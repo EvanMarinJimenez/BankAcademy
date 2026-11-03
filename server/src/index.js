@@ -5,6 +5,7 @@ import cors from 'cors'
 
 import usersRouter from './routes/users.js'
 import simulacionesRouter from './routes/simulaciones.js'
+import { iniciarRecordatorios } from './lib/recordatorios.js'
 
 const app = express()
 const httpServer = createServer(app)
@@ -37,4 +38,5 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT || 3000
 httpServer.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`)
+  iniciarRecordatorios()
 })

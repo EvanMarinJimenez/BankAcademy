@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   X, BookOpen, Tag, Settings, Calendar, AlertCircle,
-  Clock, Sliders, Award, AlertTriangle, ShieldCheck
+  Clock, Sliders, Award, AlertTriangle, ShieldCheck, Users, Search
 } from 'lucide-react'
+
+const API_USERS = 'http://localhost:3000/api/users'
+const API_SIMULACIONES = 'http://localhost:3000/api/simulaciones'
 
 const TIPOS = [
   { value: 'llamada', label: 'Llamada telefónica' },
@@ -35,6 +38,12 @@ const TONOS_CLIENTE = [
   { value: 'confundido', label: 'Confundido / Adulto mayor' },
 ]
 
+const ANTICIPACIONES = [
+  { value: 1, label: '1 hora antes' },
+  { value: 24, label: '1 día antes' },
+  { value: 72, label: '3 días antes' },
+]
+
 function getInitialFormState(scenario, mode) {
   const params = scenario?.parametros || {}
 
@@ -47,12 +56,15 @@ function getInitialFormState(scenario, mode) {
       fechaInicio: scenario.fecha_inicio ? scenario.fecha_inicio.slice(0, 16) : '',
       fechaFin: scenario.fecha_fin ? scenario.fecha_fin.slice(0, 16) : '',
       estado: scenario.estado || 'activa',
-      // Parámetros HUL04
+      // Parámetros
       duracionMinutos: params.duracion_minutos ?? 10,
       dificultad: params.dificultad || 'media',
       intentosMax: params.intentos_max ?? 2,
       umbralAprobacion: params.umbral_aprobacion ?? 70,
       tonoCliente: params.tono_cliente || 'normal',
+      // Recordatorio
+      recordatorioActivo: params.recordatorio?.activo ?? false,
+      recordatorioHoras: params.recordatorio?.horas_antes ?? 24,
     }
   }
 
@@ -64,12 +76,15 @@ function getInitialFormState(scenario, mode) {
     fechaInicio: '',
     fechaFin: '',
     estado: 'activa',
-    // Parámetros HUL04
+    // Parámetros
     duracionMinutos: 10,
     dificultad: 'media',
     intentosMax: 2,
     umbralAprobacion: 70,
     tonoCliente: 'normal',
+    // Recordatorio
+    recordatorioActivo: true,
+    recordatorioHoras: 24,
   }
 }
 
@@ -90,19 +105,95 @@ export default function ScenarioFormModal({
   const [fechaFin, setFechaFin] = useState(initialState.fechaFin)
   const [estado, setEstado] = useState(initialState.estado)
 
-  // Parámetros HUL04
+  // Parámetros
   const [duracionMinutos, setDuracionMinutos] = useState(initialState.duracionMinutos)
   const [dificultad, setDificultad] = useState(initialState.dificultad)
   const [intentosMax, setIntentosMax] = useState(initialState.intentosMax)
   const [umbralAprobacion, setUmbralAprobacion] = useState(initialState.umbralAprobacion)
   const [tonoCliente, setTonoCliente] = useState(initialState.tonoCliente)
 
+  // Recordatorio
+  const [recordatorioActivo, setRecordatorioActivo] = useState(initialState.recordatorioActivo)
+  const [recordatorioHoras, setRecordatorioHoras] = useState(initialState.recordatorioHoras)
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Participantes del escenario
+  const [usuarios, setUsuarios] = useState([])
+  const [seleccionados, setSeleccionados] = useState(new Set())
+  const [participantesCargados, setParticipantesCargados] = useState(false)
+  const [errorParticipantes, setErrorParticipantes] = useState('')
+  const [busqueda, setBusqueda] = useState('')
+
+  const idEscenario = mode === 'edit' ? scenario?.id_simulacion : null
+
+  useEffect(() => {
+    if (!isOpen) return undefined
+    let activo = true
+
+    const cargarParticipantes = async () => {
+      try {
+        const peticiones = [fetch(`${API_USERS}?role=participant`)]
+        if (idEscenario) peticiones.push(fetch(`${API_SIMULACIONES}/${idEscenario}`))
+
+        const [resUsuarios, resEscenario] = await Promise.all(peticiones)
+        const dataUsuarios = await resUsuarios.json()
+        if (!resUsuarios.ok) throw new Error(dataUsuarios.error)
+
+        const dataEscenario = resEscenario ? await resEscenario.json() : null
+        if (resEscenario && !resEscenario.ok) throw new Error(dataEscenario.error)
+        if (!activo) return
+
+        const asignados = dataEscenario?.simulacion?.participante_simulacion || []
+        setUsuarios(dataUsuarios.users || [])
+        setSeleccionados(new Set(asignados.map((p) => p.profile_id)))
+        setParticipantesCargados(true)
+      } catch (err) {
+        if (activo) setErrorParticipantes(err.message || 'No se pudieron cargar los participantes.')
+      }
+    }
+
+    cargarParticipantes()
+    return () => {
+      activo = false
+    }
+  }, [isOpen, idEscenario])
+
+  const usuariosFiltrados = useMemo(() => {
+    const texto = busqueda.trim().toLowerCase()
+    if (!texto) return usuarios
+    return usuarios.filter((u) =>
+      `${u.first_name || ''} ${u.last_name || ''} ${u.email || ''}`.toLowerCase().includes(texto)
+    )
+  }, [usuarios, busqueda])
+
   if (!isOpen) return null
 
-  // HUL05: Si cambia la fecha de inicio a futuro al crear, sugerir estado 'programada'
+  const alternarParticipante = (id) => {
+    setSeleccionados((actuales) => {
+      const siguientes = new Set(actuales)
+      if (siguientes.has(id)) siguientes.delete(id)
+      else siguientes.add(id)
+      return siguientes
+    })
+  }
+
+  const todosFiltradosSeleccionados =
+    usuariosFiltrados.length > 0 && usuariosFiltrados.every((u) => seleccionados.has(u.id))
+
+  const alternarTodos = () => {
+    setSeleccionados((actuales) => {
+      const siguientes = new Set(actuales)
+      usuariosFiltrados.forEach((u) => {
+        if (todosFiltradosSeleccionados) siguientes.delete(u.id)
+        else siguientes.add(u.id)
+      })
+      return siguientes
+    })
+  }
+
+  // Si cambia la fecha de inicio a futuro al crear, sugerir estado 'programada'
   const handleFechaInicioChange = (e) => {
     const val = e.target.value
     setFechaInicio(val)
@@ -144,13 +235,18 @@ export default function ScenarioFormModal({
         fecha_inicio: fechaInicio || null,
         fecha_fin: fechaFin || null,
         estado,
-        // HUL04: Parámetros estructurados
+        // Parámetros estructurados
         parametros: {
           duracion_minutos: Number(duracionMinutos),
           dificultad,
           intentos_max: Number(intentosMax),
           umbral_aprobacion: Number(umbralAprobacion),
           tono_cliente: tonoCliente,
+          // Recordatorio automático
+          recordatorio: {
+            activo: recordatorioActivo,
+            horas_antes: Number(recordatorioHoras),
+          },
         },
       }
 
@@ -163,7 +259,23 @@ export default function ScenarioFormModal({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al procesar la solicitud')
 
-      onSuccess(data.simulacion)
+      // El escenario ya está guardado: si esto falla, se avisa en vez de reintentar el
+      // formulario, que crearía un duplicado. Sin la lista cargada no se toca lo asignado.
+      let advertencia = ''
+      if (participantesCargados && (mode === 'edit' || seleccionados.size > 0)) {
+        try {
+          const resAsignacion = await fetch(`${API_SIMULACIONES}/${data.simulacion.id_simulacion}/assign`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profile_ids: Array.from(seleccionados) }),
+          })
+          if (!resAsignacion.ok) throw new Error()
+        } catch {
+          advertencia = `El escenario "${data.simulacion.nombre}" se guardó, pero no se pudieron actualizar sus participantes. Inténtalo desde el botón Asignar participantes de la tabla.`
+        }
+      }
+
+      onSuccess(data.simulacion, advertencia)
       onClose()
     } catch (err) {
       setError(err.message || 'Ocurrió un error inesperado')
@@ -336,7 +448,7 @@ export default function ScenarioFormModal({
             </div>
           </div>
 
-          {/* SECCIÓN HUL04: PARÁMETROS DE SIMULACIÓN */}
+          {/* PARÁMETROS DE SIMULACIÓN */}
           <div style={{
             margin: '1.25rem 0',
             padding: '1.15rem',
@@ -347,7 +459,7 @@ export default function ScenarioFormModal({
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
               <Sliders size={18} style={{ color: '#1E3A8A' }} />
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1E293B', margin: 0 }}>
-                Configuración de Parámetros (HUL04)
+                Configuración de Parámetros
               </h3>
             </div>
 
@@ -435,12 +547,12 @@ export default function ScenarioFormModal({
             </div>
           </div>
 
-          {/* SECCIÓN HUL05: PROGRAMACIÓN Y FECHAS */}
+          {/* PROGRAMACIÓN Y FECHAS */}
           <div style={{ marginBottom: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.65rem' }}>
               <Calendar size={18} style={{ color: '#1E3A8A' }} />
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1E293B', margin: 0 }}>
-                Programación de la Simulación (HUL05)
+                Programación de la Simulación
               </h3>
             </div>
 
@@ -475,7 +587,7 @@ export default function ScenarioFormModal({
               </div>
             </div>
 
-            {/* Selector de estado (HUL05: Activa / Programada / Inactiva) */}
+            {/* Selector de estado (Activa / Programada / Inactiva) */}
             <div>
               <label style={labelStyle}>Estado del escenario</label>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -511,7 +623,117 @@ export default function ScenarioFormModal({
                   ℹ️ El escenario estará en estado Programado hasta que llegue su fecha de inicio.
                 </p>
               )}
+
+              {/* Recordatorio automático */}
+              {estado === 'programada' && (
+                <div style={{ marginTop: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 600, color: '#334155', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={recordatorioActivo}
+                      onChange={(e) => setRecordatorioActivo(e.target.checked)}
+                      disabled={loading}
+                    />
+                    Enviar recordatorio a los participantes
+                  </label>
+                  {recordatorioActivo && (
+                    <select
+                      aria-label="Anticipación del recordatorio"
+                      value={recordatorioHoras}
+                      onChange={(e) => setRecordatorioHoras(e.target.value)}
+                      disabled={loading}
+                      style={{ padding: '0.4rem 0.6rem', border: '1px solid #CBD5E1', borderRadius: '8px', fontSize: '0.8rem', cursor: 'pointer', backgroundColor: '#FFFFFF' }}
+                    >
+                      {ANTICIPACIONES.map((a) => (
+                        <option key={a.value} value={a.value}>{a.label}</option>
+                      ))}
+                    </select>
+                  )}
+                  {recordatorioActivo && !fechaInicio && (
+                    <p style={{ margin: 0, width: '100%', fontSize: '0.78rem', color: '#B45309', fontWeight: 500 }}>
+                      Define una fecha de inicio para que se pueda enviar el recordatorio.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
+          </div>
+
+          {/* Participantes */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.65rem' }}>
+              <Users size={18} style={{ color: '#1E3A8A' }} />
+              <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1E293B', margin: 0 }}>
+                Participantes ({seleccionados.size} seleccionados)
+              </h3>
+            </div>
+
+            {errorParticipantes ? (
+              <p role="alert" style={{ margin: 0, fontSize: '0.85rem', color: '#B91C1C' }}>
+                No se pudo cargar la lista de participantes. {isEdit
+                  ? 'Las asignaciones actuales no se modificarán.'
+                  : 'Puedes crear el escenario y asignarlos después desde la tabla.'}
+              </p>
+            ) : !participantesCargados ? (
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748B' }}>Cargando participantes...</p>
+            ) : usuarios.length === 0 ? (
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748B' }}>No hay participantes registrados.</p>
+            ) : (
+              <>
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', alignItems: 'center' }}>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                    <input
+                      type="text"
+                      aria-label="Buscar participante"
+                      placeholder="Buscar por nombre o correo..."
+                      value={busqueda}
+                      onChange={(e) => setBusqueda(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault() }}
+                      disabled={loading}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={alternarTodos}
+                    disabled={loading || usuariosFiltrados.length === 0}
+                    style={{ padding: '0.55rem 0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#475569', fontSize: '0.8rem', fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  >
+                    {todosFiltradosSeleccionados ? 'Quitar todos' : 'Seleccionar todos'}
+                  </button>
+                </div>
+
+                <div style={{ maxHeight: '170px', overflowY: 'auto', border: '1px solid #E2E8F0', borderRadius: '8px' }}>
+                  {usuariosFiltrados.length === 0 ? (
+                    <p style={{ margin: 0, padding: '0.75rem', fontSize: '0.85rem', color: '#64748B' }}>Sin resultados.</p>
+                  ) : (
+                    usuariosFiltrados.map((u) => (
+                      <label key={u.id} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.55rem 0.75rem', borderBottom: '1px solid #F1F5F9', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={seleccionados.has(u.id)}
+                          onChange={() => alternarParticipante(u.id)}
+                          disabled={loading}
+                        />
+                        <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
+                          <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>
+                            {`${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email}
+                          </span>
+                          <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B' }}>{u.email}</span>
+                        </span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              </>
+            )}
+
+            {estado === 'programada' && recordatorioActivo && participantesCargados && seleccionados.size === 0 && (
+              <p style={{ margin: '0.4rem 0 0', fontSize: '0.78rem', color: '#B45309', fontWeight: 500 }}>
+                Selecciona al menos un participante para que alguien reciba el recordatorio.
+              </p>
+            )}
           </div>
 
           {/* Botones */}
