@@ -12,6 +12,8 @@ import HomePage from './pages/HomePage'
 import AdminHomePage from './pages/AdminHomePage'
 import AdminUsersPage from './pages/AdminUsersPage'
 import AdminScenariosPage from './pages/AdminScenariosPage'
+import AdminCallsPage from './pages/AdminCallsPage'
+import CallSessionPage from './pages/CallSessionPage'
 import ProfilePage from './pages/ProfilePage'
 
 // Si está logueado y va al login, redirigir a su home
@@ -103,6 +105,20 @@ function AppRoutes() {
       <Route path="/admin/scenarios" element={
         <ProtectedRoute requiredRole="admin">
           <AdminScenariosPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Gestión de llamadas admin (protegido) — HUL06, HUL07 */}
+      <Route path="/admin/calls" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminCallsPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Sesión de llamada activa (participante) — HUL06, HUL07 */}
+      <Route path="/llamada/:id" element={
+        <ProtectedRoute requiredRole="participant">
+          <CallSessionPage />
         </ProtectedRoute>
       } />
 

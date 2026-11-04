@@ -58,8 +58,8 @@ incluyendo comunicación, transcripción, grabación e historial.
 
 ### Historias de usuario
 
-- [ ] HUL06 — Iniciar llamada aleatoria.
-- [ ] HUL07 — Llamar a un estudiante específico.
+- [x] HUL06 — Iniciar llamada aleatoria.
+- [x] HUL07 — Llamar a un estudiante específico.
 - [ ] HUL08 — Transcripción en tiempo real.
 - [ ] HUL09 — Almacenar grabaciones.
 - [ ] HUL10 — Historial de llamadas.

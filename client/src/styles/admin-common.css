@@ -394,13 +394,12 @@
 /* Texto expandido */
 
 .sidebar:hover .nav-item span {
+    display: inline-block !important;
     opacity: 1 !important;
     visibility: visible !important;
-
     width: auto !important;
-
     overflow: visible !important;
-
+    color: #FFFFFF !important;
     transform: none !important;
 }
 
@@ -570,6 +569,26 @@
 /* =========================================================
    RESPONSIVE
    ========================================================= */
+
+@media (max-width: 800px) {
+    .sidebar:hover {
+        width: 245px !important;
+        box-shadow: 12px 0 30px rgba(0, 0, 0, 0.35) !important;
+    }
+    .sidebar:hover .sidebar-brand span,
+    .sidebar:hover .nav-item span {
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        color: #FFFFFF !important;
+    }
+    .sidebar:hover .nav-section-title {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        height: auto !important;
+    }
+}
 
 @media (max-width: 700px) {
 
@@ -1135,6 +1154,26 @@ button {
     color: #64748B !important;
 
     font-size: 11px !important;
+}
+
+@media (max-width: 800px) {
+    .sidebar:hover {
+        width: 245px !important;
+        box-shadow: 12px 0 30px rgba(0, 0, 0, 0.35) !important;
+    }
+    .sidebar:hover .sidebar-brand span,
+    .sidebar:hover .nav-item span {
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        color: #FFFFFF !important;
+    }
+    .sidebar:hover .nav-section-title {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        height: auto !important;
+    }
 }
 
 @media (max-width: 700px) {

@@ -71,8 +71,8 @@ export default function AdminHomePage() {
                 boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
               }}
             >
-              <Users size={18} />
-              <span>Gestionar Participantes</span>
+              <Users size={18} color="#1E3A8A" />
+              <span style={{ color: '#1E3A8A', fontWeight: 600 }}>Gestionar Participantes</span>
             </Link>
           </div>
         </section>

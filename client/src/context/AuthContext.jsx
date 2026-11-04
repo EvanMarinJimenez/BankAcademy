@@ -50,6 +50,9 @@ export function AuthProvider({ children }) {
         setProfile(prof)
       }
       setLoading(false)
+    }).catch((err) => {
+      console.warn('Error inicializando sesión:', err)
+      setLoading(false)
     })
 
     // Escuchar cambios de auth (login, logout, token refresh)

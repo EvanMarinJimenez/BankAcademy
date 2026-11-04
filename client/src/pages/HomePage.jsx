@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import ParticipantNavbar from '../components/ParticipantNavbar'
+import IncomingCallModal from '../components/IncomingCallModal'
+import { io } from 'socket.io-client'
 import {
   PhoneCall, MessageSquare, Clock, Star, Phone, MessageCircle, Layers, CheckCircle2
 } from 'lucide-react'
@@ -8,9 +11,39 @@ import '../styles/home.css'
 
 export default function HomePage() {
   const { profile } = useAuth()
+  const navigate = useNavigate()
   const [status, setStatus] = useState('available') // 'available' | 'busy' | 'offline'
   const [asignaciones, setAsignaciones] = useState([])
   const [loadingQueue, setLoadingQueue] = useState(true)
+  const [llamadaEntrante, setLlamadaEntrante] = useState(null) // { id_llamada, simulacion }
+  const socketRef = useRef(null)
+
+  // ─── Conexión Socket.io ───────────────────────────────────────────────────
+  useEffect(() => {
+    if (!profile?.id) return
+
+    const socket = io('http://localhost:3000', { transports: ['websocket'] })
+    socketRef.current = socket
+
+    // Unirse al room personal para recibir eventos dirigidos
+    socket.on('connect', () => {
+      socket.emit('join', profile.id)
+    })
+
+    // Escuchar llamada entrante (HUL06, HUL07)
+    socket.on('llamada:entrante', (data) => {
+      setLlamadaEntrante(data)
+    })
+
+    // Si la llamada fue cancelada o finalizada desde el server
+    socket.on('llamada:estado', ({ estado }) => {
+      if (estado !== 'en_curso') setLlamadaEntrante(null)
+    })
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [profile?.id])
 
   useEffect(() => {
     if (!profile?.id) return
@@ -37,11 +70,67 @@ export default function HomePage() {
     }
   }, [profile?.id])
 
+  // Atender llamada asignada directamente desde el panel
+  const handleAtenderLlamada = async (sim) => {
+    if (!profile?.id || !sim?.id_simulacion) return
+    try {
+      const res = await fetch('http://localhost:3000/api/llamadas/iniciar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profile_id: profile.id,
+          id_simulacion: sim.id_simulacion,
+          iniciada_por: profile.id,
+        }),
+      })
+      const data = await res.json()
+      if (res.ok && data.llamada?.id_llamada) {
+        navigate(`/llamada/${data.llamada.id_llamada}`)
+      } else if (res.status === 409) {
+        // Ya tiene una llamada en curso, consultamos para redirigirlo
+        const resActiva = await fetch(`http://localhost:3000/api/llamadas?estado=en_curso`)
+        const dataActiva = await resActiva.json()
+        const miLlamada = dataActiva.llamadas?.find((l) =>
+          l.participante_llamada?.some((p) => p.profile_id === profile.id)
+        )
+        if (miLlamada?.id_llamada) {
+          navigate(`/llamada/${miLlamada.id_llamada}`)
+        } else {
+          alert('Ya tienes una llamada en curso.')
+        }
+      } else {
+        alert(data.error || 'No se pudo iniciar la llamada')
+      }
+    } catch (err) {
+      console.error('Error al atender llamada:', err)
+      alert('Error de conexión con el servidor')
+    }
+  }
+
   const firstName = profile?.first_name || 'Participante'
 
   return (
     <div style={{ backgroundColor: '#F8FAFC', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <ParticipantNavbar />
+
+      {/* Modal de llamada entrante */}
+      {llamadaEntrante && (
+        <IncomingCallModal
+          llamada={llamadaEntrante}
+          onAccept={() => setLlamadaEntrante(null)}
+          onReject={async () => {
+            // Notificar al servidor que fue rechazada
+            try {
+              await fetch(`http://localhost:3000/api/llamadas/${llamadaEntrante.id_llamada}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: 'rechazada' }),
+              })
+            } catch { /* silencioso */ }
+            setLlamadaEntrante(null)
+          }}
+        />
+      )}
 
       <main className="main" style={{ flex: 1, padding: '2rem 1.5rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         <div className="page-head">
@@ -208,7 +297,17 @@ export default function HomePage() {
                     {sim.estado === 'cancelada' ? (
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#B91C1C' }}>Cancelada</span>
                     ) : (
-                      <button className="btn-primary" style={{ padding: '0.55rem 1.15rem' }}>
+                      <button
+                        className="btn-primary"
+                        style={{ padding: '0.55rem 1.15rem' }}
+                        onClick={() => {
+                          if (isLlamada) {
+                            handleAtenderLlamada(sim)
+                          } else {
+                            alert('La simulación de chat estará disponible en el Sprint 4.')
+                          }
+                        }}
+                      >
                         {isChat ? 'Atender chat' : 'Atender llamada'}
                       </button>
                     )}

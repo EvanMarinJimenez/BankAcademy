@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Users,
   Phone,
+  PhoneCall,
   MessageCircle,
   CalendarCheck,
   Activity,
@@ -72,6 +73,14 @@ export default function AdminLayout({ children, pageTitle = 'Administración', s
           >
             <Phone size={20} />
             <span>Escenarios</span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/calls"
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          >
+            <PhoneCall size={20} />
+            <span>Llamadas</span>
           </NavLink>
 
           <NavLink
