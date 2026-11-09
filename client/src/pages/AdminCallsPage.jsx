@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import AdminLayout from '../components/AdminLayout'
 import {
@@ -8,6 +9,7 @@ import '../styles/admin-calls.css'
 
 export default function AdminCallsPage() {
   const { profile } = useAuth()
+  const navigate = useNavigate()
 
   const [disponibles, setDisponibles] = useState([])
   const [loading, setLoading] = useState(true)
@@ -56,8 +58,13 @@ export default function AdminCallsPage() {
       if (!res.ok) throw new Error(data.error || 'Error al iniciar llamada')
 
       mostrarToast('success', `Llamada iniciada con ${data.llamada?.participante?.first_name || 'el participante'}`)
-      // Recargar la lista para reflejar que ya está en llamada
-      cargarDisponibles()
+      if (data.llamada?.id_llamada) {
+        setTimeout(() => {
+          navigate(`/llamada/${data.llamada.id_llamada}`)
+        }, 500)
+      } else {
+        cargarDisponibles()
+      }
     } catch (err) {
       mostrarToast('error', err.message)
     }
