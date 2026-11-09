@@ -405,6 +405,29 @@ router.patch('/:id/status', async (req, res) => {
   }
 })
 
+// ─── POST /api/llamadas/liberar-todas ────────────────────────────────────────
+// Admin: marcar todas las llamadas "en_curso" como "finalizada" para liberar participantes
+router.post('/liberar-todas', async (req, res) => {
+  try {
+    const fechaFin = new Date().toISOString()
+    const { data, error } = await supabaseAdmin
+      .from('llamada')
+      .update({ estado: 'finalizada', fecha_fin: fechaFin })
+      .eq('estado', 'en_curso')
+      .select('id_llamada')
+
+    if (error) return res.status(400).json({ error: error.message })
+
+    return res.json({
+      message: `${(data || []).length} llamada(s) liberada(s) exitosamente`,
+      liberadas: (data || []).map((l) => l.id_llamada),
+    })
+  } catch (err) {
+    console.error('POST /api/llamadas/liberar-todas:', err)
+    return res.status(500).json({ error: 'Error del servidor' })
+  }
+})
+
 // ─── POST /api/llamadas/:id/grabacion ───────────────────────────────────────
 // HUL09: Guardar archivo de audio y registrar en la tabla grabacion
 router.post('/:id/grabacion', async (req, res) => {

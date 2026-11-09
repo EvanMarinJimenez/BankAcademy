@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import AdminLayout from '../components/AdminLayout'
 import {
-  Phone, Shuffle, Users, RefreshCw, Loader2, PhoneCall, AlertCircle
+  Phone, Shuffle, Users, RefreshCw, Loader2, PhoneCall, AlertCircle, Unlock
 } from 'lucide-react'
 import '../styles/admin-calls.css'
 
@@ -15,6 +15,7 @@ export default function AdminCallsPage() {
   const [loading, setLoading] = useState(true)
   const [llamandoId, setLlamandoId] = useState(null) // profile_id en proceso
   const [llamandoRandom, setLlamandoRandom] = useState(false)
+  const [liberando, setLiberando] = useState(false)
   const [toast, setToast] = useState(null) // { tipo: 'success'|'error', msg }
 
   // ─── Cargar lista de participantes disponibles ───────────────────────────
@@ -103,6 +104,23 @@ export default function AdminCallsPage() {
   const getInitials = (p) =>
     ((p?.first_name?.[0] || '') + (p?.last_name?.[0] || '')).toUpperCase() || '?'
 
+  // ─── Liberar todos los participantes ocupados ────────────────────────────
+  const handleLiberarTodos = async () => {
+    if (!window.confirm('¿Liberar todas las llamadas en curso? Esto marcará todas como "finalizada" y los participantes volverán a estar disponibles.')) return
+    setLiberando(true)
+    try {
+      const res = await fetch('http://localhost:3000/api/llamadas/liberar-todas', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Error al liberar')
+      mostrarToast('success', data.message)
+      cargarDisponibles()
+    } catch (err) {
+      mostrarToast('error', err.message)
+    } finally {
+      setLiberando(false)
+    }
+  }
+
   return (
     <AdminLayout pageTitle="Simulaciones" sectionTitle="Gestión de Llamadas">
       <div className="calls-page">
@@ -134,6 +152,23 @@ export default function AdminCallsPage() {
               title="Actualizar lista"
             >
               <RefreshCw size={18} className={loading ? 'spin' : ''} />
+            </button>
+
+            {/* Botón para liberar participantes ocupados */}
+            <button
+              onClick={handleLiberarTodos}
+              disabled={liberando || loading}
+              title="Marcar todas las llamadas en curso como finalizadas"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.45rem 0.85rem', borderRadius: '8px',
+                border: '1px solid #FCA5A5', backgroundColor: '#FFF1F2',
+                color: '#BE123C', fontSize: '0.82rem', fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {liberando ? <Loader2 size={15} className="spin" /> : <Unlock size={15} />}
+              <span>Liberar todos</span>
             </button>
 
             {/* HUL06 — Llamada aleatoria */}
@@ -169,10 +204,26 @@ export default function AdminCallsPage() {
                 No hay participantes con simulaciones de llamada activas asignadas
                 o todos están ocupados en este momento.
               </p>
-              <button className="btn-refresh" onClick={cargarDisponibles}>
-                <RefreshCw size={15} />
-                Actualizar
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button className="btn-refresh" onClick={cargarDisponibles}>
+                  <RefreshCw size={15} />
+                  Actualizar
+                </button>
+                <button
+                  onClick={handleLiberarTodos}
+                  disabled={liberando}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '0.4rem',
+                    padding: '0.5rem 1rem', borderRadius: '8px',
+                    border: '1px solid #FCA5A5', backgroundColor: '#FFF1F2',
+                    color: '#BE123C', fontSize: '0.84rem', fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {liberando ? <Loader2 size={14} className="spin" /> : <Unlock size={14} />}
+                  Liberar todos los ocupados
+                </button>
+              </div>
             </div>
           ) : (
             <table className="calls-table">
