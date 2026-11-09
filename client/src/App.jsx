@@ -123,9 +123,9 @@ function AppRoutes() {
         </ProtectedRoute>
       } />
 
-      {/* Sesión de llamada activa (participante) — HUL06, HUL07 */}
+      {/* Sesión de llamada activa (admin o participante) — HUL06, HUL07, HUL08, HUL09 */}
       <Route path="/llamada/:id" element={
-        <ProtectedRoute requiredRole="participant">
+        <ProtectedRoute>
           <CallSessionPage />
         </ProtectedRoute>
       } />
