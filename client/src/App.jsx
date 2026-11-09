@@ -13,6 +13,7 @@ import AdminHomePage from './pages/AdminHomePage'
 import AdminUsersPage from './pages/AdminUsersPage'
 import AdminScenariosPage from './pages/AdminScenariosPage'
 import AdminCallsPage from './pages/AdminCallsPage'
+import AdminRecordingsPage from './pages/AdminRecordingsPage'
 import CallSessionPage from './pages/CallSessionPage'
 import ProfilePage from './pages/ProfilePage'
 
@@ -112,6 +113,13 @@ function AppRoutes() {
       <Route path="/admin/calls" element={
         <ProtectedRoute requiredRole="admin">
           <AdminCallsPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Grabaciones y transcripciones admin (protegido) — HUL08, HUL09 */}
+      <Route path="/admin/recordings" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminRecordingsPage />
         </ProtectedRoute>
       } />
 

@@ -1,5 +1,11 @@
 import { Router } from 'express'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { supabaseAdmin } from '../lib/supabase.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const router = Router()
 
@@ -164,6 +170,49 @@ router.get('/random', async (req, res) => {
   } catch (err) {
     console.error('GET /api/llamadas/random:', err)
     return res.status(500).json({ error: 'Error del servidor' })
+  }
+})
+
+// ─── GET /api/llamadas/grabaciones ──────────────────────────────────────────
+// HUL09: Listar todas las grabaciones con datos de la llamada, participante y escenario
+router.get('/grabaciones', async (req, res) => {
+  try {
+    const { data: grabaciones, error } = await supabaseAdmin
+      .from('grabacion')
+      .select(`
+        *,
+        llamada:id_llamada (
+          id_llamada,
+          tipo,
+          estado,
+          fecha_inicio,
+          fecha_fin,
+          duracion,
+          simulacion:id_simulacion (
+            id_simulacion,
+            nombre,
+            tipo,
+            parametros
+          ),
+          participante_llamada (
+            profile_id,
+            profiles:profile_id (
+              id,
+              first_name,
+              last_name,
+              email
+            )
+          )
+        )
+      `)
+      .order('fecha_creacion', { ascending: false })
+
+    if (error) return res.status(400).json({ error: error.message })
+
+    return res.json({ grabaciones: grabaciones || [] })
+  } catch (err) {
+    console.error('GET /api/llamadas/grabaciones:', err)
+    return res.status(500).json({ error: 'Error del servidor al obtener grabaciones' })
   }
 })
 
@@ -352,6 +401,118 @@ router.patch('/:id/status', async (req, res) => {
     return res.json({ message: `Llamada ${estado} exitosamente`, llamada: data })
   } catch (err) {
     console.error('PATCH /api/llamadas/:id/status:', err)
+    return res.status(500).json({ error: 'Error del servidor' })
+  }
+})
+
+// ─── POST /api/llamadas/:id/grabacion ───────────────────────────────────────
+// HUL09: Guardar archivo de audio y registrar en la tabla grabacion
+router.post('/:id/grabacion', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { audio_base64, duracion, formato = 'webm' } = req.body
+
+    let url_archivo = ''
+
+    if (audio_base64) {
+      const buffer = Buffer.from(audio_base64.replace(/^data:audio\/\w+;base64,/, ''), 'base64')
+      const fileName = `grabacion_llamada_${id}_${Date.now()}.${formato}`
+      const recordingsDir = path.join(__dirname, '../../uploads/recordings')
+      if (!fs.existsSync(recordingsDir)) {
+        fs.mkdirSync(recordingsDir, { recursive: true })
+      }
+      const uploadPath = path.join(recordingsDir, fileName)
+      await fs.promises.writeFile(uploadPath, buffer)
+      url_archivo = `http://localhost:${process.env.PORT || 3000}/uploads/recordings/${fileName}`
+    } else if (req.body.url_archivo) {
+      url_archivo = req.body.url_archivo
+    } else {
+      url_archivo = `http://localhost:${process.env.PORT || 3000}/uploads/recordings/audio_simulado_${id}.webm`
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from('grabacion')
+      .insert({
+        id_llamada: Number(id),
+        url_archivo,
+        duracion: duracion ? Number(duracion) : null,
+      })
+      .select()
+      .single()
+
+    if (error) return res.status(400).json({ error: error.message })
+
+    return res.status(201).json({ message: 'Grabación almacenada exitosamente', grabacion: data })
+  } catch (err) {
+    console.error('POST /api/llamadas/:id/grabacion:', err)
+    return res.status(500).json({ error: 'Error al almacenar grabación' })
+  }
+})
+
+// ─── GET /api/llamadas/:id/grabacion ────────────────────────────────────────
+router.get('/:id/grabacion', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { data, error } = await supabaseAdmin
+      .from('grabacion')
+      .select('*')
+      .eq('id_llamada', id)
+      .maybeSingle()
+
+    if (error) return res.status(400).json({ error: error.message })
+    return res.json({ grabacion: data })
+  } catch (err) {
+    console.error('GET /api/llamadas/:id/grabacion:', err)
+    return res.status(500).json({ error: 'Error del servidor' })
+  }
+})
+
+// ─── POST /api/llamadas/:id/transcripcion ───────────────────────────────────
+// HUL08: Guardar transcripción generada durante la llamada
+router.post('/:id/transcripcion', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { contenido, idioma = 'es-CR' } = req.body
+
+    if (!contenido) {
+      return res.status(400).json({ error: 'El contenido de la transcripción es obligatorio' })
+    }
+
+    const contenidoStr = typeof contenido === 'string' ? contenido : JSON.stringify(contenido)
+
+    const { data, error } = await supabaseAdmin
+      .from('transcripcion')
+      .insert({
+        id_llamada: Number(id),
+        contenido: contenidoStr,
+        idioma,
+      })
+      .select()
+      .single()
+
+    if (error) return res.status(400).json({ error: error.message })
+
+    return res.status(201).json({ message: 'Transcripción guardada exitosamente', transcripcion: data })
+  } catch (err) {
+    console.error('POST /api/llamadas/:id/transcripcion:', err)
+    return res.status(500).json({ error: 'Error al guardar transcripción' })
+  }
+})
+
+// ─── GET /api/llamadas/:id/transcripcion ────────────────────────────────────
+router.get('/:id/transcripcion', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { data, error } = await supabaseAdmin
+      .from('transcripcion')
+      .select('*')
+      .eq('id_llamada', id)
+      .maybeSingle()
+
+    if (error) return res.status(400).json({ error: error.message })
+    return res.json({ transcripcion: data })
+  } catch (err) {
+    console.error('GET /api/llamadas/:id/transcripcion:', err)
     return res.status(500).json({ error: 'Error del servidor' })
   }
 })

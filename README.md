@@ -60,8 +60,8 @@ incluyendo comunicación, transcripción, grabación e historial.
 
 - [x] HUL06 — Iniciar llamada aleatoria.
 - [x] HUL07 — Llamar a un estudiante específico.
-- [ ] HUL08 — Transcripción en tiempo real.
-- [ ] HUL09 — Almacenar grabaciones.
+- [x] HUL08 — Transcripción en tiempo real.
+- [x] HUL09 — Almacenar grabaciones.
 - [ ] HUL10 — Historial de llamadas.
 - [ ] HUL11 — Reproducir grabaciones.
 - [ ] HUL14 — Finalizar llamada.
