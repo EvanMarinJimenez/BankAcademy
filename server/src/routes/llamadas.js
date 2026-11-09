@@ -541,3 +541,21 @@ router.get('/:id/transcripcion', async (req, res) => {
 })
 
 export default router
+
+// ─── DELETE /api/llamadas/grabaciones/:id_grabacion ────────────────────────────────────────
+// Delete a specific recording by its id_grabacion
+router.delete('/grabaciones/:id_grabacion', async (req, res) => {
+  try {
+    const { id_grabacion } = req.params;
+    const { data, error } = await supabaseAdmin
+      .from('grabacion')
+      .delete()
+      .eq('id_grabacion', Number(id_grabacion))
+      .select();
+    if (error) return res.status(400).json({ error: error.message });
+    return res.json({ message: 'Grabación eliminada', grabacion: data });
+  } catch (err) {
+    console.error('DELETE /api/llamadas/grabaciones/:id_grabacion:', err);
+    return res.status(500).json({ error: 'Error del servidor al eliminar grabación' });
+  }
+});

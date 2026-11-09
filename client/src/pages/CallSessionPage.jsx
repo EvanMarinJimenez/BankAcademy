@@ -42,7 +42,7 @@ export default function CallSessionPage() {
   const timerRef = useRef(null)
   const recognitionRef = useRef(null)
   const dialogTimeoutRefs = useRef([])
-  const dialogStartedRef = useRef(false)
+  const llamadaRef = useRef(null)   // para evitar re-disparar diálogos
   const elapsedRef = useRef(0)
   const speakerOffRef = useRef(speakerOff)
 
@@ -107,21 +107,20 @@ export default function CallSessionPage() {
     }
   }, [transcripciones, interimText])
 
-  // ─── HUL08: Función para agregar entrada de transcripción ──────────────────
+  // ─── Función para agregar entrada de transcripción ──────────────────
   const agregarTranscripcion = useCallback((emisor, texto, tiempoActual = null) => {
     if (!texto || !texto.trim()) return
 
     const t = tiempoActual || formatTime(elapsedRef.current)
     const nuevoMensaje = {
       id: Date.now() + Math.random(),
-      emisor, // 'Cliente' | 'Agente'
+      emisor,
       texto: texto.trim(),
       tiempo: t,
     }
 
     setTranscripciones((prev) => [...prev, nuevoMensaje])
 
-    // Emitir por WebSocket para monitoreo en vivo (HUL08)
     if (socketRef.current) {
       socketRef.current.emit('llamada:transcripcion', {
         id_llamada: id,
@@ -130,18 +129,17 @@ export default function CallSessionPage() {
     }
   }, [id])
 
-  // ─── HUL08: Sintetizar voz del cliente simulado (Text-To-Speech) ──────────
+  // ─── Sintetizar voz del cliente simulado (Text-To-Speech) ──────────
   const hablarCliente = useCallback((texto) => {
     if (speakerOffRef.current || !window.speechSynthesis) return
 
     try {
-      window.speechSynthesis.cancel() // Cancelar diálogos previos
+      window.speechSynthesis.cancel()
       const utterance = new SpeechSynthesisUtterance(texto)
       utterance.lang = 'es-CR'
       utterance.rate = 1.05
       utterance.pitch = 1.0
 
-      // Seleccionar voz en español si está disponible
       const voices = window.speechSynthesis.getVoices()
       const vozEs = voices.find((v) => v.lang.startsWith('es'))
       if (vozEs) utterance.voice = vozEs
@@ -152,10 +150,12 @@ export default function CallSessionPage() {
     }
   }, [])
 
-  // ─── HUL08: Diálogos simulados del cliente según el escenario ─────────────
+  // ─── Diálogos simulados del cliente (se lanzan solo una vez al cargar) ─────
   useEffect(() => {
-    if (!llamada || dialogStartedRef.current) return
-    dialogStartedRef.current = true
+    if (!llamada) return
+    // Evitar relanzar si ya se inició para este escenario
+    if (llamadaRef.current === llamada.id_llamada) return
+    llamadaRef.current = llamada.id_llamada
 
     const sim = llamada.simulacion || {}
     const params = sim.parametros || {}

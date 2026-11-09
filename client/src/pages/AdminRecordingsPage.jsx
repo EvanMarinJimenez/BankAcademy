@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import AdminLayout from '../components/AdminLayout'
 import {
-  Mic, Search, Phone, Calendar, Clock, User,
-  FileText, Play, RefreshCw, X, Download, MessageSquare,
-  Sparkles, CheckCircle2, Volume2
+  Mic, Search, Phone, Calendar, Clock,
+  FileText, Download, RefreshCw, X, Trash2,
+  Sparkles,
 } from 'lucide-react'
 import '../styles/admin-recordings.css'
 
@@ -11,9 +11,9 @@ export default function AdminRecordingsPage() {
   const [grabaciones, setGrabaciones] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [filterTipo, setFilterTipo] = useState('all')
+  const [eliminandoId, setEliminandoId] = useState(null)
 
-  // Modal de Transcripción (HUL08)
+  // Modal de Transcripción
   const [transcriptModal, setTranscriptModal] = useState({
     isOpen: false,
     grabacion: null,
@@ -39,6 +39,27 @@ export default function AdminRecordingsPage() {
   useEffect(() => {
     fetchGrabaciones()
   }, [fetchGrabaciones])
+
+  // Eliminar grabación
+  const eliminarGrabacion = async (grab) => {
+    if (!window.confirm(`¿Eliminar la grabación de la Llamada #${grab.id_llamada}? Esta acción no se puede deshacer.`)) return
+    setEliminandoId(grab.id_grabacion)
+    try {
+      const res = await fetch(`http://localhost:3000/api/llamadas/grabaciones/${grab.id_grabacion}`, {
+        method: 'DELETE',
+      })
+      if (res.ok) {
+        setGrabaciones((prev) => prev.filter((g) => g.id_grabacion !== grab.id_grabacion))
+      } else {
+        const data = await res.json()
+        alert(data.error || 'Error al eliminar la grabación')
+      }
+    } catch {
+      alert('No se pudo conectar con el servidor')
+    } finally {
+      setEliminandoId(null)
+    }
+  }
 
   // Cargar transcripción de una grabación específica
   const verTranscripcion = async (grabacion) => {
@@ -72,6 +93,9 @@ export default function AdminRecordingsPage() {
     }
   }
 
+  const cerrarModal = () =>
+    setTranscriptModal({ isOpen: false, grabacion: null, loading: false, transcripcion: null })
+
   const formatSecs = (secs) => {
     if (!secs) return '00:00'
     const m = String(Math.floor(secs / 60)).padStart(2, '0')
@@ -93,12 +117,10 @@ export default function AdminRecordingsPage() {
       const sim = llam.simulacion || {}
       const part = llam.participante_llamada?.[0]?.profiles || {}
 
-      const matchSearch = search.trim() === '' ||
+      return search.trim() === '' ||
         (sim.nombre || '').toLowerCase().includes(search.toLowerCase()) ||
         (`${part.first_name || ''} ${part.last_name || ''}`).toLowerCase().includes(search.toLowerCase()) ||
         (part.email || '').toLowerCase().includes(search.toLowerCase())
-
-      return matchSearch
     })
   }, [grabaciones, search])
 
@@ -133,7 +155,7 @@ export default function AdminRecordingsPage() {
               <Sparkles size={22} />
             </div>
             <div>
-              <span>Con transcripción (HUL08)</span>
+              <span>Con transcripción</span>
               <strong>{grabaciones.length}</strong>
             </div>
           </article>
@@ -185,7 +207,7 @@ export default function AdminRecordingsPage() {
             <Mic size={40} style={{ margin: '0 auto 1rem', opacity: 0.35 }} />
             <p style={{ margin: 0, fontWeight: 600 }}>No hay grabaciones registradas aún</p>
             <p style={{ margin: '0.35rem 0 0', fontSize: '0.875rem' }}>
-              Las grabaciones y transcripciones se almacenan automáticamente al finalizar una llamada de simulación (HUL08 y HUL09).
+              Las grabaciones y transcripciones se almacenan automáticamente al finalizar una llamada de simulación.
             </p>
           </div>
         ) : (
@@ -195,6 +217,7 @@ export default function AdminRecordingsPage() {
               const sim = llam.simulacion || {}
               const part = llam.participante_llamada?.[0]?.profiles || {}
               const nombreParticipante = `${part.first_name || 'Participante'} ${part.last_name || ''}`.trim()
+              const estaEliminando = eliminandoId === grab.id_grabacion
 
               return (
                 <div
@@ -210,6 +233,8 @@ export default function AdminRecordingsPage() {
                     flexWrap: 'wrap',
                     gap: '1.25rem',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                    opacity: estaEliminando ? 0.5 : 1,
+                    transition: 'opacity 0.2s',
                   }}
                 >
                   {/* Info izquierda */}
@@ -252,7 +277,7 @@ export default function AdminRecordingsPage() {
                     </div>
                   </div>
 
-                  {/* Reproductor de audio HTML5 (HUL09 / HUL11) */}
+                  {/* Reproductor de audio */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1', maxWidth: '380px', minWidth: '260px' }}>
                     <audio
                       controls
@@ -266,20 +291,56 @@ export default function AdminRecordingsPage() {
 
                   {/* Acciones */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.35rem' }}>
+  <button
+    onClick={() => verTranscripcion(grab)}
+    style={{
+      padding: '0.5rem 0.9rem', borderRadius: '8px',
+      border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF',
+      color: '#1E3A8A', fontSize: '0.8rem', fontWeight: 600,
+      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem',
+      transition: 'all 0.15s',
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EFF6FF'}
+    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+  >
+    <FileText size={15} />
+    Ver transcripción
+  </button>
+  <a
+    href={grab.url_archivo}
+    download
+    style={{
+      padding: '0.5rem 0.9rem', borderRadius: '8px',
+      border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF',
+      color: '#1E3A8A', fontSize: '0.8rem', fontWeight: 600,
+      cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem',
+      textDecoration: 'none',
+      transition: 'all 0.15s',
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EFF6FF'}
+    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+  >
+    <Download size={15} />
+    Descargar
+  </a>
+</div>
+
                     <button
-                      onClick={() => verTranscripcion(grab)}
+                      onClick={() => eliminarGrabacion(grab)}
+                      disabled={estaEliminando}
+                      title="Eliminar grabación"
                       style={{
-                        padding: '0.5rem 0.9rem', borderRadius: '8px',
-                        border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF',
-                        color: '#1E3A8A', fontSize: '0.8rem', fontWeight: 600,
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem',
+                        padding: '0.5rem', borderRadius: '8px',
+                        border: '1px solid #FCA5A5', backgroundColor: '#FFF1F2',
+                        color: '#BE123C', cursor: estaEliminando ? 'not-allowed' : 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.15s',
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EFF6FF'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+                      onMouseEnter={(e) => !estaEliminando && (e.currentTarget.style.backgroundColor = '#FEE2E2')}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFF1F2'}
                     >
-                      <FileText size={15} />
-                      Ver transcripción (HUL08)
+                      <Trash2 size={15} />
                     </button>
                   </div>
                 </div>
@@ -289,7 +350,7 @@ export default function AdminRecordingsPage() {
         )}
       </div>
 
-      {/* ─── Modal de Transcripción (HUL08) ────────────────────────────────── */}
+      {/* ─── Modal de Transcripción ─────────────────────────────────── */}
       {transcriptModal.isOpen && (
         <div
           style={{
@@ -298,7 +359,7 @@ export default function AdminRecordingsPage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 9999, padding: '1rem',
           }}
-          onClick={() => setTranscriptModal({ isOpen: false, grabacion: null, loading: false, transcripcion: null })}
+          onClick={cerrarModal}
         >
           <div
             style={{
@@ -312,7 +373,7 @@ export default function AdminRecordingsPage() {
           >
             {/* Cerrar */}
             <button
-              onClick={() => setTranscriptModal({ isOpen: false, grabacion: null, loading: false, transcripcion: null })}
+              onClick={cerrarModal}
               style={{
                 position: 'absolute', top: '1.25rem', right: '1.25rem',
                 background: 'none', border: 'none', color: '#94A3B8',
@@ -327,7 +388,7 @@ export default function AdminRecordingsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                 <Sparkles size={20} style={{ color: '#1E3A8A' }} />
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1E293B', margin: 0 }}>
-                  Transcripción de la Llamada (HUL08)
+                  Transcripción de la Llamada
                 </h2>
               </div>
               <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748B' }}>
@@ -396,7 +457,7 @@ export default function AdminRecordingsPage() {
             {/* Pie del modal */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.25rem' }}>
               <button
-                onClick={() => setTranscriptModal({ isOpen: false, grabacion: null, loading: false, transcripcion: null })}
+                onClick={cerrarModal}
                 style={{
                   padding: '0.55rem 1.25rem', borderRadius: '8px',
                   backgroundColor: '#1E3A8A', color: '#FFFFFF',
