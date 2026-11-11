@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const router = Router()
+const recordingsDir = path.join(__dirname, '../../uploads/recordings')
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Schema real de la BD:
@@ -433,37 +434,47 @@ router.post('/liberar-todas', async (req, res) => {
 router.post('/:id/grabacion', async (req, res) => {
   try {
     const { id } = req.params
-    const { audio_base64, duracion, formato = 'webm' } = req.body
+    const { audio_base64, duracion, formato } = req.body
 
-    let url_archivo = ''
-
-    if (audio_base64) {
-      const buffer = Buffer.from(audio_base64.replace(/^data:audio\/\w+;base64,/, ''), 'base64')
-      const fileName = `grabacion_llamada_${id}_${Date.now()}.${formato}`
-      const recordingsDir = path.join(__dirname, '../../uploads/recordings')
-      if (!fs.existsSync(recordingsDir)) {
-        fs.mkdirSync(recordingsDir, { recursive: true })
-      }
-      const uploadPath = path.join(recordingsDir, fileName)
-      await fs.promises.writeFile(uploadPath, buffer)
-      url_archivo = `http://localhost:${process.env.PORT || 3000}/uploads/recordings/${fileName}`
-    } else if (req.body.url_archivo) {
-      url_archivo = req.body.url_archivo
-    } else {
-      url_archivo = `http://localhost:${process.env.PORT || 3000}/uploads/recordings/audio_simulado_${id}.webm`
+    if (!audio_base64) {
+      return res.status(400).json({ error: 'El audio de la grabación es obligatorio.' })
     }
+
+    // Una sola grabación por llamada
+    const { data: existente } = await supabaseAdmin
+      .from('grabacion')
+      .select('id_grabacion')
+      .eq('id_llamada', id)
+      .maybeSingle()
+
+    if (existente) {
+      return res.status(409).json({ error: 'Esta llamada ya tiene una grabación.' })
+    }
+
+    const extension = formato === 'wav' ? 'wav' : 'webm'
+    const fileName = `grabacion_llamada_${Number(id)}_${Date.now()}.${extension}`
+    const filePath = path.join(recordingsDir, fileName)
+    const buffer = Buffer.from(audio_base64.slice(audio_base64.indexOf(',') + 1), 'base64')
+
+    await fs.promises.mkdir(recordingsDir, { recursive: true })
+    await fs.promises.writeFile(filePath, buffer)
 
     const { data, error } = await supabaseAdmin
       .from('grabacion')
       .insert({
         id_llamada: Number(id),
-        url_archivo,
+        url_archivo: `http://localhost:${process.env.PORT || 3000}/uploads/recordings/${fileName}`,
         duracion: duracion ? Number(duracion) : null,
       })
       .select()
       .single()
 
-    if (error) return res.status(400).json({ error: error.message })
+    if (error) {
+      // Si la base rechaza el registro, no dejar el archivo huérfano
+      await fs.promises.rm(filePath, { force: true })
+      const status = error.code === '23505' ? 409 : 400
+      return res.status(status).json({ error: error.message })
+    }
 
     return res.status(201).json({ message: 'Grabación almacenada exitosamente', grabacion: data })
   } catch (err) {
@@ -540,22 +551,30 @@ router.get('/:id/transcripcion', async (req, res) => {
   }
 })
 
-export default router
-
-// ─── DELETE /api/llamadas/grabaciones/:id_grabacion ────────────────────────────────────────
-// Delete a specific recording by its id_grabacion
+// ─── DELETE /api/llamadas/grabaciones/:id_grabacion ─────────────────────────
+// Borra el registro y su archivo de audio
 router.delete('/grabaciones/:id_grabacion', async (req, res) => {
   try {
-    const { id_grabacion } = req.params;
+    const { id_grabacion } = req.params
     const { data, error } = await supabaseAdmin
       .from('grabacion')
       .delete()
       .eq('id_grabacion', Number(id_grabacion))
-      .select();
-    if (error) return res.status(400).json({ error: error.message });
-    return res.json({ message: 'Grabación eliminada', grabacion: data });
+      .select()
+      .maybeSingle()
+
+    if (error) return res.status(400).json({ error: error.message })
+    if (!data) return res.status(404).json({ error: 'Grabación no encontrada' })
+
+    // basename evita borrar algo fuera de la carpeta de grabaciones
+    const fileName = path.basename(new URL(data.url_archivo, 'http://localhost').pathname)
+    await fs.promises.rm(path.join(recordingsDir, fileName), { force: true })
+
+    return res.json({ message: 'Grabación eliminada', grabacion: data })
   } catch (err) {
-    console.error('DELETE /api/llamadas/grabaciones/:id_grabacion:', err);
-    return res.status(500).json({ error: 'Error del servidor al eliminar grabación' });
+    console.error('DELETE /api/llamadas/grabaciones/:id_grabacion:', err)
+    return res.status(500).json({ error: 'Error del servidor al eliminar grabación' })
   }
-});
+})
+
+export default router
