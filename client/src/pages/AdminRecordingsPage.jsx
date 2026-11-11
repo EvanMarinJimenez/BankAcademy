@@ -5,6 +5,7 @@ import {
   FileText, Download, RefreshCw, X, Trash2,
   Sparkles,
 } from 'lucide-react'
+import { urlGrabacion } from '../utils/grabaciones'
 import '../styles/admin-recordings.css'
 
 export default function AdminRecordingsPage() {
@@ -12,6 +13,7 @@ export default function AdminRecordingsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [eliminandoId, setEliminandoId] = useState(null)
+  const [noDisponibles, setNoDisponibles] = useState(() => new Set())
 
   // Modal de Transcripción
   const [transcriptModal, setTranscriptModal] = useState({
@@ -145,8 +147,8 @@ export default function AdminRecordingsPage() {
               <Phone size={22} />
             </div>
             <div>
-              <span>Grabaciones de llamadas</span>
-              <strong>{grabaciones.length}</strong>
+              <span>Duración total</span>
+              <strong>{formatSecs(grabaciones.reduce((t, g) => t + (g.duracion || 0), 0))}</strong>
             </div>
           </article>
 
@@ -156,7 +158,7 @@ export default function AdminRecordingsPage() {
             </div>
             <div>
               <span>Con transcripción</span>
-              <strong>{grabaciones.length}</strong>
+              <strong>{grabaciones.filter((g) => g.llamada?.transcripcion).length}</strong>
             </div>
           </article>
         </section>
@@ -279,14 +281,21 @@ export default function AdminRecordingsPage() {
 
                   {/* Reproductor de audio */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1', maxWidth: '380px', minWidth: '260px' }}>
+                    {noDisponibles.has(grab.id_grabacion) ? (
+                      <span style={{ fontSize: '0.8rem', color: '#B91C1C', fontWeight: 600 }}>
+                        El archivo de audio no está disponible en el servidor.
+                      </span>
+                    ) : (
                     <audio
                       controls
-                      src={grab.url_archivo}
+                      onError={() => setNoDisponibles((prev) => new Set(prev).add(grab.id_grabacion))}
+                      src={urlGrabacion(grab.url_archivo)}
                       style={{ width: '100%', height: '36px', outline: 'none' }}
                       preload="none"
                     >
                       Tu navegador no soporta el reproductor de audio.
                     </audio>
+                    )}
                   </div>
 
                   {/* Acciones */}
@@ -308,7 +317,7 @@ export default function AdminRecordingsPage() {
     Ver transcripción
   </button>
   <a
-    href={grab.url_archivo}
+    href={urlGrabacion(grab.url_archivo)}
     download
     style={{
       padding: '0.5rem 0.9rem', borderRadius: '8px',

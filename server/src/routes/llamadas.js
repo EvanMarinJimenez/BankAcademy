@@ -41,7 +41,9 @@ router.get('/', async (req, res) => {
           fecha_salida,
           profile_id,
           profiles:profile_id(id, first_name, last_name, email)
-        )
+        ),
+        grabacion(id_grabacion, url_archivo, duracion),
+        transcripcion(id_transcripcion)
       `)
       .order('fecha_inicio', { ascending: false })
 
@@ -189,6 +191,7 @@ router.get('/grabaciones', async (req, res) => {
           fecha_inicio,
           fecha_fin,
           duracion,
+          transcripcion (id_transcripcion),
           simulacion:id_simulacion (
             id_simulacion,
             nombre,
@@ -387,8 +390,9 @@ router.patch('/:id/status', async (req, res) => {
         .eq('id_llamada', id)
     }
 
-    // Notificar vía socket a todos los participantes de la llamada
+    // Notificar vía socket a la sala de la llamada (p. ej. el admin que espera) y a los participantes
     const io = req.app.get('io')
+    io?.to(`call_${id}`).emit('llamada:estado', { id_llamada: data.id_llamada, estado: data.estado })
     if (io && data?.participante_llamada) {
       data.participante_llamada.forEach((pl) => {
         if (pl.profile_id) {

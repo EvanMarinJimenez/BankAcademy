@@ -7,6 +7,7 @@ import {
   Landmark, LogOut, Info, FileText, Send, Radio,
   CheckCircle2, Sparkles, Loader2
 } from 'lucide-react'
+import ConfirmModal from '../components/ConfirmModal'
 import '../styles/llamada-usuario.css'
 
 export default function CallSessionPage() {
@@ -55,6 +56,8 @@ export default function CallSessionPage() {
   const elapsedRef = useRef(0)
   const finalizandoRef = useRef(false)
   const finalizarRef = useRef(null)
+  const cerrarSinRespuestaRef = useRef(null)
+  const [confirmarFin, setConfirmarFin] = useState(false)
 
   useEffect(() => {
     elapsedRef.current = elapsed
@@ -148,6 +151,10 @@ export default function CallSessionPage() {
     })
 
     socket.on('rtc:hangup', () => finalizarRef.current?.(false))
+
+    socket.on('llamada:estado', ({ estado }) => {
+      if (estado === 'rechazada') cerrarSinRespuestaRef.current?.('El participante rechazó la llamada.')
+    })
 
     const iniciar = async () => {
       try {
@@ -357,12 +364,47 @@ export default function CallSessionPage() {
     }
 
     setSavingCall(false)
-    navigate(esAdmin ? '/admin/recordings' : '/home')
+    navigate(esAdmin ? '/admin/call-history' : '/home')
   }, [id, esAdmin, notas, transcripciones, navigate])
+
+  // ─── La otra persona nunca se conectó (rechazó o no contestó) ─────────────
+  const cerrarSinRespuesta = useCallback(async (mensaje, estado) => {
+    if (finalizandoRef.current) return
+    finalizandoRef.current = true
+
+    clearInterval(timerRef.current)
+    try { recognitionRef.current?.stop() } catch { /* ignore */ }
+    pcRef.current?.close()
+    audioStreamRef.current?.getTracks().forEach((t) => t.stop())
+    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
+
+    if (estado) {
+      try {
+        await fetch(`/api/llamadas/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ estado }),
+        })
+      } catch { /* ignore */ }
+    }
+    setError(mensaje)
+  }, [id])
 
   useEffect(() => {
     finalizarRef.current = finalizarLlamada
-  }, [finalizarLlamada])
+    cerrarSinRespuestaRef.current = cerrarSinRespuesta
+  }, [finalizarLlamada, cerrarSinRespuesta])
+
+  // Si el participante no contesta en 45 s, la llamada se marca como perdida
+  useEffect(() => {
+    if (!esAdmin || !llamada) return
+    const t = setTimeout(() => {
+      if (!remoteStreamRef.current) {
+        cerrarSinRespuestaRef.current?.('El participante no contestó la llamada.', 'perdida')
+      }
+    }, 45000)
+    return () => clearTimeout(t)
+  }, [esAdmin, llamada])
 
   // Checklist del escenario
   const getChecklist = () => {
@@ -397,7 +439,7 @@ export default function CallSessionPage() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '1rem', fontFamily: 'Inter, sans-serif' }}>
         <p style={{ color: '#EF4444', fontWeight: 600 }}>{error || 'Llamada no encontrada'}</p>
-        <button onClick={() => navigate('/home')} style={{ padding: '0.5rem 1.25rem', background: '#1E3A8A', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+        <button onClick={() => navigate(esAdmin ? '/admin/calls' : '/home')} style={{ padding: '0.5rem 1.25rem', background: '#1E3A8A', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
           Volver al inicio
         </button>
       </div>
@@ -410,6 +452,19 @@ export default function CallSessionPage() {
 
   return (
     <div>
+      <ConfirmModal
+        isOpen={confirmarFin}
+        title="Finalizar llamada"
+        message={esAdmin
+          ? 'Se terminará la llamada para ambos y se guardarán la grabación, la transcripción y tus notas.'
+          : 'Se terminará la llamada para ambos.'}
+        confirmText="Finalizar"
+        cancelText="Volver"
+        isDanger
+        onConfirm={() => { setConfirmarFin(false); finalizarLlamada() }}
+        onCancel={() => setConfirmarFin(false)}
+      />
+
       {/* Modal overlay al guardar grabación */}
       {savingCall && (
         <div style={{
@@ -462,7 +517,7 @@ export default function CallSessionPage() {
         {/* Salir */}
         <button
           className="session-bar__exit"
-          onClick={() => finalizarLlamada()}
+          onClick={() => setConfirmarFin(true)}
           title="Finalizar llamada"
         >
           <LogOut size={18} />
@@ -582,7 +637,7 @@ export default function CallSessionPage() {
             </div>
 
             {/* Botón Finalizar llamada */}
-            <button className="end-call-btn" onClick={() => finalizarLlamada()} disabled={savingCall}>
+            <button className="end-call-btn" onClick={() => setConfirmarFin(true)} disabled={savingCall}>
               <PhoneOff size={18} />
               <span>Finalizar y guardar llamada</span>
             </button>

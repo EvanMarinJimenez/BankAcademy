@@ -14,6 +14,7 @@ import AdminUsersPage from './pages/AdminUsersPage'
 import AdminScenariosPage from './pages/AdminScenariosPage'
 import AdminCallsPage from './pages/AdminCallsPage'
 import AdminRecordingsPage from './pages/AdminRecordingsPage'
+import AdminCallHistoryPage from './pages/AdminCallHistoryPage'
 import CallSessionPage from './pages/CallSessionPage'
 import ProfilePage from './pages/ProfilePage'
 
@@ -113,6 +114,13 @@ function AppRoutes() {
       <Route path="/admin/calls" element={
         <ProtectedRoute requiredRole="admin">
           <AdminCallsPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Historial de llamadas admin (protegido) */}
+      <Route path="/admin/call-history" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminCallHistoryPage />
         </ProtectedRoute>
       } />
 

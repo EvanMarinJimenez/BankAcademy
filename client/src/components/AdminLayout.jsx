@@ -9,6 +9,7 @@ import {
   MessageCircle,
   CalendarCheck,
   Activity,
+  History,
   ClipboardCheck,
   Mic,
   FileText,
@@ -107,6 +108,14 @@ export default function AdminLayout({ children, pageTitle = 'Administración', s
           >
             <Activity size={20} />
             <span>Monitoreo</span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/call-history"
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          >
+            <History size={20} />
+            <span>Historial de llamadas</span>
           </NavLink>
 
           <div className="nav-section-title">EVALUACIÓN</div>
