@@ -24,7 +24,7 @@ export default function AdminRecordingsPage() {
   const fetchGrabaciones = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/grabaciones')
+      const res = await fetch('/api/llamadas/grabaciones')
       const data = await res.json()
       if (res.ok) {
         setGrabaciones(data.grabaciones || [])
@@ -45,7 +45,7 @@ export default function AdminRecordingsPage() {
     if (!window.confirm(`¿Eliminar la grabación de la Llamada #${grab.id_llamada}? Esta acción no se puede deshacer.`)) return
     setEliminandoId(grab.id_grabacion)
     try {
-      const res = await fetch(`http://localhost:3000/api/llamadas/grabaciones/${grab.id_grabacion}`, {
+      const res = await fetch(`/api/llamadas/grabaciones/${grab.id_grabacion}`, {
         method: 'DELETE',
       })
       if (res.ok) {
@@ -71,7 +71,7 @@ export default function AdminRecordingsPage() {
     })
 
     try {
-      const res = await fetch(`http://localhost:3000/api/llamadas/${grabacion.id_llamada}/transcripcion`)
+      const res = await fetch(`/api/llamadas/${grabacion.id_llamada}/transcripcion`)
       const data = await res.json()
       let contenidoParsed = []
       if (data.transcripcion?.contenido) {

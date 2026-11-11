@@ -35,7 +35,7 @@ export default function AdminUsersPage() {
   const loadUsers = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/api/users')
+      const res = await fetch('/api/users')
       if (res.ok) {
         const data = await res.json()
         setUsers(data.users || [])
@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
     const fetchUsers = async () => {
       setLoading(true)
       try {
-        const res = await fetch('http://localhost:3000/api/users')
+        const res = await fetch('/api/users')
         if (res.ok) {
           const data = await res.json()
           if (isMounted) setUsers(data.users || [])
@@ -138,7 +138,7 @@ export default function AdminUsersPage() {
 
     try {
       // 1. Try server endpoint
-      const res = await fetch(`http://localhost:3000/api/users/${selectedUser.id}/status`, {
+      const res = await fetch(`/api/users/${selectedUser.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_active: newStatus }),

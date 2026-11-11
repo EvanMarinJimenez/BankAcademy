@@ -19,11 +19,18 @@ export default function CallSessionPage() {
   const [error, setError] = useState(null)
   const [savingCall, setSavingCall] = useState(false)
 
+  // El admin hace de cliente y el participante de agente bancario
+  const esAdmin = profile?.role === 'admin'
+  const rol = profile?.role
+  const miEmisor = esAdmin ? 'Cliente' : 'Agente'
+
   // Controles de llamada
   const [muted, setMuted] = useState(false)
   const [speakerOff, setSpeakerOff] = useState(false)
   const [elapsed, setElapsed] = useState(0) // segundos
   const [notas, setNotas] = useState('')
+  const [conectado, setConectado] = useState(false)
+  const [sinMicrofono, setSinMicrofono] = useState(false)
 
   // ─── HUL08: Transcripción en tiempo real ──────────────────────────────────
   const [transcripciones, setTranscripciones] = useState([])
@@ -32,27 +39,26 @@ export default function CallSessionPage() {
   const [activeTab, setActiveTab] = useState('transcription') // 'transcription' | 'checklist'
   const transcriptScrollRef = useRef(null)
 
-  // ─── HUL09: Grabación de audio (MediaRecorder) ───────────────────────────
-  const [isRecording, setIsRecording] = useState(false)
+  // ─── Audio de la llamada (WebRTC) y grabación (MediaRecorder) ─────────────
+  const audioStreamRef = useRef(null)     // micrófono propio
+  const remoteStreamRef = useRef(null)    // audio de la otra persona
+  const remoteAudioRef = useRef(null)
+  const pcRef = useRef(null)
+  const audioCtxRef = useRef(null)
+  const mezclaRef = useRef(null)          // mezcla de ambas voces para la grabación (solo admin)
   const mediaRecorderRef = useRef(null)
   const audioChunksRef = useRef([])
-  const audioStreamRef = useRef(null)
   const socketRef = useRef(null)
 
   const timerRef = useRef(null)
   const recognitionRef = useRef(null)
-  const dialogTimeoutRefs = useRef([])
-  const llamadaRef = useRef(null)   // para evitar re-disparar diálogos
   const elapsedRef = useRef(0)
-  const speakerOffRef = useRef(speakerOff)
+  const finalizandoRef = useRef(false)
+  const finalizarRef = useRef(null)
 
   useEffect(() => {
     elapsedRef.current = elapsed
   }, [elapsed])
-
-  useEffect(() => {
-    speakerOffRef.current = speakerOff
-  }, [speakerOff])
 
   const formatTime = (secs) => {
     const m = String(Math.floor(secs / 60)).padStart(2, '0')
@@ -64,7 +70,7 @@ export default function CallSessionPage() {
   useEffect(() => {
     const fetchLlamada = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/llamadas/${id}`)
+        const res = await fetch(`/api/llamadas/${id}`)
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Llamada no encontrada')
         setLlamada(data.llamada)
@@ -77,17 +83,114 @@ export default function CallSessionPage() {
     fetchLlamada()
   }, [id])
 
-  // ─── Conectar Socket.io ───────────────────────────────────────────────────
+  // ─── Micrófono + Socket.io + WebRTC ───────────────────────────────────────
+  // Quien ya estaba en la sala hace la oferta cuando entra la otra persona.
+  // Socket.io solo transporta la señalización; el audio viaja directo entre navegadores.
   useEffect(() => {
-    const socket = io('http://localhost:3000')
+    if (!rol) return
+    let cancelado = false
+    const socket = io()
     socketRef.current = socket
 
-    socket.emit('join_call', id)
+    const crearConexion = () => {
+      pcRef.current?.close()
+      const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
+      const local = audioStreamRef.current
+      local?.getTracks().forEach((track) => pc.addTrack(track, local))
+
+      pc.onicecandidate = (e) => {
+        if (e.candidate) socket.emit('rtc:signal', { id_llamada: id, candidate: e.candidate })
+      }
+      pc.ontrack = (e) => {
+        const remoto = e.streams[0]
+        remoteStreamRef.current = remoto
+        if (remoteAudioRef.current) remoteAudioRef.current.srcObject = remoto
+        if (mezclaRef.current) {
+          audioCtxRef.current.createMediaStreamSource(remoto).connect(mezclaRef.current)
+        }
+        setConectado(true)
+      }
+      pc.onconnectionstatechange = () => {
+        if (['disconnected', 'failed', 'closed'].includes(pc.connectionState)) setConectado(false)
+      }
+
+      pcRef.current = pc
+      return pc
+    }
+
+    // Los mensajes se procesan en orden para no agregar candidatos antes de la oferta
+    let cola = Promise.resolve()
+    const enCola = (fn) => {
+      cola = cola.then(fn).catch((err) => console.warn('WebRTC:', err))
+    }
+
+    socket.on('rtc:peer-joined', () => enCola(async () => {
+      const pc = crearConexion()
+      await pc.setLocalDescription(await pc.createOffer())
+      socket.emit('rtc:signal', { id_llamada: id, description: pc.localDescription })
+    }))
+
+    socket.on('rtc:signal', ({ description, candidate }) => enCola(async () => {
+      if (description?.type === 'offer') {
+        const pc = crearConexion()
+        await pc.setRemoteDescription(description)
+        await pc.setLocalDescription(await pc.createAnswer())
+        socket.emit('rtc:signal', { id_llamada: id, description: pc.localDescription })
+      } else if (description) {
+        await pcRef.current?.setRemoteDescription(description)
+      } else if (candidate) {
+        await pcRef.current?.addIceCandidate(candidate)
+      }
+    }))
+
+    socket.on('llamada:transcripcion', ({ id: msgId, emisor, texto, tiempo }) => {
+      setTranscripciones((prev) => [...prev, { id: msgId, emisor, texto, tiempo }])
+    })
+
+    socket.on('rtc:hangup', () => finalizarRef.current?.(false))
+
+    const iniciar = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        if (cancelado) {
+          stream.getTracks().forEach((t) => t.stop())
+          return
+        }
+        audioStreamRef.current = stream
+
+        // HUL09: el admin graba la mezcla de las dos voces
+        if (esAdmin) {
+          const ctx = new AudioContext()
+          const mezcla = ctx.createMediaStreamDestination()
+          ctx.createMediaStreamSource(stream).connect(mezcla)
+          audioCtxRef.current = ctx
+          mezclaRef.current = mezcla
+
+          const recorder = new MediaRecorder(mezcla.stream)
+          audioChunksRef.current = []
+          recorder.ondataavailable = (e) => {
+            if (e.data?.size > 0) audioChunksRef.current.push(e.data)
+          }
+          recorder.start(1000)
+          mediaRecorderRef.current = recorder
+        }
+      } catch (err) {
+        console.warn('Micrófono no disponible o permiso denegado:', err)
+        setSinMicrofono(true)
+      }
+      if (!cancelado) socket.emit('join_call', id)
+    }
+    iniciar()
 
     return () => {
+      cancelado = true
       socket.disconnect()
+      pcRef.current?.close()
+      audioStreamRef.current?.getTracks().forEach((t) => t.stop())
+      if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
+      audioCtxRef.current?.close()
     }
-  }, [id])
+  }, [id, rol, esAdmin])
 
   // ─── Temporizador de llamada ──────────────────────────────────────────────
   useEffect(() => {
@@ -107,352 +210,159 @@ export default function CallSessionPage() {
     }
   }, [transcripciones, interimText])
 
-  // ─── Función para agregar entrada de transcripción ──────────────────
-  const agregarTranscripcion = useCallback((emisor, texto, tiempoActual = null) => {
+  // ─── Agregar una frase propia a la transcripción y enviarla al otro lado ──
+  const agregarTranscripcion = useCallback((texto) => {
     if (!texto || !texto.trim()) return
 
-    const t = tiempoActual || formatTime(elapsedRef.current)
     const nuevoMensaje = {
       id: Date.now() + Math.random(),
-      emisor,
+      emisor: miEmisor,
       texto: texto.trim(),
-      tiempo: t,
+      tiempo: formatTime(elapsedRef.current),
     }
 
     setTranscripciones((prev) => [...prev, nuevoMensaje])
+    socketRef.current?.emit('llamada:transcripcion', { id_llamada: id, ...nuevoMensaje })
+  }, [id, miEmisor])
 
-    if (socketRef.current) {
-      socketRef.current.emit('llamada:transcripcion', {
-        id_llamada: id,
-        ...nuevoMensaje,
-      })
-    }
-  }, [id])
-
-  // ─── Sintetizar voz del cliente simulado (Text-To-Speech) ──────────
-  const hablarCliente = useCallback((texto) => {
-    if (speakerOffRef.current || !window.speechSynthesis) return
-
-    try {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(texto)
-      utterance.lang = 'es-CR'
-      utterance.rate = 1.05
-      utterance.pitch = 1.0
-
-      const voices = window.speechSynthesis.getVoices()
-      const vozEs = voices.find((v) => v.lang.startsWith('es'))
-      if (vozEs) utterance.voice = vozEs
-
-      window.speechSynthesis.speak(utterance)
-    } catch {
-      // Ignorar fallo de TTS
-    }
-  }, [])
-
-  // ─── Diálogos simulados del cliente (se lanzan solo una vez al cargar) ─────
-  useEffect(() => {
-    if (!llamada) return
-    // Evitar relanzar si ya se inició para este escenario
-    if (llamadaRef.current === llamada.id_llamada) return
-    llamadaRef.current = llamada.id_llamada
-
-    const sim = llamada.simulacion || {}
-    const params = sim.parametros || {}
-    const tono = (params.tono_cliente || 'normal').toLowerCase()
-
-    let saludo = 'Buenas tardes. Le llamo porque necesito resolver una situación con mi cuenta bancaria.'
-    if (sim.nombre?.toLowerCase().includes('cargo') || sim.descripcion?.toLowerCase().includes('cargo')) {
-      saludo = 'Buenas tardes. Me comunico porque me llegó un cargo no reconocido en mi estado de cuenta y necesito aclararlo de inmediato.'
-    } else if (sim.nombre?.toLowerCase().includes('bloqueo') || sim.descripcion?.toLowerCase().includes('bloqueo')) {
-      saludo = 'Hola, buenas tardes. Mi tarjeta fue bloqueada sin previo aviso al intentar pagar y necesito desbloquearla urgentemente.'
-    } else if (sim.nombre?.toLowerCase().includes('información') || sim.descripcion?.toLowerCase().includes('información')) {
-      saludo = 'Buenas tardes, llamo para solicitar información sobre las condiciones de una cuenta de ahorros.'
-    }
-
-    if (tono.includes('inconforme') || tono.includes('molesto') || tono.includes('exigente')) {
-      saludo = 'Buenas tardes. Llevo más de 15 minutos esperando en línea. Tengo un cobro irregular en mi cuenta y exijo que me lo solucionen ya mismo.'
-    }
-
-    // Diálogo 1: El cliente habla tras 3 segundos
-    const t1 = setTimeout(() => {
-      agregarTranscripcion('Cliente', saludo, '00:03')
-      hablarCliente(saludo)
-    }, 2800)
-
-    // Diálogo 2: El cliente proporciona datos tras 28 segundos
-    const t2 = setTimeout(() => {
-      const datos = 'Sí claro, mi nombre completo es María González Pérez y mi cédula es 1-1456-0789. El cobro fue realizado ayer.'
-      agregarTranscripcion('Cliente', datos, '00:28')
-      hablarCliente(datos)
-    }, 28000)
-
-    // Diálogo 3: El cliente solicita confirmación tras 55 segundos
-    const t3 = setTimeout(() => {
-      const confirmacion = 'Entiendo la explicación. ¿Cuánto tiempo tarda en verse reflejado el comprobante del trámite?'
-      agregarTranscripcion('Cliente', confirmacion, '00:55')
-      hablarCliente(confirmacion)
-    }, 55000)
-
-    // Diálogo 4: Despedida tras 90 segundos
-    const t4 = setTimeout(() => {
-      const despedida = 'Perfecto, muchas gracias por su atención y rapidez. Que pase un buen día.'
-      agregarTranscripcion('Cliente', despedida, '01:30')
-      hablarCliente(despedida)
-    }, 90000)
-
-    dialogTimeoutRefs.current = [t1, t2, t3, t4]
-
-    return () => {
-      dialogTimeoutRefs.current.forEach(clearTimeout)
-      if (window.speechSynthesis) window.speechSynthesis.cancel()
-    }
-  }, [llamada, agregarTranscripcion, hablarCliente])
-
-  // ─── HUL08: Reconocimiento de voz del Agente (Web Speech Recognition) ─────
+  // ─── HUL08: Reconocimiento de voz propio (Web Speech Recognition) ─────────
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!SpeechRecognition) return
+    if (!SpeechRecognition || muted) return
 
-    try {
-      const recognition = new SpeechRecognition()
-      recognition.lang = 'es-CR'
-      recognition.continuous = true
-      recognition.interimResults = true
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'es-CR'
+    recognition.continuous = true
+    recognition.interimResults = true
 
-      recognition.onresult = (event) => {
-        let interim = ''
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const trans = event.results[i][0].transcript
-          if (event.results[i].isFinal) {
-            agregarTranscripcion('Agente', trans)
-            setInterimText('')
-          } else {
-            interim += trans
-          }
-        }
-        if (interim) setInterimText(interim)
-      }
-
-      recognition.onerror = () => {
-        // Ignorar errores menores de audio
-      }
-
-      recognition.onend = () => {
-        // Reiniciar si sigue en llamada y no está silenciado
-        if (!muted && mediaRecorderRef.current?.state === 'recording') {
-          try { recognition.start() } catch { /* ignore */ }
+    recognition.onresult = (event) => {
+      let interim = ''
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const trans = event.results[i][0].transcript
+        if (event.results[i].isFinal) {
+          agregarTranscripcion(trans)
+          setInterimText('')
+        } else {
+          interim += trans
         }
       }
-
-      if (!muted) {
-        try { recognition.start() } catch { /* ignore */ }
-      }
-
-      recognitionRef.current = recognition
-    } catch {
-      // Navegador sin soporte completo
+      if (interim) setInterimText(interim)
     }
 
-    return () => {
-      if (recognitionRef.current) {
-        try { recognitionRef.current.stop() } catch { /* ignore */ }
+    // Chrome detiene el reconocimiento tras un silencio; reiniciarlo mientras siga la llamada
+    let activo = true
+    recognition.onend = () => {
+      if (activo && !finalizandoRef.current) {
+        try { recognition.start() } catch { /* ignore */ }
       }
+    }
+
+    try { recognition.start() } catch { /* ignore */ }
+    recognitionRef.current = recognition
+
+    return () => {
+      activo = false
+      try { recognition.stop() } catch { /* ignore */ }
     }
   }, [muted, agregarTranscripcion])
 
-  // ─── HUL09: Iniciar grabación con MediaRecorder al comenzar llamada ────────
-  useEffect(() => {
-    let active = true
-
-    const startRecording = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-        if (!active) return
-
-        audioStreamRef.current = stream
-        const mediaRecorder = new MediaRecorder(stream, {
-          mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4',
-        })
-
-        audioChunksRef.current = []
-
-        mediaRecorder.ondataavailable = (e) => {
-          if (e.data && e.data.size > 0) {
-            audioChunksRef.current.push(e.data)
-          }
-        }
-
-        mediaRecorder.start(1000) // Emitir fragmentos cada 1 segundo
-        mediaRecorderRef.current = mediaRecorder
-        setIsRecording(true)
-      } catch (err) {
-        console.warn('Micrófono físico no disponible o permiso denegado, usando grabación simulada:', err)
-        setIsRecording(true) // Simulación activa
-      }
-    }
-
-    startRecording()
-
-    return () => {
-      active = false
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop())
-      }
-      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-        try { mediaRecorderRef.current.stop() } catch { /* ignore */ }
-      }
-    }
-  }, [])
-
   // Silenciar / reactivar micrófono en tiempo real
   const toggleMute = () => {
-    setMuted((prev) => {
-      const next = !prev
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getAudioTracks().forEach((t) => {
-          t.enabled = !next
-        })
-      }
-      if (recognitionRef.current) {
-        if (next) {
-          try { recognitionRef.current.stop() } catch { /* ignore */ }
-        } else {
-          try { recognitionRef.current.start() } catch { /* ignore */ }
-        }
-      }
-      return next
+    const next = !muted
+    audioStreamRef.current?.getAudioTracks().forEach((t) => {
+      t.enabled = !next
     })
+    setMuted(next)
   }
 
-  // ─── HUL08: Enviar respuesta manual del agente ────────────────────────────
+  // ─── HUL08: Enviar texto manual a la transcripción ────────────────────────
   const handleSendManual = (e) => {
     e.preventDefault()
     if (!manualInput.trim()) return
-    agregarTranscripcion('Agente', manualInput.trim())
+    agregarTranscripcion(manualInput.trim())
     setManualInput('')
   }
 
-  // ─── Generar Blob de audio fallback si no hubo captura de micrófono ───────
-  const generarAudioFallback = () => {
-    try {
-      const sampleRate = 8000
-      const durationSeconds = Math.max(1, elapsed)
-      const numSamples = sampleRate * durationSeconds
-      const buffer = new ArrayBuffer(44 + numSamples)
-      const view = new DataView(buffer)
+  // ─── Finalizar llamada ────────────────────────────────────────────────────
+  // El admin guarda la grabación, la transcripción y sus notas.
+  // avisar=false cuando fue la otra persona quien colgó.
+  const finalizarLlamada = useCallback(async (avisar = true) => {
+    if (finalizandoRef.current) return
+    finalizandoRef.current = true
 
-      // Encabezado WAV 8kHz mono 8-bit PCM
-      const writeString = (offset, str) => {
-        for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i))
-      }
-      writeString(0, 'RIFF')
-      view.setUint32(4, 36 + numSamples, true)
-      writeString(8, 'WAVE')
-      writeString(12, 'fmt ')
-      view.setUint32(16, 16, true)
-      view.setUint16(20, 1, true)
-      view.setUint16(22, 1, true)
-      view.setUint32(24, sampleRate, true)
-      view.setUint32(28, sampleRate, true)
-      view.setUint16(32, 1, true)
-      view.setUint16(34, 8, true)
-      writeString(36, 'data')
-      view.setUint32(40, numSamples, true)
-
-      // Tono suave alternado
-      for (let i = 0; i < numSamples; i++) {
-        const val = Math.sin((i / sampleRate) * 440 * 2 * Math.PI) * 15 + 128
-        view.setUint8(44 + i, Math.floor(val))
-      }
-
-      return new Blob([buffer], { type: 'audio/wav' })
-    } catch {
-      return new Blob(['Simulated Call Recording Audio'], { type: 'audio/webm' })
-    }
-  }
-
-  // ─── HUL09 & HUL08: Finalizar y Guardar Grabación y Transcripción ──────────
-  const finalizarLlamada = useCallback(async () => {
     clearInterval(timerRef.current)
-    dialogTimeoutRefs.current.forEach(clearTimeout)
-    if (window.speechSynthesis) window.speechSynthesis.cancel()
-
     setSavingCall(true)
+    if (avisar) socketRef.current?.emit('rtc:hangup', id)
 
-    // 1. Detener reconocimiento
-    if (recognitionRef.current) {
-      try { recognitionRef.current.stop() } catch { /* ignore */ }
-    }
+    try { recognitionRef.current?.stop() } catch { /* ignore */ }
+    pcRef.current?.close()
 
-    // 2. Detener grabadora y obtener Blob de audio
-    let audioBlob = null
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      try {
+    if (esAdmin) {
+      // 1. Detener la grabadora y subir el audio (HUL09)
+      const recorder = mediaRecorderRef.current
+      if (recorder && recorder.state !== 'inactive') {
         await new Promise((resolve) => {
-          mediaRecorderRef.current.onstop = resolve
-          mediaRecorderRef.current.stop()
+          recorder.onstop = resolve
+          recorder.stop()
         })
-      } catch { /* ignore */ }
+      }
+
+      if (audioChunksRef.current.length > 0) {
+        try {
+          const tipo = recorder.mimeType || 'audio/webm'
+          const audioBlob = new Blob(audioChunksRef.current, { type: tipo })
+          const audioBase64 = await new Promise((resolve) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.readAsDataURL(audioBlob)
+          })
+
+          await fetch(`/api/llamadas/${id}/grabacion`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              audio_base64: audioBase64,
+              duracion: elapsedRef.current,
+              formato: tipo.includes('mp4') ? 'mp4' : 'webm',
+            }),
+          })
+        } catch (err) {
+          console.warn('Error al almacenar archivo de grabación:', err)
+        }
+      }
+
+      // 2. Guardar transcripción (HUL08)
+      if (transcripciones.length > 0) {
+        try {
+          await fetch(`/api/llamadas/${id}/transcripcion`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contenido: transcripciones, idioma: 'es-CR' }),
+          })
+        } catch (err) {
+          console.warn('Error al guardar transcripción:', err)
+        }
+      }
     }
 
-    if (audioChunksRef.current.length > 0) {
-      audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' })
-    } else {
-      audioBlob = generarAudioFallback()
-    }
-
-    // 3. Convertir audio a Base64 para almacenar en servidor (HUL09)
+    // 3. Marcar la llamada como finalizada
     try {
-      const reader = new FileReader()
-      const base64Promise = new Promise((resolve) => {
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(audioBlob)
-      })
-      const audioBase64 = await base64Promise
-
-      // Guardar grabación en backend
-      await fetch(`http://localhost:3000/api/llamadas/${id}/grabacion`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          audio_base64: audioBase64,
-          duracion: elapsed,
-          formato: audioBlob.type.includes('wav') ? 'wav' : 'webm',
-        }),
-      })
-    } catch (err) {
-      console.warn('Error al almacenar archivo de grabación:', err)
-    }
-
-    // 4. Guardar transcripción en backend (HUL08)
-    try {
-      await fetch(`http://localhost:3000/api/llamadas/${id}/transcripcion`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contenido: transcripciones,
-          idioma: 'es-CR',
-        }),
-      })
-    } catch (err) {
-      console.warn('Error al guardar transcripción:', err)
-    }
-
-    // 5. Finalizar estado de la llamada
-    try {
-      await fetch(`http://localhost:3000/api/llamadas/${id}/status`, {
+      await fetch(`/api/llamadas/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estado: 'finalizada', notas_admin: notas }),
+        body: JSON.stringify({ estado: 'finalizada', ...(esAdmin && { notas_admin: notas }) }),
       })
     } catch {
-      // Ignorar fallo de navegación
+      // Ignorar fallo de red
     }
 
     setSavingCall(false)
-    navigate(profile?.role === 'admin' ? '/admin/recordings' : '/home')
-  }, [id, elapsed, notas, transcripciones, navigate, profile])
+    navigate(esAdmin ? '/admin/recordings' : '/home')
+  }, [id, esAdmin, notas, transcripciones, navigate])
+
+  useEffect(() => {
+    finalizarRef.current = finalizarLlamada
+  }, [finalizarLlamada])
 
   // Checklist del escenario
   const getChecklist = () => {
@@ -552,8 +462,8 @@ export default function CallSessionPage() {
         {/* Salir */}
         <button
           className="session-bar__exit"
-          onClick={finalizarLlamada}
-          title="Finalizar y guardar"
+          onClick={() => finalizarLlamada()}
+          title="Finalizar llamada"
         >
           <LogOut size={18} />
         </button>
@@ -566,7 +476,7 @@ export default function CallSessionPage() {
         <aside className="panel client-panel">
           <div className="client-panel__head">
             <div className="client-avatar">CL</div>
-            <h2>Cliente simulado</h2>
+            <h2>{esAdmin ? 'Tu papel: cliente' : 'Cliente bancario'}</h2>
             <p className="client-meta">Escenario de práctica</p>
             <span className="priority-tag priority-tag--normal">
               {params.dificultad ? `Dificultad: ${params.dificultad}` : 'Normal'}
@@ -628,8 +538,27 @@ export default function CallSessionPage() {
               <div className="call-avatar">CL</div>
             </div>
 
-            <p className="call-name">Cliente bancario</p>
-            <p className="call-status">● Llamada en curso con audio en vivo</p>
+            {/* Audio de la otra persona. El ref se reaplica en cada render para mantener stream y silencio */}
+            <audio
+              autoPlay
+              ref={(el) => {
+                remoteAudioRef.current = el
+                if (!el) return
+                if (remoteStreamRef.current && el.srcObject !== remoteStreamRef.current) {
+                  el.srcObject = remoteStreamRef.current
+                }
+                el.muted = speakerOff
+              }}
+            />
+
+            <p className="call-name">{esAdmin ? 'Participante (agente)' : 'Cliente bancario'}</p>
+            <p className="call-status">
+              {sinMicrofono
+                ? '● Sin micrófono: la otra persona no podrá escucharte'
+                : conectado
+                  ? '● Llamada en curso con audio en vivo'
+                  : '● Esperando a que la otra persona se conecte...'}
+            </p>
 
             {/* Controles: micrófono, altavoz */}
             <div className="call-controls" style={{ marginBottom: '1.25rem' }}>
@@ -645,7 +574,7 @@ export default function CallSessionPage() {
               <button
                 className="call-control"
                 onClick={() => setSpeakerOff((s) => !s)}
-                title={speakerOff ? 'Activar audio del cliente' : 'Silenciar audio del cliente'}
+                title={speakerOff ? 'Activar audio de la llamada' : 'Silenciar audio de la llamada'}
                 style={{ backgroundColor: speakerOff ? '#FEE2E2' : '#FFFFFF', color: speakerOff ? '#DC2626' : '#1E293B' }}
               >
                 {speakerOff ? <VolumeX size={20} /> : <Volume2 size={20} />}
@@ -653,7 +582,7 @@ export default function CallSessionPage() {
             </div>
 
             {/* Botón Finalizar llamada */}
-            <button className="end-call-btn" onClick={finalizarLlamada} disabled={savingCall}>
+            <button className="end-call-btn" onClick={() => finalizarLlamada()} disabled={savingCall}>
               <PhoneOff size={18} />
               <span>Finalizar y guardar llamada</span>
             </button>
@@ -820,19 +749,19 @@ export default function CallSessionPage() {
                 </ul>
               </div>
 
-              <div className="guide-panel__section">
+              {esAdmin && <div className="guide-panel__section">
                 <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1E293B' }}>
-                  Mis notas
+                  Notas del evaluador
                 </h3>
                 <textarea
                   className="notes-area"
                   rows={4}
-                  placeholder="Escribe observaciones de la simulación..."
+                  placeholder="Observaciones sobre el desempeño del participante (se guardan al finalizar)..."
                   value={notas}
                   onChange={(e) => setNotas(e.target.value)}
                   style={{ fontSize: '0.8rem' }}
                 />
-              </div>
+              </div>}
             </div>
           )}
         </aside>

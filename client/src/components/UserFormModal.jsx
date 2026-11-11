@@ -65,8 +65,8 @@ export default function UserFormModal({
 
     try {
       const url = mode === 'create'
-        ? 'http://localhost:3000/api/users'
-        : `http://localhost:3000/api/users/${user.id}`
+        ? '/api/users'
+        : `/api/users/${user.id}`
 
       const method = mode === 'create' ? 'POST' : 'PUT'
 

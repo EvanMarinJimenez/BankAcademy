@@ -22,7 +22,7 @@ export default function AdminCallsPage() {
   const cargarDisponibles = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/disponibles')
+      const res = await fetch('/api/llamadas/disponibles')
       const data = await res.json()
       if (res.ok) setDisponibles(data.disponibles || [])
       else mostrarToast('error', data.error || 'Error al cargar participantes')
@@ -46,7 +46,7 @@ export default function AdminCallsPage() {
   // ─── Iniciar llamada (HUL06 y HUL07 comparten esta función) ─────────────
   const iniciarLlamada = async ({ profile_id, id_simulacion }) => {
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/iniciar', {
+      const res = await fetch('/api/llamadas/iniciar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -85,7 +85,7 @@ export default function AdminCallsPage() {
   const handleLlamadaAleatoria = async () => {
     setLlamandoRandom(true)
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/random')
+      const res = await fetch('/api/llamadas/random')
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'No hay participantes disponibles')
 
@@ -109,7 +109,7 @@ export default function AdminCallsPage() {
     if (!window.confirm('¿Liberar todas las llamadas en curso? Esto marcará todas como "finalizada" y los participantes volverán a estar disponibles.')) return
     setLiberando(true)
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/liberar-todas', { method: 'POST' })
+      const res = await fetch('/api/llamadas/liberar-todas', { method: 'POST' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al liberar')
       mostrarToast('success', data.message)

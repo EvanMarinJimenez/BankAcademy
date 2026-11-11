@@ -58,18 +58,27 @@ io.on('connection', (socket) => {
     }
   })
 
-  // Room de la llamada para transcripción y audio en tiempo real (HUL08)
+  // Room de la llamada. Al entrar, se avisa a quien ya estaba para que inicie la conexión WebRTC.
   socket.on('join_call', (callId) => {
-    if (callId) {
-      socket.join(`call_${callId}`)
-      console.log(`Socket ${socket.id} se unió a la llamada call_${callId}`)
-    }
+    if (!callId) return
+    socket.join(`call_${callId}`)
+    socket.to(`call_${callId}`).emit('rtc:peer-joined')
   })
 
-  // Transcripción en tiempo real (HUL08)
+  // Señalización WebRTC (oferta, respuesta y candidatos ICE) hacia el otro lado de la llamada
+  socket.on('rtc:signal', ({ id_llamada, ...data } = {}) => {
+    if (id_llamada) socket.to(`call_${id_llamada}`).emit('rtc:signal', data)
+  })
+
+  // Uno de los dos colgó
+  socket.on('rtc:hangup', (callId) => {
+    if (callId) socket.to(`call_${callId}`).emit('rtc:hangup')
+  })
+
+  // Transcripción en tiempo real hacia el otro lado de la llamada (HUL08)
   socket.on('llamada:transcripcion', (data) => {
     if (data?.id_llamada) {
-      io.to(`call_${data.id_llamada}`).emit('llamada:transcripcion', data)
+      socket.to(`call_${data.id_llamada}`).emit('llamada:transcripcion', data)
     }
   })
 

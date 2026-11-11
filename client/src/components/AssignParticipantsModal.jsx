@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { X, Search, Users, Check, AlertCircle, RefreshCw } from 'lucide-react'
 
-const API_USERS = 'http://localhost:3000/api/users'
-const API_SIMULACIONES = 'http://localhost:3000/api/simulaciones'
+const API_USERS = '/api/users'
+const API_SIMULACIONES = '/api/simulaciones'
 
 export default function AssignParticipantsModal({
   isOpen,

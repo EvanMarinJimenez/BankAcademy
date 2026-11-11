@@ -9,7 +9,7 @@ import {
   CheckCircle2, Clock, Sliders, CalendarX, Bell
 } from 'lucide-react'
 
-const API = 'http://localhost:3000/api/simulaciones'
+const API = '/api/simulaciones'
 
 const TIPO_CONFIG = {
   llamada: { label: 'Llamada', icon: Phone, color: '#DBEAFE', iconColor: '#1D4ED8' },

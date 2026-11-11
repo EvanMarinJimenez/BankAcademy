@@ -22,7 +22,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!profile?.id) return
 
-    const socket = io('http://localhost:3000', { transports: ['websocket'] })
+    const socket = io({ transports: ['websocket'] })
     socketRef.current = socket
 
     // Unirse al room personal para recibir eventos dirigidos
@@ -52,7 +52,7 @@ export default function HomePage() {
     const fetchMisSimulaciones = async () => {
       setLoadingQueue(true)
       try {
-        const res = await fetch(`http://localhost:3000/api/simulaciones/mis-simulaciones/${profile.id}`)
+        const res = await fetch(`/api/simulaciones/mis-simulaciones/${profile.id}`)
         const data = await res.json()
         if (res.ok && isMounted) {
           setAsignaciones(data.asignaciones || [])
@@ -74,7 +74,7 @@ export default function HomePage() {
   const handleAtenderLlamada = async (sim) => {
     if (!profile?.id || !sim?.id_simulacion) return
     try {
-      const res = await fetch('http://localhost:3000/api/llamadas/iniciar', {
+      const res = await fetch('/api/llamadas/iniciar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ export default function HomePage() {
         navigate(`/llamada/${data.llamada.id_llamada}`)
       } else if (res.status === 409) {
         // Ya tiene una llamada en curso, consultamos para redirigirlo
-        const resActiva = await fetch(`http://localhost:3000/api/llamadas?estado=en_curso`)
+        const resActiva = await fetch(`/api/llamadas?estado=en_curso`)
         const dataActiva = await resActiva.json()
         const miLlamada = dataActiva.llamadas?.find((l) =>
           l.participante_llamada?.some((p) => p.profile_id === profile.id)
@@ -121,7 +121,7 @@ export default function HomePage() {
           onReject={async () => {
             // Notificar al servidor que fue rechazada
             try {
-              await fetch(`http://localhost:3000/api/llamadas/${llamadaEntrante.id_llamada}/status`, {
+              await fetch(`/api/llamadas/${llamadaEntrante.id_llamada}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ estado: 'rechazada' }),

@@ -345,6 +345,7 @@ router.patch('/:id/status', async (req, res) => {
     }
 
     const payload = { estado }
+    if (notas_admin !== undefined) payload.notas_admin = notas_admin || null
 
     // Registrar fecha de fin y duración al cerrar
     if (['finalizada', 'perdida', 'rechazada'].includes(estado)) {
@@ -451,7 +452,7 @@ router.post('/:id/grabacion', async (req, res) => {
       return res.status(409).json({ error: 'Esta llamada ya tiene una grabación.' })
     }
 
-    const extension = formato === 'wav' ? 'wav' : 'webm'
+    const extension = formato === 'mp4' ? 'mp4' : 'webm'
     const fileName = `grabacion_llamada_${Number(id)}_${Date.now()}.${extension}`
     const filePath = path.join(recordingsDir, fileName)
     const buffer = Buffer.from(audio_base64.slice(audio_base64.indexOf(',') + 1), 'base64')
@@ -463,7 +464,8 @@ router.post('/:id/grabacion', async (req, res) => {
       .from('grabacion')
       .insert({
         id_llamada: Number(id),
-        url_archivo: `http://localhost:${process.env.PORT || 3000}/uploads/recordings/${fileName}`,
+        // Ruta relativa: el navegador la pide al mismo origen y Vite la reenvía al servidor
+        url_archivo: `/uploads/recordings/${fileName}`,
         duracion: duracion ? Number(duracion) : null,
       })
       .select()

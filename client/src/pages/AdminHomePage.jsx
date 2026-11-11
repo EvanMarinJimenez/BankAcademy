@@ -12,7 +12,7 @@ export default function AdminHomePage() {
   const [userCount, setUserCount] = useState(0)
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/users')
+    fetch('/api/users')
       .then((res) => res.json())
       .then((data) => {
         if (data.users) setUserCount(data.users.length)

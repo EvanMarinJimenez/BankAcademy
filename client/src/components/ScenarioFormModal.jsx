@@ -4,8 +4,8 @@ import {
   Clock, Sliders, Award, AlertTriangle, ShieldCheck, Users, Search
 } from 'lucide-react'
 
-const API_USERS = 'http://localhost:3000/api/users'
-const API_SIMULACIONES = 'http://localhost:3000/api/simulaciones'
+const API_USERS = '/api/users'
+const API_SIMULACIONES = '/api/simulaciones'
 
 const TIPOS = [
   { value: 'llamada', label: 'Llamada telefónica' },
@@ -222,8 +222,8 @@ export default function ScenarioFormModal({
     setLoading(true)
     try {
       const url = mode === 'create'
-        ? 'http://localhost:3000/api/simulaciones'
-        : `http://localhost:3000/api/simulaciones/${scenario.id_simulacion}`
+        ? '/api/simulaciones'
+        : `/api/simulaciones/${scenario.id_simulacion}`
 
       const method = mode === 'create' ? 'POST' : 'PUT'
 
